@@ -11,7 +11,17 @@
       "permanent": true
     },
     {
+      "source": "/about-us/",
+      "destination": "/about/",
+      "permanent": true
+    },
+    {
       "source": "/contact-us",
+      "destination": "/book/",
+      "permanent": true
+    },
+    {
+      "source": "/contact-us/",
       "destination": "/book/",
       "permanent": true
     },
@@ -21,7 +31,17 @@
       "permanent": true
     },
     {
+      "source": "/blog/",
+      "destination": "/insights/",
+      "permanent": true
+    },
+    {
       "source": "/feed",
+      "destination": "/rss.xml",
+      "permanent": true
+    },
+    {
+      "source": "/feed/",
       "destination": "/rss.xml",
       "permanent": true
     },
