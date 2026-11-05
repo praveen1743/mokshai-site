@@ -76,7 +76,9 @@ Details and rules: [CONTENT-AND-SEO.md](CONTENT-AND-SEO.md).
 
 ## Analytics
 
-`Base.astro` loads the Google tag carried over from the old site (`GT-PLWBBHHT` Site Kit tag and `AW-17581749958` Google Ads). Events fired by `lib/handoff.ts → track()`:
+`Base.astro` loads the Google tag carried over from the old site (`GT-PLWBBHHT` Site Kit tag and `AW-17581749958` Google Ads). The library is **deferred** until the visitor's first interaction (scroll, tap, key press) or 5 seconds after load, whichever comes first; calls made before that are queued in `dataLayer` and sent when it loads. Measured on the live site, loading it eagerly cost ~370 KB, ~0.9 s of main-thread blocking and dropped Lighthouse mobile performance from 96 to 53. Trade-off: a visitor who leaves within 5 seconds without interacting is not recorded.
+
+Events fired by `lib/handoff.ts → track()`:
 
 | Event | When |
 | --- | --- |

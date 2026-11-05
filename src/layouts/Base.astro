@@ -52,13 +52,31 @@ const primaryTag = site.googleTagIds[0];
   <script type="application/ld+json" set:html={JSON.stringify(graph)} />
   {primaryTag && (
     <>
-      <script async src={`https://www.googletagmanager.com/gtag/js?id=${primaryTag}`}></script>
-      <script is:inline define:vars={{ ids: site.googleTagIds }}>
+      <script is:inline define:vars={{ ids: site.googleTagIds, primary: primaryTag }}>
+        // The Google tag costs ~370 KB of script and ~0.9 s of main-thread time on
+        // mobile. Queue calls immediately, but load the library only after the
+        // visitor's first interaction or 5 s, whichever comes first. Queued events
+        // (including generate_lead) are sent once it loads.
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         window.gtag = gtag;
         gtag('js', new Date());
         ids.forEach(function (id) { gtag('config', id); });
+        (function () {
+          var loaded = false;
+          var events = ['pointerdown', 'keydown', 'scroll', 'touchstart'];
+          function load() {
+            if (loaded) return;
+            loaded = true;
+            events.forEach(function (e) { removeEventListener(e, load, { passive: true }); });
+            var s = document.createElement('script');
+            s.async = true;
+            s.src = 'https://www.googletagmanager.com/gtag/js?id=' + primary;
+            document.head.appendChild(s);
+          }
+          events.forEach(function (e) { addEventListener(e, load, { passive: true, once: true }); });
+          addEventListener('load', function () { setTimeout(load, 5000); });
+        })();
       </script>
     </>
   )}
