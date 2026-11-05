@@ -5,12 +5,16 @@ import Faq from '../components/Faq.astro';
 import CtaBand from '../components/CtaBand.astro';
 import { tools } from '../lib/tools';
 import { breadcrumbs, faq, webApp } from '../lib/schema';
+import RelatedReading from '../components/RelatedReading.astro';
+import { allPosts, postsForTool } from '../lib/insights';
+
 
 interface Props { slug: (typeof tools)[number]['slug']; title: string; lede: string; faqs: { q: string; a: string }[] }
 const { slug, title, lede, faqs } = Astro.props;
 const tool = tools.find((t) => t.slug === slug)!;
 const path = `/tools/${slug}/`;
 const others = tools.filter((t) => t.slug !== slug);
+const reading = postsForTool(await allPosts(), slug).slice(0, 3);
 ---
 <Base
   title={`${tool.name} calculator`}
@@ -57,6 +61,7 @@ const others = tools.filter((t) => t.slug !== slug);
     </div>
   </section>
 
+  <RelatedReading posts={reading} title="Guides that use this calculator" />
   <CtaBand title="Want these numbers checked against your real queue?" text="Book a call and attach your inputs. We will tell you which assumptions look optimistic, which look conservative, and what a pilot would need to prove." />
 </Base>
 

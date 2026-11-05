@@ -39,6 +39,8 @@ Shell for calculator pages: page hero, the calculator (named slot `calc`), a met
 | Component | Purpose | Props |
 | --- | --- | --- |
 | `SplitTable.astro` | The operating model: what the agent handles vs. what a person owns. Collapses to labelled rows on mobile | `rows?: { area, agent, human }[]`, `caption?` |
+| `PostList.astro` | Editorial list of articles (topic, audience, reading time, date, title, summary) | `posts`, `showSummary?`, `compact?` |
+| `RelatedReading.astro` | "Related reading" band before the CTA; renders nothing when empty | `posts`, `title?`, `moreHref?`, `moreLabel?`, `tone?: 'sky' \| 'mint' \| 'paper'` |
 | `Faq.astro` | Accessible accordion built on `<details>`; first item open | `items: { q, a }[]` (pair with `faq()` from `lib/schema.ts` for FAQPage schema) |
 | `MiniCalc.astro` | Compact live MSP ticket-savings estimate on the homepage (three sliders, fixed 15 min at $42/h) linking to the full calculator | none |
 | `Range.astro` | Labelled slider with live output and gradient fill | `id`, `label`, `min`, `max`, `step`, `value`, `hint?`, `display?` (server-rendered output text) |
@@ -72,6 +74,8 @@ Product-style illustrations that show each page's subject. All are HTML/SVG, lab
 | `schema.ts` | `organization`, `website`, `breadcrumbs`, `faq`, `service`, `article`, `webApp`, `orgId` |
 | `serviceDetails.ts` | Copy, FAQs and outcomes for each service page |
 | `tools.ts` | Calculator names, audiences, questions and descriptions |
+| `topics.ts` | Insights topics (slug, name, description, intro) used for hubs, breadcrumbs and the footer |
+| `insights.ts` | `allPosts`, `relatedPosts`, `postsForService`, `postsForTool`, `postsForAudience`, `featuredPost`, `readingMinutes`, `audienceLabel`, `fmtDate` |
 
 ## Global style utilities (`styles/global.css`)
 

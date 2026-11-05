@@ -1,5 +1,4 @@
 ---
-import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import Arrow from '../components/Arrow.astro';
 import Icon from '../components/Icon.astro';
@@ -12,9 +11,11 @@ import CtaBand from '../components/CtaBand.astro';
 import { services } from '../site.config';
 import { faq } from '../lib/schema';
 import { tools } from '../lib/tools';
+import { allPosts, featuredPost } from '../lib/insights';
 
-const posts = (await getCollection('insights')).sort((a, b) => +b.data.updated - +a.data.updated);
-const [featured, ...morePosts] = posts;
+const posts = await allPosts();
+const featured = featuredPost(posts);
+const morePosts = posts.filter((p) => p.id !== featured?.id).slice(0, 4);
 const otherTools = tools.filter((t) => t.slug !== 'msp-ticket-roi');
 const capabilities = ['Ticket triage', 'Password resets', 'Alert correlation', 'Access requests', 'New-starter provisioning', 'Documentation drafts', 'Quote preparation', 'Document intake', 'Order status updates', 'Weekly reporting', 'Technician copilots', 'White-label AI services'];
 const fmt = (d: Date) => d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
@@ -234,14 +235,14 @@ const reasons = [
       </div>
       {featured && (
         <a class="feature reveal" href={`/${featured.id}/`}>
-          <span class="tag">{featured.data.audience === 'msp' ? 'For MSPs' : 'For operations'} · Updated {fmt(featured.data.updated)}</span>
+          <span class="tag">{featured.data.audience === 'msp' ? 'For MSPs' : featured.data.audience === 'operations' ? 'For operations' : 'For any team'} · {fmt(featured.data.published)}</span>
           <span class="feature-title">{featured.data.title}</span>
           <span class="feature-text">{featured.data.summary}</span>
           <span class="link-arrow">Read the guide</span>
         </a>
       )}
       <ul class="post-links" role="list">
-        {morePosts.map((p) => (<li><a href={`/${p.id}/`}>{p.data.title}</a><span class="tag">{fmt(p.data.updated)}</span></li>))}
+        {morePosts.map((p) => (<li><a href={`/${p.id}/`}>{p.data.title}</a><span class="tag">{fmt(p.data.published)}</span></li>))}
       </ul>
     </div>
   </section>

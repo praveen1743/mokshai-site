@@ -1,11 +1,19 @@
 ---
 title: "Why Automation Isn’t About Robots. It’s About Profit Margins"
-description: "Automation is a margin strategy, not a robotics project: where it cuts cost and rework, where it fails, and how to pilot it profitably."
+description: "Where business automation protects profit margins (labour, rework, scale, speed), where it fails, and how to pilot it so it pays back."
 published: 2025-10-17
 updated: 2026-03-28
 audience: operations
-summary: "Most automation that pays for itself is software, not robots. It protects margins by cutting rework, overtime and manual handoffs, and it fails when it is bolted onto a broken process."
+topic: operations
+summary: "Most automation that pays for itself is software that cuts rework, overtime and manual handoffs. It fails when it is bolted onto a broken process, so start from the margin you want to protect."
+services: [ai-consulting, custom-ai-development]
+tools: [back-office-hours, ai-budget-planner]
+takeaways:
+  - "Judge automation by the margin it protects: labour hours, rework, error rates and turnaround time."
+  - "Redesign the process before automating it; automating a broken process makes the breakage faster."
+  - "Pilot one process, measure it against a baseline, and scale only what pays back."
 ---
+
 ## Introduction: Breaking the Robot Myth
 
 When most people hear the word *automation*, they instantly imagine factory robots assembling cars or humanoid machines taking over jobs. While robots are certainly part of the story, the truth is far more practical: **automation isn’t about robots—it’s about profit margins.**
@@ -125,3 +133,9 @@ Beyond cost savings, automation should enable long-term growth by:
 ## Conclusion: Automation Is a Profitability Strategy, Not a Tech Showcase
 
 Automation isn’t about filling factories with robots. It’s about protecting and expanding **profit margins** through smarter processes, reduced waste, and scalable growth. Businesses that view automation as a financial strategy—not a technological fad—will build stronger, more resilient, and more profitable futures.
+
+## Next steps
+
+- For a worked example in quoting and estimating, read [Automating quote preparation in fabrication and manufacturing shops](/automating-quote-preparation-for-fabrication-shops/).
+- To put numbers on a candidate process, follow [How to calculate the ROI of an AI agent](/how-to-calculate-ai-agent-roi/) or try the [back-office time savings calculator](/tools/back-office-hours/).
+- To run a pilot that ends in a clear decision, see [What a 30-day AI agent pilot should measure](/ai-agent-pilot-metrics/).

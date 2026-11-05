@@ -7,7 +7,11 @@ import Arrow from '../components/Arrow.astro';
 import IntakeScene from '../components/scenes/IntakeScene.astro';
 import SplitTable from '../components/SplitTable.astro';
 import { breadcrumbs, faq, service } from '../lib/schema';
+import RelatedReading from '../components/RelatedReading.astro';
+import { allPosts, postsForAudience } from '../lib/insights';
 
+
+const reading = postsForAudience(await allPosts(), 'operations').slice(0, 4);
 const faqs = [
   { q: 'What kind of businesses is this for?', a: 'Operations-heavy firms where skilled people spend hours on preparation and admin: fabrication and manufacturing shops, construction trades, distributors and professional services. If quotes, orders or documents queue up waiting for someone to process them, it is a fit.' },
   { q: 'Is automation about robots on the shop floor?', a: 'No. The automation that usually pays for itself first is software: reading incoming requests, pulling records, filling templates and keeping systems in sync. It protects margins by cutting rework, overtime and manual handoffs.' },
@@ -73,6 +77,7 @@ const rows = [
     </div>
   </section>
 
+  <RelatedReading posts={reading} title="Guides for operations teams" moreHref="/insights/operations/" moreLabel="All operations guides" />
   <CtaBand title="Start with the workflow that queues up the most" secondaryHref="/tools/back-office-hours/" secondaryLabel="Estimate the hours first" />
 </Base>
 <style>

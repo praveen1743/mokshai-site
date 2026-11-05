@@ -16,15 +16,53 @@
 ```yaml
 ---
 title: "How AI agents triage MSP tickets"
-description: "One or two sentences for search results (≤ 160 characters)."
-summary: "The direct answer to the article's question, shown at the top of the page."
+description: "One or two sentences for search results (max 170 characters, enforced)."
+summary: "The direct answer to the article's question, shown as 'The short answer'."
 published: 2026-11-20
 updated: 2026-11-20
-audience: msp            # msp | operations | general
+audience: msp                 # msp | operations | general
+topic: msp-automation         # msp-automation | strategy-and-roi | security-and-governance | operations
+services: [custom-ai-development]   # service slugs this article supports
+tools: [msp-ticket-roi]             # calculator slugs this article uses
+takeaways:                          # 3-4 bullets shown in a "Key takeaways" box
+  - "..."
+faqs:                               # shown on the page and emitted as FAQPage schema
+  - q: "..."
+    a: "..."
+featured: false                     # true pins it as the featured article
 ---
 ```
 
-The file name becomes the URL (`/how-ai-agents-triage-msp-tickets/`). The article is added to `/insights/`, the RSS feed, the sitemap and gets `BlogPosting` schema automatically.
+The file name becomes the URL (`/how-ai-agents-triage-msp-tickets/`). The article is added to `/insights/`, its topic hub, the RSS feed and the sitemap, and gets `BlogPosting`, `BreadcrumbList` and (with `faqs`) `FAQPage` schema automatically.
+
+## Internal linking
+
+Links are generated from the frontmatter, so a new article is linked from the right places without editing any page:
+
+| Where | What links appear | Driven by |
+|---|---|---|
+| Article page | "Put this into practice" (services + calculators), "Related reading" (3 articles, same topic first), topic breadcrumb, sidebar calculator button | `services`, `tools`, `topic`, `audience` |
+| Service pages | "Related guides" | `services` |
+| `/msp/`, `/operations/` | "Guides for MSPs" / "Guides for operations teams" | `audience` (`general` appears on both) |
+| Calculator pages | "Guides that use this calculator" | `tools` |
+| `/insights/<topic>/` | All articles in the topic, plus related services and calculators | `topic` |
+| Footer | All topic hubs | `src/lib/topics.ts` |
+| Home, `/insights/` | Featured article + latest | `featured`, `published` |
+
+Also link by hand inside the body: each article should link to at least two other pages (a service, a calculator or another guide) where the text naturally refers to them. Use root-relative URLs such as `/tools/msp-ticket-roi/`.
+
+## Articles to review
+
+These articles were drafted for the relaunch and must be read and fact-checked by someone at Moksh AI before the site moves to mokshai.net:
+
+- `how-to-automate-tier-1-tickets-with-an-ai-agent.md`
+- `ai-agent-pilot-metrics.md`
+- `custom-ai-agents-vs-automation-platforms-vs-built-in-ai.md`
+- `ai-agent-security-checklist.md`
+- `automating-quote-preparation-for-fabrication-shops.md`
+- `how-to-calculate-ai-agent-roi.md`
+
+They contain no statistics or client claims; the ROI example is labelled hypothetical. Check that the practices they describe match how Moksh AI actually delivers, and add real examples where you have them.
 
 ## Writing rules
 

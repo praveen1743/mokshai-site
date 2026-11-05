@@ -3,8 +3,12 @@ import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
 import CtaBand from '../components/CtaBand.astro';
 import { breadcrumbs } from '../lib/schema';
+import RelatedReading from '../components/RelatedReading.astro';
+import { allPosts } from '../lib/insights';
+
 import ScorecardScene from '../components/scenes/ScorecardScene.astro';
 
+const reading = (await allPosts()).filter((p) => ['ai-agent-pilot-metrics', 'how-to-calculate-ai-agent-roi', 'how-to-automate-tier-1-tickets-with-an-ai-agent'].includes(p.id));
 const phases = [
   { n: '01', h: 'Discovery', p: 'We map one workflow end to end with the people who do it: what arrives, which systems hold the data, where time goes, and where mistakes happen. We pull a baseline from your own systems and agree the metric a pilot will be judged on.', get: 'Ranked list of automation candidates, business case, pilot brief', decide: 'Whether to pilot, and which workflow first' },
   { n: '02', h: 'Pilot', p: 'We build one agent on one queue. It runs on live work with a person approving its actions, and we report weekly against the baseline: volume handled, accuracy, time saved and running cost.', get: 'Measured results on your own work', decide: 'Keep it, change it, or stop. The stop rule is agreed before we start' },
@@ -52,6 +56,7 @@ const principles = [
   </section>
 
 
+  <RelatedReading posts={reading} title="Go deeper on pilots and payback" moreHref="/insights/strategy-and-roi/" moreLabel="All strategy and ROI guides" tone="paper" />
   <CtaBand />
 </Base>
 <style>

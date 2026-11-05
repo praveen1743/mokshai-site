@@ -6,7 +6,7 @@ It is a fully static site built with [Astro](https://astro.build) and deployed o
 
 | | |
 | --- | --- |
-| Pages | 19 content pages, 4 calculators, 2 articles, 3 legacy redirects |
+| Pages | 19 content pages, 4 calculators, 4 topic hubs, 8 articles, 3 legacy redirects |
 | Lighthouse (mobile, lab) | Performance 98–99 · Accessibility 100 · Best practices 100 · SEO 100 |
 | Core Web Vitals (lab) | LCP 2.1–2.3 s · CLS 0 · TBT 0 ms |
 | Accessibility | 0 axe-core violations (WCAG 2.2 AA rules) at 390 px and 1440 px |
@@ -87,7 +87,8 @@ mokshai-site/
 | `/security/` | `pages/security.astro` | Agent controls and vendor due-diligence questions |
 | `/about/` | `pages/about.astro` | Company facts and Moksh Group |
 | `/tools/` + 4 calculators | `pages/tools/*.astro` | MSP ticket ROI, back-office time, AI spend audit, AI budget planner |
-| `/insights/` | `pages/insights/index.astro` | Article index |
+| `/insights/` | `pages/insights/index.astro` | Article index with topic navigation and featured article |
+| `/insights/<topic>/` | `pages/insights/[topic].astro` | Four topic hubs: MSP automation, strategy and ROI, security and governance, operations |
 | `/<article-slug>/` | `pages/[slug].astro` | Articles at their original WordPress URLs |
 | `/book/` | `pages/book.astro` | Booking form with calculator handoff |
 | `/privacy-policy/` | `pages/privacy-policy.astro` | Privacy policy (Markdown) |

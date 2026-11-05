@@ -1,35 +1,68 @@
 ---
-import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import PageHero from '../../components/PageHero.astro';
 import CtaBand from '../../components/CtaBand.astro';
+import PostList from '../../components/PostList.astro';
+import { allPosts, audienceLabel, readingMinutes, featuredPost } from '../../lib/insights';
+import { topics, topicBySlug } from '../../lib/topics';
 import { breadcrumbs } from '../../lib/schema';
-const posts = (await getCollection('insights')).sort((a, b) => +b.data.updated - +a.data.updated);
-const fmt = (d: Date) => d.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
+import { site } from '../../site.config';
+
+const posts = await allPosts();
+const featured = featuredPost(posts);
+const rest = posts.filter((p) => p.id !== featured?.id);
+const counts = Object.fromEntries(topics.map((t) => [t.slug, posts.filter((p) => p.data.topic === t.slug).length]));
 ---
-<Base title="Insights on AI Agents & Automation" description="Practical writing on AI agents for MSPs, back-office automation and AI strategy from the Moksh AI team." schema={[{ '@type': 'CollectionPage', name: 'Insights', url: 'https://mokshai.net/insights/' }, breadcrumbs([{ name: 'Insights', path: '/insights/' }])]}>
-  <PageHero eyebrow="Insights" title="Notes from the work" lede="Practical writing on AI agents, automation and the decisions around them. No trend pieces." />
-  <section class="section">
-    <div class="container list">
-      {posts.map((p) => (
-        <a class="post" href={`/${p.id}/`}>
-          <div class="meta"><span class="tag">{p.data.audience === 'msp' ? 'For MSPs' : 'For operations'}</span><time class="mono" datetime={p.data.updated.toISOString()}>Updated {fmt(p.data.updated)}</time></div>
-          <h2>{p.data.title}</h2>
-          <p>{p.data.summary}</p>
-          <span class="link-arrow">Read</span>
+<Base
+  title="Insights on AI Agents & Automation"
+  description="Practical guides on AI agents for MSPs, back-office automation, pilot metrics, AI agent security and ROI from the Moksh AI team."
+  schema={[
+    { '@type': 'CollectionPage', name: 'Insights', url: `${site.url}/insights/`, hasPart: posts.map((p) => ({ '@type': 'BlogPosting', headline: p.data.title, url: `${site.url}/${p.id}/` })) },
+    breadcrumbs([{ name: 'Insights', path: '/insights/' }]),
+  ]}
+>
+  <PageHero eyebrow="Insights" title="Guides from the work" lede="Practical writing on AI agents, automation and the decisions around them: what to automate, how to measure it, and how to keep it safe." />
+
+  <section class="section-tight">
+    <div class="container">
+      <nav class="topics" aria-label="Topics">
+        <span class="tag">Browse by topic</span>
+        <ul role="list">
+          {topics.map((t) => (<li><a href={`/insights/${t.slug}/`}>{t.name}<span class="mono">{counts[t.slug]}</span></a></li>))}
+        </ul>
+      </nav>
+
+      {featured && (
+        <a class="feature" href={`/${featured.id}/`}>
+          <span class="tag">Latest · {topicBySlug(featured.data.topic).name} · {audienceLabel(featured.data.audience)} · {readingMinutes(featured.body)} min read</span>
+          <span class="f-title">{featured.data.title}</span>
+          <span class="f-text">{featured.data.summary}</span>
+          <span class="link-arrow">Read the guide</span>
         </a>
-      ))}
+      )}
     </div>
   </section>
+
+  <section class="section-tight">
+    <div class="container">
+      <h2 class="all-h">All articles</h2>
+      <PostList posts={rest} />
+    </div>
+  </section>
+
   <CtaBand />
 </Base>
 <style>
-  .list { border-top: 1px solid var(--line); }
-  .post { display: grid; grid-template-columns: minmax(0, .5fr) minmax(0, 1fr); grid-template-areas: 'meta title' 'meta text' 'meta link'; gap: 10px 48px; padding-block: 36px; border-bottom: 1px solid var(--line); color: inherit; text-decoration: none; }
-  .meta { grid-area: meta; display: grid; gap: 6px; align-content: start; font-size: var(--t-xs); color: var(--muted); }
-  .post h2 { grid-area: title; font-size: var(--t-xl); transition: color .18s var(--ease); }
-  .post:hover h2 { color: var(--blue-700); }
-  .post p { grid-area: text; color: var(--muted); max-width: 64ch; }
-  .post .link-arrow { grid-area: link; color: var(--blue-700); }
-  @media (max-width: 800px) { .post { grid-template-columns: minmax(0, 1fr); grid-template-areas: 'meta' 'title' 'text' 'link'; } }
+  .topics { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 18px; margin-bottom: 36px; }
+  .topics ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .topics a { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; padding: 8px 16px; border: 1px solid var(--line-strong); border-radius: 999px; background: var(--surface); color: var(--ink); text-decoration: none; font-weight: 500; font-size: var(--t-sm); transition: border-color .2s var(--ease), color .2s var(--ease); }
+  .topics a:hover { border-color: var(--blue-700); color: var(--blue-700); }
+  .topics .mono { font-size: var(--t-xs); color: var(--muted); }
+  .feature { display: grid; gap: 14px; padding: clamp(26px, 4vw, 52px); background: var(--ink); border-radius: 18px; color: var(--on-dark); text-decoration: none; transition: transform .25s var(--ease), box-shadow .25s var(--ease); }
+  .feature:hover { transform: translateY(-2px); box-shadow: var(--shadow-2); color: var(--on-dark); }
+  .feature .tag { color: var(--teal-on-dark); }
+  .f-title { font: 780 var(--t-2xl)/1.06 var(--f-display); font-stretch: 84%; letter-spacing: -0.02em; color: #fff; max-width: 26ch; }
+  .f-text { color: var(--on-dark-muted); font-size: var(--t-lg); max-width: 68ch; }
+  .feature .link-arrow { color: var(--blue-on-dark); }
+  .all-h { font-size: var(--t-xl); margin-bottom: 20px; }
 </style>

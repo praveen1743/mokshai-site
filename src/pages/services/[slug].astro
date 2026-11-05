@@ -11,6 +11,9 @@ import SpendScene from '../../components/scenes/SpendScene.astro';
 import { serviceDetails, type ServiceSlug } from '../../lib/serviceDetails';
 import { services } from '../../site.config';
 import { breadcrumbs, faq, service } from '../../lib/schema';
+import RelatedReading from '../../components/RelatedReading.astro';
+import { allPosts, postsForService } from '../../lib/insights';
+
 
 export function getStaticPaths() {
   return Object.keys(serviceDetails).map((slug) => ({ params: { slug } }));
@@ -19,6 +22,7 @@ const slug = Astro.params.slug as ServiceSlug;
 const s = serviceDetails[slug];
 const path = `/services/${slug}/`;
 const others = services.filter((x) => x.slug !== slug);
+const reading = postsForService(await allPosts(), slug).slice(0, 4);
 ---
 <Base
   title={s.seoTitle}
@@ -72,6 +76,7 @@ const others = services.filter((x) => x.slug !== slug);
     </div>
   </section>
 
+  <RelatedReading posts={reading} title="Related guides" />
   <CtaBand />
 </Base>
 <style>

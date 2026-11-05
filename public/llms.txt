@@ -24,5 +24,13 @@
 - [Security](https://mokshai.net/security/): least access, human approval, audit logs, client data separation
 
 ## Insights
+Topic hubs: [MSP automation](https://mokshai.net/insights/msp-automation/), [Strategy and ROI](https://mokshai.net/insights/strategy-and-roi/), [Security and governance](https://mokshai.net/insights/security-and-governance/), [Operations automation](https://mokshai.net/insights/operations/)
+
+- [How to Automate Tier-1 Tickets with an AI Agent](https://mokshai.net/how-to-automate-tier-1-tickets-with-an-ai-agent/)
+- [What a 30-Day AI Agent Pilot Should Measure](https://mokshai.net/ai-agent-pilot-metrics/)
+- [Custom AI Agents, Automation Platforms or Built-In AI Features: How to Choose](https://mokshai.net/custom-ai-agents-vs-automation-platforms-vs-built-in-ai/)
+- [AI Agent Security Checklist](https://mokshai.net/ai-agent-security-checklist/)
+- [Automating Quote Preparation in Fabrication and Manufacturing Shops](https://mokshai.net/automating-quote-preparation-for-fabrication-shops/)
+- [How to Calculate the ROI of an AI Agent](https://mokshai.net/how-to-calculate-ai-agent-roi/)
 - [AI Agents for MSPs: What They Are & How They Reduce Workload](https://mokshai.net/ai-agents-for-msps-what-they-are-how-they-reduce-workload/)
 - [Why Automation Isn’t About Robots. It’s About Profit Margins](https://mokshai.net/why-automation-isnt-about-robots-its-about-profit-margins/)

@@ -1,0 +1,20 @@
+---
+// "Related reading" band placed before the CTA on service, audience,
+// calculator and trust pages. Renders nothing when there are no posts.
+import PostList from './PostList.astro';
+import type { Post } from '../lib/insights';
+interface Props { posts: Post[]; title?: string; moreHref?: string; moreLabel?: string; tone?: 'sky' | 'mint' | 'paper' }
+const { posts, title = 'Related reading', moreHref = '/insights/', moreLabel = 'All insights', tone = 'sky' } = Astro.props;
+---
+{posts.length > 0 && (
+  <section class={`section-tight${tone === 'paper' ? '' : ` ${tone}`}`} aria-labelledby="related-h">
+    <div class="container">
+      <div class="rr-head"><h2 id="related-h">{title}</h2><a class="link-arrow" href={moreHref}>{moreLabel}</a></div>
+      <PostList posts={posts} compact />
+    </div>
+  </section>
+)}
+<style>
+  .rr-head { display: flex; justify-content: space-between; align-items: end; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; }
+  .rr-head h2 { font-size: var(--t-xl); }
+</style>

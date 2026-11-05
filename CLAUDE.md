@@ -19,7 +19,8 @@ Vercel, from `main`. Settings live in `vercel.json`; keep `public/.htaccess` and
 - `src/lib/schema.ts`: JSON-LD builders. `Base.astro` always emits Organization + WebSite; pages pass extra nodes via the `schema` prop.
 - `src/lib/calc.ts`: pure calculator formulas. Any change needs a test in `tests/calc.test.ts`.
 - `src/lib/handoff.ts`: sessionStorage handoff from calculators to `/book/`, plus the `track()` wrapper for gtag events.
-- `src/content/insights/*.md`: articles, served at the site root (`/[slug]/`) so old WordPress URLs keep working.
+- `src/content/insights/*.md`: articles, served at the site root (`/[slug]/`) so old WordPress URLs keep working. Frontmatter (`topic`, `services`, `tools`, `takeaways`, `faqs`) drives internal links and schema; see `docs/CONTENT-AND-SEO.md`.
+- `src/lib/topics.ts`, `src/lib/insights.ts`: Insights topics and helpers (related posts, posts per service/tool/audience).
 - `src/layouts/ToolPage.astro`: shared calculator page shell (method + FAQ + related tools).
 - `src/components/scenes/`: hero illustrations, one per page topic. Pass them to `PageHero` via `slot="visual"`.
 
@@ -45,6 +46,7 @@ Vercel, from `main`. Settings live in `vercel.json`; keep `public/.htaccess` and
 - No two-beat or contrast headlines ("The agent prepares. A person decides.", "X, not Y"). Write plain, specific statements.
 - Show the operating-model table (`SplitTable`) only on the homepage and audience pages, not on every page.
 - Answer-first: the first paragraph of a service page or article answers its main question directly.
+- Every article links in its body to at least two other pages (a service, a calculator or another article), and declares `services` and `tools` in frontmatter.
 
 ## Checks before shipping a change
 `npm run test && npm run build`, then check the changed pages at 390 px and 1440 px for horizontal overflow, and run axe/Lighthouse on any page whose layout changed.

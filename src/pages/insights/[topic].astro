@@ -1,0 +1,75 @@
+---
+// Topic hub: one page per Insights topic, linking to its articles and to the
+// services and calculators those articles relate to.
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import PostList from '../../components/PostList.astro';
+import { allPosts } from '../../lib/insights';
+import { topics } from '../../lib/topics';
+import { services } from '../../site.config';
+import { tools } from '../../lib/tools';
+import { breadcrumbs } from '../../lib/schema';
+import { site } from '../../site.config';
+
+export function getStaticPaths() {
+  return topics.map((t) => ({ params: { topic: t.slug }, props: { topic: t } }));
+}
+const { topic } = Astro.props;
+const posts = (await allPosts()).filter((p) => p.data.topic === topic.slug);
+const svcSlugs = new Set(posts.flatMap((p) => p.data.services));
+const toolSlugs = new Set(posts.flatMap((p) => p.data.tools));
+const relServices = services.filter((s) => svcSlugs.has(s.slug));
+const relTools = tools.filter((t) => toolSlugs.has(t.slug));
+const others = topics.filter((t) => t.slug !== topic.slug);
+const path = `/insights/${topic.slug}/`;
+---
+<Base
+  title={`${topic.name} guides`}
+  description={topic.description}
+  schema={[
+    { '@type': 'CollectionPage', name: `${topic.name} guides`, url: `${site.url}${path}`, description: topic.description, hasPart: posts.map((p) => ({ '@type': 'BlogPosting', headline: p.data.title, url: `${site.url}/${p.id}/` })) },
+    breadcrumbs([{ name: 'Insights', path: '/insights/' }, { name: topic.name, path }]),
+  ]}
+>
+  <PageHero eyebrow="Insights topic" title={topic.name} lede={topic.intro} crumbs={[{ name: 'Insights', href: '/insights/' }]} />
+
+  <section class="section-tight">
+    <div class="container layout">
+      <div class="main">
+        <h2 class="sr">Articles</h2>
+        {posts.length ? <PostList posts={posts} /> : <p class="lede">New guides on this topic are on the way.</p>}
+      </div>
+      <aside class="side" aria-label="Related">
+        {relServices.length > 0 && (
+          <div class="box">
+            <p class="tag">Related services</p>
+            <ul role="list">{relServices.map((s) => <li><a href={`/services/${s.slug}/`}>{s.name}</a></li>)}</ul>
+          </div>
+        )}
+        {relTools.length > 0 && (
+          <div class="box">
+            <p class="tag">Free calculators</p>
+            <ul role="list">{relTools.map((t) => <li><a href={`/tools/${t.slug}/`}>{t.name}</a></li>)}</ul>
+          </div>
+        )}
+        <div class="box">
+          <p class="tag">Other topics</p>
+          <ul role="list">{others.map((t) => <li><a href={`/insights/${t.slug}/`}>{t.name}</a></li>)}</ul>
+        </div>
+      </aside>
+    </div>
+  </section>
+  <CtaBand />
+</Base>
+<style>
+  .layout { display: grid; grid-template-columns: minmax(0, 1fr) 280px; gap: clamp(32px, 5vw, 64px); align-items: start; }
+  @media (max-width: 960px) { .layout { grid-template-columns: minmax(0, 1fr); } }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .side { display: grid; gap: 16px; position: sticky; top: 96px; }
+  @media (max-width: 960px) { .side { position: static; } }
+  .box { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 20px; display: grid; gap: 10px; }
+  .box ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+  .box a { display: flex; min-height: 36px; align-items: center; font-weight: 500; text-decoration: none; }
+  .box a::after { content: "→"; margin-left: auto; color: var(--teal-700); }
+</style>

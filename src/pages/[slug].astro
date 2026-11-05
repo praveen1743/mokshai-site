@@ -1,57 +1,123 @@
 ---
 // Articles live at the site root so the old WordPress URLs keep working unchanged.
-import { getCollection, render } from 'astro:content';
+import { render } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import CtaBand from '../components/CtaBand.astro';
 import Arrow from '../components/Arrow.astro';
-import { article, breadcrumbs } from '../lib/schema';
+import Faq from '../components/Faq.astro';
+import PostList from '../components/PostList.astro';
+import { article, breadcrumbs, faq } from '../lib/schema';
+import { allPosts, relatedPosts, readingMinutes, audienceLabel, type Post } from '../lib/insights';
+import { topicBySlug } from '../lib/topics';
+import { services } from '../site.config';
+import { serviceDetails } from '../lib/serviceDetails';
+import { tools } from '../lib/tools';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('insights');
-  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+  const posts = await allPosts();
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post, posts } }));
 }
-const { post } = Astro.props;
+const { post, posts } = Astro.props as { post: Post; posts: Post[] };
 const { Content, headings } = await render(post);
+const d = post.data;
 const path = `/${post.id}/`;
-const fmt = (d: Date) => d.toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' });
+const topic = topicBySlug(d.topic);
+const fmt = (x: Date) => x.toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' });
 const toc = headings.filter((h) => h.depth === 2);
-const tool = post.data.audience === 'msp' ? { href: '/tools/msp-ticket-roi/', label: 'Estimate your ticket savings' } : { href: '/tools/back-office-hours/', label: 'Estimate your time savings' };
+const related = relatedPosts(post, posts, 3);
+const relServices = services.filter((s) => d.services.includes(s.slug));
+const relTools = tools.filter((t) => d.tools.includes(t.slug));
+const primaryTool = relTools[0] ?? (d.audience === 'operations' ? tools.find((t) => t.slug === 'back-office-hours')! : tools.find((t) => t.slug === 'msp-ticket-roi')!);
+const schema = [
+  article({ title: d.title, description: d.description, path, published: d.published, updated: d.updated }),
+  breadcrumbs([{ name: 'Insights', path: '/insights/' }, { name: topic.name, path: `/insights/${topic.slug}/` }, { name: d.title, path }]),
+  ...(d.faqs.length ? [faq(d.faqs)] : []),
+];
 ---
-<Base title={post.data.title} description={post.data.description} ogType="article" published={post.data.published} updated={post.data.updated}
-  schema={[article({ title: post.data.title, description: post.data.description, path, published: post.data.published, updated: post.data.updated }), breadcrumbs([{ name: 'Insights', path: '/insights/' }, { name: post.data.title, path }])]}>
+<Base title={d.title} description={d.description} ogType="article" published={d.published} updated={d.updated} schema={schema}>
   <article>
     <header class="a-head">
       <div class="container narrow stack">
-        <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/insights/">Insights</a></nav>
-        <span class="eyebrow">{post.data.audience === 'msp' ? 'For MSPs' : 'For operations'}</span>
-        <h1>{post.data.title}</h1>
-        <p class="byline">By the Moksh AI team · Published <time datetime={post.data.published.toISOString()}>{fmt(post.data.published)}</time> · Updated <time datetime={post.data.updated.toISOString()}>{fmt(post.data.updated)}</time></p>
-        <div class="summary"><span class="tag">Summary</span><p>{post.data.summary}</p></div>
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/insights/">Insights</a><span aria-hidden="true">/</span><a href={`/insights/${topic.slug}/`}>{topic.name}</a></nav>
+        <span class="eyebrow">{audienceLabel(d.audience)}</span>
+        <h1>{d.title}</h1>
+        <p class="byline">By the Moksh AI team · {readingMinutes(post.body)} min read · Published <time datetime={d.published.toISOString()}>{fmt(d.published)}</time>{+d.updated !== +d.published && <> · Updated <time datetime={d.updated.toISOString()}>{fmt(d.updated)}</time></>}</p>
+        <div class="summary"><span class="tag">The short answer</span><p>{d.summary}</p></div>
       </div>
     </header>
+
     <div class="container a-body">
       <aside class="toc" aria-label="On this page">
         <p class="tag">On this page</p>
-        <ol>{toc.map((h) => <li><a href={`#${h.slug}`}>{h.text}</a></li>)}</ol>
-        <a class="btn btn-primary toc-cta" href={tool.href}>{tool.label} <Arrow /></a>
+        <ol>{toc.map((h) => <li><a href={`#${h.slug}`}>{h.text}</a></li>)}{d.faqs.length > 0 && <li><a href="#questions">Questions</a></li>}</ol>
+        <a class="btn btn-primary toc-cta" href={`/tools/${primaryTool.slug}/`}>{primaryTool.name} <Arrow /></a>
       </aside>
-      <div class="prose"><Content /></div>
+      <div class="main">
+        {d.takeaways.length > 0 && (
+          <section class="takeaways" aria-labelledby="takeaways-h">
+            <h2 id="takeaways-h" class="tk-h">Key takeaways</h2>
+            <ul class="checks">{d.takeaways.map((t) => <li>{t}</li>)}</ul>
+          </section>
+        )}
+        <div class="prose"><Content /></div>
+
+        {d.faqs.length > 0 && (
+          <section class="a-faq" id="questions" aria-labelledby="questions-h">
+            <h2 id="questions-h">Questions</h2>
+            <Faq items={d.faqs} />
+          </section>
+        )}
+
+        {(relServices.length > 0 || relTools.length > 0) && (
+          <section class="practice" aria-labelledby="practice-h">
+            <h2 id="practice-h">Put this into practice</h2>
+            <ul class="practice-list" role="list">
+              {relServices.map((s) => (
+                <li><a href={`/services/${s.slug}/`}><span class="tag">Service</span><strong>{s.name}</strong><span>{serviceDetails[s.slug].lede}</span></a></li>
+              ))}
+              {relTools.map((t) => (
+                <li><a href={`/tools/${t.slug}/`}><span class="tag">Free calculator</span><strong>{t.name}</strong><span>{t.question}</span></a></li>
+              ))}
+            </ul>
+          </section>
+        )}
+      </div>
     </div>
   </article>
+
+  {related.length > 0 && (
+    <section class="section-tight sky">
+      <div class="container">
+        <div class="rel-head"><h2>Related reading</h2><a class="link-arrow" href={`/insights/${topic.slug}/`}>More {topic.name} guides</a></div>
+        <PostList posts={related} compact />
+      </div>
+    </section>
+  )}
   <CtaBand />
 </Base>
 <style>
   .a-head { background: linear-gradient(160deg, #e7f1fc 0%, #eef7f6 50%, #eaf6ee 100%); padding-block: clamp(48px, 7vw, 88px) 40px; }
   .narrow { max-width: 920px; }
-  .a-head h1 { font-size: var(--t-2xl); max-width: 22ch; }
+  .a-head h1 { font-size: var(--t-2xl); max-width: 24ch; }
   .byline { color: var(--muted); font-size: var(--t-sm); }
   .summary { border-left: 3px solid var(--blue-700); padding: 4px 0 4px 18px; display: grid; gap: 6px; max-width: 68ch; }
   .summary p { font-size: var(--t-lg); line-height: 1.55; }
-  .a-body { display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: clamp(32px, 5vw, 72px); padding-block: 56px 96px; align-items: start; }
+  .a-body { display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: clamp(32px, 5vw, 72px); padding-block: 56px 80px; align-items: start; }
+  .main { min-width: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 48px; max-width: 72ch; }
+  .main > * { min-width: 0; }
   .toc { position: sticky; top: 96px; display: grid; gap: 12px; font-size: var(--t-sm); }
   .toc ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; border-left: 1px solid var(--line); }
   .toc li a { display: block; padding-left: 14px; color: var(--muted); text-decoration: none; line-height: 1.4; }
   .toc li a:hover { color: var(--blue-700); }
   .toc-cta { margin-top: 12px; white-space: normal; }
+  .takeaways { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px 26px; display: grid; gap: 14px; }
+  .tk-h { font-size: var(--t-lg); }
+  .a-faq h2, .practice h2 { font-size: var(--t-xl); margin-bottom: 18px; }
+  .practice-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+  .practice-list a { display: grid; gap: 4px; padding: 18px 20px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); color: inherit; text-decoration: none; transition: border-color .2s var(--ease), box-shadow .2s var(--ease); }
+  .practice-list a:hover { border-color: var(--blue-700); box-shadow: var(--shadow-1); }
+  .practice-list strong { font-family: var(--f-display); font-stretch: 90%; font-size: var(--t-lg); }
+  .practice-list span:last-child { color: var(--muted); font-size: var(--t-sm); }
+  .rel-head { display: flex; justify-content: space-between; align-items: end; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; }
   @media (max-width: 960px) { .a-body { grid-template-columns: minmax(0, 1fr); } .toc { position: static; } }
 </style>

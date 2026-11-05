@@ -7,7 +7,11 @@ import CtaBand from '../components/CtaBand.astro';
 import Arrow from '../components/Arrow.astro';
 import QueueConsole from '../components/QueueConsole.astro';
 import { breadcrumbs, faq, service } from '../lib/schema';
+import RelatedReading from '../components/RelatedReading.astro';
+import { allPosts, postsForAudience } from '../lib/insights';
 
+
+const reading = postsForAudience(await allPosts(), 'msp').slice(0, 4);
 const faqs = [
   { q: 'Which MSP tasks can AI agents automate?', a: 'Repetitive work such as ticket triage and routing, password resets, access requests, new-starter provisioning, alert correlation and documentation drafts. Technicians review the output and handle complex cases.' },
   { q: 'Do AI agents work with our PSA and RMM?', a: 'Agents are built on the APIs of the tools you already run, so there is no rip-and-replace. On the first call we review your stack and tell you plainly where an agent can and cannot connect.' },
@@ -84,6 +88,7 @@ const plays = [
     </div>
   </section>
 
+  <RelatedReading posts={reading} title="Guides for MSPs" moreHref="/insights/msp-automation/" moreLabel="All MSP automation guides" />
   <CtaBand title="See where the hours go in your ticket queue" />
 </Base>
 <style>

@@ -5,7 +5,11 @@ import Faq from '../components/Faq.astro';
 import CtaBand from '../components/CtaBand.astro';
 import Arrow from '../components/Arrow.astro';
 import { breadcrumbs, faq } from '../lib/schema';
+import RelatedReading from '../components/RelatedReading.astro';
+import { allPosts } from '../lib/insights';
 
+
+const reading = (await allPosts()).filter((p) => ['how-to-calculate-ai-agent-roi', 'custom-ai-agents-vs-automation-platforms-vs-built-in-ai', 'ai-agent-pilot-metrics'].includes(p.id));
 const models = [
   { name: 'Discovery', basis: 'Fixed fee', for: 'Finding out what is worth automating', includes: ['Workflow mapping and baseline', 'Ranked automation candidates', 'Business case in your numbers', 'Pilot brief with a stop rule'] },
   { name: 'Pilot', basis: 'Fixed scope, fixed price', for: 'Proving one agent on one queue', includes: ['One agent, one workflow', 'Integration with your systems', 'Human approval switched on', 'Weekly results against the baseline'] },
@@ -44,6 +48,7 @@ const faqs = [
       <Faq items={faqs} />
     </div>
   </section>
+  <RelatedReading posts={reading} title="Before you ask for a quote" moreHref="/insights/strategy-and-roi/" moreLabel="All strategy and ROI guides" tone="paper" />
   <CtaBand title="Get a fixed-scope quote for one workflow" />
 </Base>
 <style>

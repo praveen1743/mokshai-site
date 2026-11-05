@@ -4,17 +4,21 @@ import sitemap from '@astrojs/sitemap';
 // Wrap Markdown tables in a focusable, labelled scroll region so wide tables
 // stay keyboard-accessible on small screens.
 function rehypeTableScroll() {
-  const walk = (node) => {
-    if (!node.children) return;
-    node.children = node.children.map((child) => {
-      walk(child);
-      if (child.type === 'element' && child.tagName === 'table') {
-        return { type: 'element', tagName: 'div', properties: { className: ['table-scroll'], tabIndex: 0, role: 'region', ariaLabel: 'Table (scrolls sideways)' }, children: [child] };
-      }
-      return child;
-    });
+  return (tree) => {
+    let n = 0;
+    const walk = (node) => {
+      if (!node.children) return;
+      node.children = node.children.map((child) => {
+        walk(child);
+        if (child.type === 'element' && child.tagName === 'table') {
+          n += 1;
+          return { type: 'element', tagName: 'div', properties: { className: ['table-scroll'], tabIndex: 0, role: 'region', ariaLabel: `Table ${n} (scrolls sideways)` }, children: [child] };
+        }
+        return child;
+      });
+    };
+    walk(tree);
   };
-  return (tree) => walk(tree);
 }
 
 export default defineConfig({

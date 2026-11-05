@@ -1,0 +1,33 @@
+---
+// Editorial list of articles. Used on Insights, topic hubs, service, audience
+// and calculator pages, and under each article as related reading.
+import { audienceLabel, fmtDate, readingMinutes, type Post } from '../lib/insights';
+import { topicBySlug } from '../lib/topics';
+interface Props { posts: Post[]; showSummary?: boolean; compact?: boolean }
+const { posts, showSummary = true, compact = false } = Astro.props;
+---
+<ul class={`post-list${compact ? ' compact' : ''}`} role="list">
+  {posts.map((p) => (
+    <li>
+      <a href={`/${p.id}/`}>
+        <span class="meta"><span class="tag">{topicBySlug(p.data.topic).name}</span><span class="tag">{audienceLabel(p.data.audience)} · {readingMinutes(p.body)} min read</span><time class="tag" datetime={p.data.published.toISOString()}>{fmtDate(p.data.published)}</time></span>
+        <span class="title">{p.data.title}</span>
+        {showSummary && <span class="text">{p.data.summary}</span>}
+      </a>
+    </li>
+  ))}
+</ul>
+<style>
+  .post-list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--ink); }
+  .post-list a { display: grid; grid-template-columns: minmax(0, .38fr) minmax(0, 1fr); grid-template-areas: 'meta title' 'meta text'; gap: 8px 40px; padding-block: 26px; border-bottom: 1px solid var(--line-strong); color: inherit; text-decoration: none; transition: background-color .25s var(--ease), padding .25s var(--ease); }
+  .post-list a:hover { background: var(--surface); padding-inline: 16px; }
+  .meta { grid-area: meta; display: grid; gap: 6px; align-content: start; }
+  .meta .tag:first-child { color: var(--teal-700); }
+  .title { grid-area: title; font: 700 var(--t-xl)/1.18 var(--f-display); font-stretch: 88%; letter-spacing: -0.01em; transition: color .2s var(--ease); }
+  .post-list a:hover .title { color: var(--blue-700); }
+  .text { grid-area: text; color: var(--muted); max-width: 68ch; }
+  .compact .title { font-size: var(--t-lg); }
+  .compact a { padding-block: 18px; }
+  @media (max-width: 800px) { .post-list a { grid-template-columns: minmax(0, 1fr); grid-template-areas: 'meta' 'title' 'text'; } .meta { grid-auto-flow: column; justify-content: start; gap: 12px; flex-wrap: wrap; } }
+  @media (max-width: 480px) { .meta { grid-auto-flow: row; } }
+</style>

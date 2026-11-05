@@ -3,6 +3,9 @@ import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
 import CtaBand from '../components/CtaBand.astro';
 import { breadcrumbs } from '../lib/schema';
+import RelatedReading from '../components/RelatedReading.astro';
+import { allPosts } from '../lib/insights';
+
 import PermissionScene from '../components/scenes/PermissionScene.astro';
 
 const controls = [
@@ -22,6 +25,7 @@ const questions = [
   'Who has access to the agent’s logs and configuration?',
   'What happens to our data and access when the engagement ends?',
 ];
+const reading = (await allPosts()).filter((p) => p.data.topic === 'security-and-governance' || p.id === 'how-to-automate-tier-1-tickets-with-an-ai-agent').slice(0, 3);
 ---
 <Base title="Security & Data Handling for AI Agents" description="How Moksh AI builds AI agents safely: least-privilege access, human approval for sensitive actions, audit logs, client data separation and model choices that follow your data rules." schema={[breadcrumbs([{ name: 'Security', path: '/security/' }])]}>
   <PageHero eyebrow="Security" title="Agents with limits you can see" lede="An AI agent is software with access to your systems. It should be built with the same care as any privileged account, and you should be able to check that it is.">
@@ -51,6 +55,7 @@ const questions = [
   <section class="section-tight">
     <div class="container"><p class="measure note">For how we handle personal information collected through this website, see our <a href="/privacy-policy/">privacy policy</a>.</p></div>
   </section>
+  <RelatedReading posts={reading} title="Security guides" moreHref="/insights/security-and-governance/" moreLabel="All security guides" />
   <CtaBand title="Want the answers for your environment?" text="Book a call and bring your security questions. We will answer them in writing for the workflow you have in mind." />
 </Base>
 <style>
