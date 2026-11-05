@@ -1,10 +1,9 @@
 ---
 import Arrow from './Arrow.astro';
-import HexField from './HexField.astro';
 interface Props { title?: string; text?: string; secondaryHref?: string; secondaryLabel?: string }
 const {
-  title = 'Bring one workflow. Leave with a plan for it.',
-  text = 'A 30-minute call about one workflow you want off your team’s plate. You get a straight answer on whether an agent fits, which systems it would touch, and how a pilot would be measured.',
+  title = 'Book a 30-minute call about one workflow',
+  text = 'Tell us which workflow takes up your team’s time. You get a straight answer on whether an agent fits, which systems it would touch, and how a pilot would be measured.',
   secondaryHref = '/tools/',
   secondaryLabel = 'Size it first with a calculator',
 } = Astro.props;
@@ -12,7 +11,6 @@ const {
 <section class="section-tight cta-wrap">
   <div class="container">
     <div class="cta on-grad reveal">
-      <HexField class="cta-hex" />
       <div class="stack-sm">
         <span class="eyebrow">Next step</span>
         <h2>{title}</h2>
@@ -27,6 +25,4 @@ const {
 </section>
 <style>
   .cta-wrap { background: linear-gradient(180deg, transparent 50%, var(--ink) 50%); }
-  .cta :global(.cta-hex) { width: 560px; right: -120px; top: -140px; opacity: .45; }
-  .cta :global(.cta-hex path) { stroke: rgba(255, 255, 255, .7); }
 </style>

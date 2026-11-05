@@ -26,9 +26,11 @@ Vercel, from `main`. Settings live in `vercel.json`; keep `public/.htaccess` and
 ## Design rules
 - Use the tokens at the top of `src/styles/global.css`. No new hex values in components.
 - Palette comes from the logo: `--blue` #2583DB and `--green` #1FA92F, bridged by `--teal`. On light backgrounds use the `-700` text variants; the raw logo colours are for decoration and dark backgrounds only.
-- Gradients (`--grad`, `--grad-deep`, `.grad-text`) are for calls to action, one key phrase per heading, featured edges and hero lighting. Not for body text or every card.
-- The logo hexagon is the brand device (`--hex` clip-path, `HexField`, `.hexi` badges). No grid-line backgrounds.
+- Gradient text (`.grad-text`) appears once on the whole site: the homepage H1. All other headings are solid ink. `--grad-deep` is for primary buttons and the CTA band; `--grad` for small decorative accents.
+- Ambient lighting (`.glow`) is used only in the homepage hero. Every other section is a flat tint or flat ink.
+- Hexagons do three jobs only: icon badges (`.hexi`, hub node icons), step numbers (`.step-n`) and the hub core. `HexField` appears only in the homepage hero. Bullets, eyebrow markers, FAQ toggles and slider handles are plain. No grid-line backgrounds.
 - Sections alternate surfaces: paper, `.sky`, `.mint`, `.wash`, `.dark`. Avoid two of the same tint in a row.
+- Vary section layouts. No more than two card grids per page; prefer editorial lists, statements and live components. Not every section needs an eyebrow label.
 - Fonts: Archivo (display, `font-stretch` ~86%), IBM Plex Sans (body), IBM Plex Mono (labels, numbers). Self-hosted in `public/fonts/`.
 - Content is fully readable at rest: `.reveal` animates movement only, never opacity. No animation may move layout (CLS must stay 0).
 - Never give a decorative element a class named `dark`: `.dark` paints the ink background.
@@ -40,6 +42,8 @@ Vercel, from `main`. Settings live in `vercel.json`; keep `public/.htaccess` and
 - No invented numbers, clients, testimonials or certifications. Every figure on the site needs a source the company can show.
 - Calculator defaults are labelled "Example inputs" and must stay labelled.
 - Banned phrasing: "unlock the potential", "seamless", "elevate", "empower", "cutting-edge", "in today's competitive market", "game-changer".
+- No two-beat or contrast headlines ("The agent prepares. A person decides.", "X, not Y"). Write plain, specific statements.
+- Show the operating-model table (`SplitTable`) only on the homepage and audience pages, not on every page.
 - Answer-first: the first paragraph of a service page or article answers its main question directly.
 
 ## Checks before shipping a change

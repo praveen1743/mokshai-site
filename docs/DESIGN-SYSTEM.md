@@ -5,10 +5,11 @@ Tokens live at the top of `src/styles/global.css`. Components use tokens only, w
 ## Principles
 
 1. **Show the work.** Illustrations depict what Moksh AI actually builds (integration maps, queues, permissions), not robots or glowing brains.
-2. **The logo is the brand device.** Its hexagon shapes bullets, icon badges, step numbers, slider handles, FAQ toggles and the background motif. No grid-line backgrounds.
-3. **Colour from the logo, used with intent.** Blue → teal → green gradients mark calls to action, one key phrase per heading, featured edges and hero lighting. Body text and most surfaces stay solid.
+2. **The logo is the brand device, used sparingly.** Hexagons do three jobs: icon badges, step numbers and the hub core. The `HexField` background appears only in the homepage hero. Bullets, eyebrow markers, FAQ toggles and slider handles are plain shapes. No grid-line backgrounds.
+3. **Colour from the logo, used with intent.** Gradient text appears once on the site (the homepage H1). Gradients otherwise mark primary buttons, the CTA band and small accents. Ambient blue/green lighting appears only in the homepage hero.
 4. **Tinted, never plain white.** Sections alternate paper, sky, mint, wash and deep ink.
 5. **Readable at rest.** Nothing is hidden waiting for scroll or JavaScript.
+6. **Vary the rhythm.** No more than two card grids per page. Use editorial lists, large statements and live components instead of yet another grid of identical cards.
 
 ## Colour
 
@@ -59,7 +60,9 @@ Scale: `--t-xs` 13 · `--t-sm` 15 · `--t-md` 17 · `--t-lg` 20 · `--t-xl` 24�
 | Hover lift + gradient border | Cards | 250 ms, `transform` only |
 | Gradient shift | Primary buttons | `background-position` |
 | Scroll reveal | `.reveal` | CSS scroll-driven animation, movement only, never opacity |
-| Ambient | HexField, hub pulses, marquee, queue panel | Slow, looping, paused or static with reduced motion |
+| Ambient | HexField (home hero only), hub pulses, marquee, queue panel | Slow, looping, paused or static with reduced motion |
+| Hover trace | Hub nodes | Hovering a node highlights its wire to the core |
+| Page transitions | All pages | CSS cross-document view transitions (`@view-transition`), 280 ms; off with reduced motion; unsupported browsers navigate normally |
 
 Hard rule: **CLS stays 0.** No animation may change layout.
 
@@ -78,5 +81,7 @@ Hard rule: **CLS stays 0.** No animation may change layout.
 - No stock photos of robots, brains, handshakes or circuit boards.
 - No AI-generated photos of people.
 - No grid-line backgrounds, purple-to-blue gradients or emoji section markers.
+- No gradient text outside the homepage H1, and no corner glows outside the homepage hero.
+- No two-beat contrast headlines ("X. Y.", "X, not Y").
 - Never give a decorative element the class `dark` (it paints the ink background).
 - Collapsing grid columns use `minmax(0, 1fr)`, never bare `1fr`.

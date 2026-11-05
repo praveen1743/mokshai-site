@@ -2,7 +2,6 @@
 import Base from '../../layouts/Base.astro';
 import PageHero from '../../components/PageHero.astro';
 import CtaBand from '../../components/CtaBand.astro';
-import SplitTable from '../../components/SplitTable.astro';
 import { services } from '../../site.config';
 import { serviceDetails } from '../../lib/serviceDetails';
 import { breadcrumbs, service } from '../../lib/schema';
@@ -14,7 +13,7 @@ const schema = [
 ];
 ---
 <Base title="AI Consulting & Implementation Services" description="AI strategy consulting, custom AI agent development, implementation and training, and AI cost optimisation for MSPs and operations-heavy businesses." schema={schema}>
-  <PageHero eyebrow="Services" title="Four services, one way of working" lede="Every engagement follows the same rule: the agent prepares the work, a person makes the decision. Start with any one of these and add the others only if they pay.">
+  <PageHero eyebrow="Services" title="Four services, from roadmap to running agents" lede="Every engagement follows the same rule: the agent prepares the work, a person makes the decision. Start with any one of these and add the others only if they pay.">
     <Hub slot="visual" tone="light"
       core={{ title: 'Your agent', sub: 'built and run by us' }}
       left={[
@@ -38,12 +37,6 @@ const schema = [
           <span class="link-arrow">Details</span>
         </a>
       ))}
-    </div>
-  </section>
-  <section class="section sky">
-    <div class="container">
-      <div class="head"><span class="eyebrow">The common thread</span><h2>Who does what once an agent is in place</h2></div>
-      <SplitTable />
     </div>
   </section>
   <CtaBand />

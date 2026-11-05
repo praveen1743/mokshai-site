@@ -1,11 +1,9 @@
 ---
-import HexField from './HexField.astro';
 interface Props { eyebrow: string; title: string; accent?: string; lede?: string; crumbs?: { name: string; href: string }[]; tone?: 'wash' | 'dark' }
 const { eyebrow, title, accent, lede, crumbs = [], tone = 'wash' } = Astro.props;
 const hasVisual = Astro.slots.has('visual');
 ---
-<section class={`page-hero glow ${tone === 'dark' ? 'dark' : 'wash'}${hasVisual ? ' has-visual' : ''}`}>
-  {!hasVisual && <HexField variant={tone === 'dark' ? 'dark' : 'light'} class="ph-hex" />}
+<section class={`page-hero ${tone === 'dark' ? 'dark' : 'wash'}${hasVisual ? ' has-visual' : ''}`}>
   <div class="container">
     <div class="hero-text">
       {crumbs.length > 0 && (
@@ -23,8 +21,6 @@ const hasVisual = Astro.slots.has('visual');
   </div>
 </section>
 <style>
-  .page-hero :global(.ph-hex) { width: min(620px, 70vw); right: -6%; top: 50%; translate: 0 -50%; }
-  @media (max-width: 760px) { .page-hero :global(.ph-hex) { opacity: .35; right: -30%; } }
   .dark .crumbs, .dark .crumbs a { color: var(--on-dark-muted); }
   .hero-text { display: grid; gap: 22px; }
   .has-visual h1 { font-size: clamp(2.3rem, 1.5rem + 3.2vw, 3.9rem); }

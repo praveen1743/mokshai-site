@@ -32,7 +32,7 @@ const rows = [
   description="AI agents that prepare quotes and estimates, process incoming documents and handle routine status updates for fabrication, construction-trade and operations-heavy businesses."
   schema={[service({ name: 'AI automation for operations teams', path: '/operations/', description: 'AI agents for quote preparation, document intake, status updates and reporting in operations-heavy businesses.', serviceType: 'Business process automation' }), breadcrumbs([{ name: 'For operations', path: '/operations/' }]), faq(faqs)]}
 >
-  <PageHero eyebrow="For operations-heavy businesses" title="Get hours back from quoting, intake and back-office handoffs" lede="Automation is a margin strategy, not a robotics project. The first wins usually come from software that gets work ready for the skilled people who make the decisions.">
+  <PageHero eyebrow="For operations-heavy businesses" title="Get hours back from quoting, intake and back-office handoffs" lede="The first wins usually come from software that reads incoming requests, pulls the right records and prepares the work, so your estimators and coordinators spend their time on decisions.">
     <div class="btn-row">
       <a class="btn btn-primary" href="/tools/back-office-hours/">Estimate your time savings <Arrow /></a>
       <a class="btn btn-secondary" href="/book/">Book a strategy call</a>
@@ -51,12 +51,12 @@ const rows = [
 
   <section class="section sky">
     <div class="container">
-      <div class="head"><span class="eyebrow">The split</span><h2>The agent gets the work ready. Your people decide.</h2></div>
+      <div class="head"><span class="eyebrow">The split</span><h2>Who handles what in back-office work</h2></div>
       <SplitTable rows={rows} caption="Who does what in back-office automation" />
     </div>
   </section>
 
-  <section class="section-tight dark glow">
+  <section class="section-tight dark">
     <div class="container group">
       <div class="stack-sm"><span class="eyebrow">Part of Moksh Group</span><h2>We already work alongside fabrication and construction teams</h2></div>
       <div class="stack-sm">
@@ -73,7 +73,7 @@ const rows = [
     </div>
   </section>
 
-  <CtaBand title="Pick the workflow that queues up the most. Start there." secondaryHref="/tools/back-office-hours/" secondaryLabel="Estimate the hours first" />
+  <CtaBand title="Start with the workflow that queues up the most" secondaryHref="/tools/back-office-hours/" secondaryLabel="Estimate the hours first" />
 </Base>
 <style>
   .group, .faqg { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(28px, 5vw, 72px); align-items: start; }

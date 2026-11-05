@@ -28,7 +28,7 @@ const after = rows.reduce((s, r) => s + r.after, 0);
     <div class="sum">
       <div><span class="mono lbl">Today</span><strong class="mono">${total.toLocaleString('en-US')}</strong></div>
       <div><span class="mono lbl">After</span><strong class="mono">${after.toLocaleString('en-US')}</strong></div>
-      <div class="save"><span class="mono lbl">Saved / year</span><strong class="mono grad-text">${((total - after) * 12).toLocaleString('en-US')}</strong></div>
+      <div class="save"><span class="mono lbl">Saved / year</span><strong class="mono save-v">${((total - after) * 12).toLocaleString('en-US')}</strong></div>
     </div>
   </div>
 </figure>
@@ -47,5 +47,6 @@ const after = rows.reduce((s, r) => s + r.after, 0);
   .sum div { display: grid; gap: 4px; }
   .lbl { font-size: 10.5px; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
   .sum strong { font-size: 20px; }
+  .save-v { color: var(--green-700); }
   @media (max-width: 480px) { .rows li { grid-template-columns: 1fr auto; } .bars { grid-column: 1 / -1; grid-row: 2; } }
 </style>

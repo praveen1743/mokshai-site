@@ -59,7 +59,7 @@ const year = new Date().getFullYear();
 </footer>
 
 <style>
-  .site-footer { padding-block: 72px calc(32px + env(safe-area-inset-bottom, 0px)); font-size: var(--t-sm); background: radial-gradient(90% 60% at 100% 0%, rgba(31, 169, 47, .12), transparent 60%), radial-gradient(80% 60% at 0% 100%, rgba(37, 131, 219, .16), transparent 60%), var(--ink); }
+  .site-footer { padding-block: 72px calc(32px + env(safe-area-inset-bottom, 0px)); font-size: var(--t-sm); background: var(--ink); }
   .top { display: grid; grid-template-columns: minmax(0, 1.5fr) repeat(3, minmax(0, 1fr)); gap: 40px; padding-bottom: 48px; border-bottom: 1px solid rgba(255, 255, 255, .1); }
   @media (max-width: 960px) { .top { grid-template-columns: repeat(2, minmax(0, 1fr)); } .intro { grid-column: 1 / -1; } }
   @media (max-width: 520px) { .top { grid-template-columns: minmax(0, 1fr); } }

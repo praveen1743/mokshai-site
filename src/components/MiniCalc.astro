@@ -1,0 +1,65 @@
+---
+// Compact, live version of the MSP ticket ROI calculator for the homepage.
+// Three inputs; minutes and hourly cost are fixed example values that the
+// full calculator lets the visitor change.
+import Range from './Range.astro';
+import Arrow from './Arrow.astro';
+import { ticketRoi, usd, num } from '../lib/calc';
+
+const FIXED = { minutesPerTicket: 15, hourlyCost: 42, buildCost: 0, runCostPerMonth: 0 };
+const r0 = ticketRoi({ ticketsPerMonth: 1500, tier1Share: 0.45, agentShare: 0.35, ...FIXED });
+---
+<div class="mini" id="mini-calc">
+  <form class="mini-in" novalidate aria-label="Quick ticket savings estimate">
+    <span class="example-pill">Example inputs</span>
+    <Range id="mc-tickets" label="Tickets per month" min={200} max={10000} step={50} value={1500} display="1,500" />
+    <Range id="mc-tier1" label="Share that are tier-1" min={5} max={80} step={1} value={45} display="45%" />
+    <Range id="mc-agent" label="Share of tier-1 the agent handles" min={5} max={80} step={1} value={35} display="35%" />
+    <p class="mini-note">Assumes 15 minutes per tier-1 ticket at $42 an hour. Change both, and add build and running costs, in the full calculator.</p>
+  </form>
+  <div class="mini-out" aria-live="polite">
+    <p class="mini-label">Technician time returned</p>
+    <p class="mini-big"><span id="mc-hours">{num(r0.hoursPerMonth)}</span> <small>hours a month</small></p>
+    <dl>
+      <div><dt>Labour value</dt><dd id="mc-value">{usd(r0.valuePerMonth)}/mo</dd></div>
+      <div><dt>Capacity freed</dt><dd id="mc-fte">{num(r0.fte, 1)} FTE</dd></div>
+    </dl>
+    <a class="btn btn-light" href="/tools/msp-ticket-roi/">Open the full calculator <Arrow /></a>
+  </div>
+</div>
+
+<style>
+  .mini { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); border-radius: 18px; overflow: hidden; border: 1px solid rgba(255, 255, 255, .12); }
+  @media (max-width: 860px) { .mini { grid-template-columns: minmax(0, 1fr); } }
+  .mini-in { background: var(--surface); color: var(--ink); padding: clamp(22px, 3vw, 36px); display: grid; gap: 20px; }
+  .mini-note { font-size: var(--t-xs); color: var(--muted); }
+  .mini-out { padding: clamp(22px, 3vw, 36px); background: var(--ink-2); color: var(--on-dark); display: grid; gap: 18px; align-content: center; }
+  .mini-label { font: 500 var(--t-xs)/1.2 var(--f-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--teal-on-dark); }
+  .mini-big { font: 780 clamp(3rem, 2rem + 4vw, 5.2rem)/1 var(--f-display); font-stretch: 82%; letter-spacing: -0.03em; color: #fff; font-variant-numeric: tabular-nums; }
+  .mini-big small { font: 500 var(--t-md)/1 var(--f-body); color: var(--on-dark-muted); letter-spacing: 0; }
+  .mini-out dl { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 0; border-top: 1px solid rgba(255, 255, 255, .12); padding-top: 16px; }
+  .mini-out dt { font-size: var(--t-xs); color: var(--on-dark-muted); }
+  .mini-out dd { margin: 4px 0 0; font: 500 var(--t-md)/1.2 var(--f-mono); color: #fff; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .mini-out .btn { justify-self: start; }
+</style>
+
+<script>
+  import { ticketRoi, usd, num } from '../lib/calc';
+  import { track } from '../lib/handoff';
+  const $ = (id: string) => document.getElementById(id) as HTMLInputElement;
+  const out = (id: string) => document.getElementById(id) as HTMLElement;
+  let started = false;
+  function update() {
+    out('mc-tickets-out').textContent = num(+$('mc-tickets').value);
+    out('mc-tier1-out').textContent = `${$('mc-tier1').value}%`;
+    out('mc-agent-out').textContent = `${$('mc-agent').value}%`;
+    const r = ticketRoi({ ticketsPerMonth: +$('mc-tickets').value, tier1Share: +$('mc-tier1').value / 100, agentShare: +$('mc-agent').value / 100, minutesPerTicket: 15, hourlyCost: 42, buildCost: 0, runCostPerMonth: 0 });
+    out('mc-hours').textContent = num(r.hoursPerMonth);
+    out('mc-value').textContent = `${usd(r.valuePerMonth)}/mo`;
+    out('mc-fte').textContent = `${num(r.fte, 1)} FTE`;
+  }
+  document.querySelectorAll('#mini-calc input').forEach((el) => el.addEventListener('input', () => {
+    if (!started) { started = true; track('calculator_start', { calculator: 'home-mini' }); }
+    update();
+  }));
+</script>

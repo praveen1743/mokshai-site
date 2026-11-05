@@ -32,7 +32,7 @@ Shell for calculator pages: page hero, the calculator (named slot `calc`), a met
 | `Header.astro` | Sticky glass header, primary nav, "Book a call" button, mobile menu | Nav items from `site.config.ts`. Mobile menu is a real button with `aria-expanded`; Escape closes it |
 | `Footer.astro` | Brand blurb, site and service links, both offices, Moksh Group links, legal line | All facts from `site.config.ts` |
 | `CtaBand.astro` | Gradient call-to-action card closing most pages | Props: `title`, `text`, `secondaryHref`, `secondaryLabel` |
-| `PageHero.astro` | Interior page header on a tinted wash | Props: `eyebrow`, `title`, `accent` (gradient words), `lede`, `crumbs`, `tone`. Default slot for buttons; named slot `visual` for a scene, which switches to a two-column layout |
+| `PageHero.astro` | Interior page header on a flat tinted wash (no lighting or background hexagons) | Props: `eyebrow`, `title`, `accent` (gradient words), `lede`, `crumbs`, `tone`. Default slot for buttons; named slot `visual` for a scene, which switches to a two-column layout |
 
 ## Content blocks
 
@@ -40,6 +40,7 @@ Shell for calculator pages: page hero, the calculator (named slot `calc`), a met
 | --- | --- | --- |
 | `SplitTable.astro` | The operating model: what the agent handles vs. what a person owns. Collapses to labelled rows on mobile | `rows?: { area, agent, human }[]`, `caption?` |
 | `Faq.astro` | Accessible accordion built on `<details>`; first item open | `items: { q, a }[]` (pair with `faq()` from `lib/schema.ts` for FAQPage schema) |
+| `MiniCalc.astro` | Compact live MSP ticket-savings estimate on the homepage (three sliders, fixed 15 min at $42/h) linking to the full calculator | none |
 | `Range.astro` | Labelled slider with live output and gradient fill | `id`, `label`, `min`, `max`, `step`, `value`, `hint?`, `display?` (server-rendered output text) |
 | `Icon.astro` | 24 px line-icon set, always `aria-hidden` | `name` (ticket, alert, doc, copilot, layers, quote, inbox, status, chart, compass, code, people, coins, shield, clock, stack, handshake, target, wallet, lock, eye, power, database, route) |
 | `Arrow.astro` | Arrow glyph used in buttons | none |
@@ -51,7 +52,7 @@ Product-style illustrations that show each page's subject. All are HTML/SVG, lab
 
 | Scene | Used on | Shows |
 | --- | --- | --- |
-| `Hub.astro` | Home (dark), Services hub, About (light) | An agent core connected to systems or teams, with animated data pulses. Props: `core`, `left`, `right` (`{ label, sub?, icon?, human? }[]`), `tone`, `steps?`, `caption?`. Height adapts to node count |
+| `Hub.astro` | Home (dark), Services hub, About (light) | An agent core connected to systems or teams, with animated data pulses; hovering a node highlights its wire. Props: `core`, `left`, `right` (`{ label, sub?, icon?, human? }[]`), `compact?` (a smaller node set shown below 560 px so labels never truncate), `tone`, `steps?`, `caption?`. Height adapts to node count |
 | `QueueConsole.astro` | `/msp/` | Service-desk queue cycling tickets between agent and engineer. Swaps text in place, so no layout shift; pauses off-screen |
 | `IntakeScene.astro` | `/operations/` | RFQ email with a drawing turned into a draft quote, with a missing field flagged |
 | `MatrixScene.astro` | AI strategy & consulting | Value-vs-effort matrix with a "start here" quadrant and ranked shortlist |

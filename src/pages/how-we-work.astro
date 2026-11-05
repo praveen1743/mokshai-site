@@ -2,7 +2,6 @@
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
 import CtaBand from '../components/CtaBand.astro';
-import SplitTable from '../components/SplitTable.astro';
 import { breadcrumbs } from '../lib/schema';
 import ScorecardScene from '../components/scenes/ScorecardScene.astro';
 
@@ -22,7 +21,7 @@ const principles = [
 ];
 ---
 <Base title="How We Work: Discovery, Pilot, Scale" description="How Moksh AI runs AI automation engagements: discovery on one workflow, a measured pilot with human approval, then scale with training, runbooks and monthly review." schema={[breadcrumbs([{ name: 'How we work', path: '/how-we-work/' }])]}>
-  <PageHero eyebrow="How we work" title="Small, measured steps, with a decision at each one" lede="AI projects go wrong when they start big and measure late. Ours start with one workflow, a baseline and a stop rule, and grow only on evidence.">
+  <PageHero eyebrow="How we work" title="Four steps, each ending in a decision you make" lede="AI projects go wrong when they start big and measure late. Ours start with one workflow, a baseline and a stop rule, and grow only on evidence.">
     <ScorecardScene slot="visual" />
   </PageHero>
 
@@ -52,12 +51,6 @@ const principles = [
     </div>
   </section>
 
-  <section class="section">
-    <div class="container">
-      <div class="head"><span class="eyebrow">Operating model</span><h2>What the agent does, and what stays with people</h2></div>
-      <SplitTable />
-    </div>
-  </section>
 
   <CtaBand />
 </Base>
