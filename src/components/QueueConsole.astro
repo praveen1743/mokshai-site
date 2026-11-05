@@ -1,0 +1,108 @@
+---
+// Hero visual: an illustrative service-desk queue showing the agent/engineer
+// split. Static and complete at rest; rows rotate only when motion is allowed.
+const rows = [
+  { id: '48213', subject: 'Password reset · M365 user', owner: 'agent', status: 'Resolved', note: 'Identity verified, reset sent' },
+  { id: '48214', subject: 'Disk 92% on FS-02', owner: 'agent', status: 'Grouped', note: '14 related alerts → 1 incident' },
+  { id: '48215', subject: 'VPN drops after update', owner: 'human', status: 'Routed', note: 'Device history + 2 past fixes attached' },
+  { id: '48216', subject: 'New starter: mailbox + Teams', owner: 'agent', status: 'Prepared', note: 'Waiting for manager approval' },
+  { id: '48217', subject: 'Firewall rule change', owner: 'human', status: 'Needs approval', note: 'Security-sensitive, never automated' },
+];
+const extra = [
+  { id: '48218', subject: 'Printer offline · 2nd floor', owner: 'agent', status: 'Resolved', note: 'Known fix applied from KB' },
+  { id: '48219', subject: 'Suspicious sign-in · finance', owner: 'human', status: 'Escalated', note: 'Timeline and IPs attached' },
+  { id: '48220', subject: 'Shared drive access request', owner: 'agent', status: 'Prepared', note: 'Owner approval requested' },
+  { id: '48221', subject: 'Backup job failed · SQL-01', owner: 'human', status: 'Routed', note: 'Last 3 job logs summarised' },
+];
+---
+<figure class="console" aria-label="Illustrative service desk queue">
+  <div class="c-head">
+    <span class="c-title"><span class="live" aria-hidden="true"></span>Service desk queue</span>
+    <span class="c-tag">Illustrative</span>
+  </div>
+  <div class="c-legend" aria-hidden="true">
+    <span><span class="dot dot-agent"></span>Agent</span>
+    <span><span class="dot dot-human"></span>Engineer decides</span>
+  </div>
+  <ol class="c-rows" data-extra={JSON.stringify(extra)}>
+    {rows.map((r) => (
+      <li class={`row ${r.owner}`}>
+        <span class="r-id">#{r.id}</span>
+        <span class="r-sub">{r.subject}</span>
+        <span class="r-status">{r.status}</span>
+        <span class="r-note">{r.note}</span>
+      </li>
+    ))}
+  </ol>
+  <figcaption class="c-foot">The agent sorts, prepares and closes routine work. Anything outside its limits goes to a person with the context already attached.</figcaption>
+</figure>
+
+<style>
+  .console { margin: 0; position: relative; background: linear-gradient(180deg, rgba(16, 48, 77, .78), rgba(6, 24, 39, .9)); border-radius: 18px; box-shadow: 0 40px 90px -40px rgba(37, 131, 219, .7), 0 30px 70px -40px rgba(31, 169, 47, .5); overflow: hidden; font-family: var(--f-mono); color: var(--on-dark); min-width: 0; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+  .console::before { content: ''; position: absolute; inset: 0; border-radius: inherit; padding: 1px; background: linear-gradient(140deg, rgba(37,131,219,.9), rgba(22,163,176,.4) 45%, rgba(31,169,47,.9)); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none; }
+  .c-head { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,.08); font-size: var(--t-xs); letter-spacing: .04em; }
+  .c-title { display: inline-flex; align-items: center; gap: 10px; color: var(--on-dark); }
+  .live { width: 8px; height: 8px; border-radius: 50%; background: var(--green-on-dark); box-shadow: 0 0 0 4px rgba(111, 208, 138, .15); }
+  .c-tag { color: var(--on-dark-muted); border: 1px solid rgba(255,255,255,.18); border-radius: 4px; padding: 4px 7px; text-transform: uppercase; font-size: 11px; letter-spacing: .08em; }
+  .c-legend { display: flex; gap: 18px; padding: 10px 20px; font-size: 11px; color: var(--on-dark-muted); text-transform: uppercase; letter-spacing: .08em; border-bottom: 1px solid rgba(255,255,255,.08); }
+  .c-legend > span { display: inline-flex; align-items: center; gap: 8px; }
+  .c-legend .dot-agent { background: var(--blue-on-dark); }
+  .c-legend .dot-human { background: var(--amber-on-dark); }
+  .c-legend .dot-agent { background: var(--blue-on-dark); }
+  .c-rows { list-style: none; margin: 0; padding: 0; }
+  .row { display: grid; grid-template-columns: 64px minmax(0, 1fr) auto; grid-template-areas: 'id sub status' 'id note note'; gap: 3px 12px; padding: 13px 18px; border-bottom: 1px solid rgba(255,255,255,.06); border-left: 3px solid transparent; font-size: 12.5px; line-height: 1.45; }
+  .row.agent { border-left-color: var(--blue-on-dark); }
+  .row.human { border-left-color: var(--amber-on-dark); }
+  .r-id { grid-area: id; color: #8aa0b6; }
+  .r-sub { grid-area: sub; color: #fff; font-family: var(--f-body); font-size: 14px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .r-status { grid-area: status; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; padding: 3px 7px; border-radius: 4px; align-self: start; white-space: nowrap; }
+  .agent .r-status { color: var(--blue-on-dark); background: rgba(125, 182, 245, .1); }
+  .human .r-status { color: var(--amber-on-dark); background: rgba(242, 180, 92, .1); }
+  .r-note { grid-area: note; color: var(--on-dark-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .c-foot { padding: 16px 20px; font: 400 12.5px/1.55 var(--f-body); color: var(--on-dark-muted); background: rgba(6, 24, 39, .6); }
+  .row.enter { animation: enter .5s var(--ease) both; }
+  @keyframes enter { from { opacity: .2; background-color: rgba(125,182,245,.12); } to { opacity: 1; background-color: transparent; } }
+  @media (max-width: 420px) { .row { grid-template-columns: 52px minmax(0, 1fr); grid-template-areas: 'id sub' 'id status' 'id note'; } }
+</style>
+
+<script>
+  const list = document.querySelector<HTMLOListElement>('.c-rows');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (list && !reduce) {
+    type Row = { id: string; subject: string; owner: string; status: string; note: string };
+    const pool: Row[] = JSON.parse(list.dataset.extra || '[]');
+    const items = Array.from(list.children) as HTMLLIElement[];
+    // Read the server-rendered rows so the first tick continues from them.
+    let data: Row[] = items.map((li) => ({
+      id: (li.querySelector('.r-id')?.textContent || '').replace('#', ''),
+      subject: li.querySelector('.r-sub')?.textContent || '',
+      status: li.querySelector('.r-status')?.textContent || '',
+      note: li.querySelector('.r-note')?.textContent || '',
+      owner: li.classList.contains('human') ? 'human' : 'agent',
+    }));
+    let i = 0;
+    let nextId = Math.max(...data.map((d) => Number(d.id))) + pool.length;
+    let timer: number | undefined;
+    // Rows keep their positions; only their text changes, so nothing shifts layout.
+    const tick = () => {
+      const r = { ...pool[i % pool.length], id: String(++nextId) };
+      i++;
+      data = [r, ...data.slice(0, items.length - 1)];
+      items.forEach((li, k) => {
+        const d = data[k];
+        li.className = `row ${d.owner}`;
+        (li.querySelector('.r-id') as HTMLElement).textContent = `#${d.id}`;
+        (li.querySelector('.r-sub') as HTMLElement).textContent = d.subject;
+        (li.querySelector('.r-status') as HTMLElement).textContent = d.status;
+        (li.querySelector('.r-note') as HTMLElement).textContent = d.note;
+      });
+      void items[0].offsetWidth;
+      items[0].classList.add('enter');
+    };
+    const start = () => { if (!timer) timer = window.setInterval(tick, 3200); };
+    const stop = () => { if (timer) { clearInterval(timer); timer = undefined; } };
+    const io = new IntersectionObserver((entries) => entries.forEach((e) => (e.isIntersecting ? start() : stop())));
+    io.observe(list);
+    document.addEventListener('visibilitychange', () => (document.hidden ? stop() : start()));
+  }
+</script>

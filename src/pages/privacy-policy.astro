@@ -1,0 +1,12 @@
+---
+import { getEntry, render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+const entry = (await getEntry('pages', 'privacy-policy'))!;
+const { Content } = await render(entry);
+const updated = entry.data.updated.toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+<Base title="Privacy Policy" description="How Moksh AI (Moksh Infotech Pvt Ltd) collects, uses and protects information when you visit mokshai.net or contact us.">
+  <PageHero eyebrow="Legal" title="Privacy policy" lede={`Last updated ${updated}.`} />
+  <section class="section"><div class="container"><div class="prose"><Content /></div></div></section>
+</Base>

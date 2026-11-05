@@ -1,0 +1,25 @@
+{
+  "name": "mokshai-site",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "node scripts/copy-fonts.mjs && astro dev",
+    "build": "node scripts/copy-fonts.mjs && astro build",
+    "preview": "astro preview --host",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "astro": "5.18.1",
+    "@astrojs/sitemap": "3.7.4",
+    "@fontsource-variable/archivo": "5.3.0",
+    "@fontsource/ibm-plex-sans": "5.3.0",
+    "@fontsource/ibm-plex-mono": "5.3.0"
+  },
+  "devDependencies": {
+    "vitest": "3.2.7"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

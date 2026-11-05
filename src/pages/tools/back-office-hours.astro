@@ -1,0 +1,77 @@
+---
+import ToolPage from '../../layouts/ToolPage.astro';
+import Range from '../../components/Range.astro';
+import Arrow from '../../components/Arrow.astro';
+import { backOffice, usd, num } from '../../lib/calc';
+
+const r0 = backOffice({ requestsPerWeek: 40, minutesPerRequest: 75, automatableShare: 0.4, hourlyCost: 45, workingWeeks: 48 });
+const faqs = [
+  { q: 'What counts as a request?', a: 'Any repeatable unit of back-office work: a quote or estimate request, an RFQ, a purchase order to enter, a drawing set to log, an invoice to match, a status report to compile. Use whichever one takes most of your team’s time.' },
+  { q: 'Which part of the work can an agent take?', a: 'Usually the preparation: reading the incoming email or document, pulling the right customer and job records, filling in the template or system fields, and flagging anything missing. A person still checks prices, technical judgement and anything sent to a customer.' },
+  { q: 'Why show extra capacity instead of cost savings?', a: 'For most operations teams the constraint is how much work the same people can turn around, not payroll. Faster quotes win more jobs. The extra requests per week figure shows how much more the current team could handle at the same quality.' },
+];
+---
+<ToolPage slug="back-office-hours" title="Back-office time savings calculator" lede="Estimate the hours an AI agent could save on quoting, estimating and document intake, what that time is worth over a year, and how much more work the same team could handle." faqs={faqs}>
+  <div slot="calc" class="calc" id="bo-calc">
+    <form class="calc-inputs" novalidate>
+      <span class="example-pill">Example inputs. Replace them with your own</span>
+      <Range id="req" label="Requests per week" min={5} max={500} step={5} value={40} hint="Quotes, RFQs, orders, drawing sets or invoices: pick one type." />
+      <Range id="mins" label="Minutes of preparation per request" min={5} max={480} step={5} value={75} display="75 min" />
+      <Range id="share" label="Share of that preparation an agent can do" min={5} max={90} step={5} value={40} display="40%" hint="Reading, looking up records, filling templates, flagging gaps." />
+      <Range id="cost" label="Loaded staff cost per hour" min={15} max={150} step={1} value={45} display="$45" />
+      <Range id="weeks" label="Working weeks per year" min={40} max={52} step={1} value={48} />
+    </form>
+    <div class="calc-out" aria-live="polite">
+      <span class="eyebrow">Time returned to your team</span>
+      <div class="big-out" id="o-week">{num(r0.hoursPerWeek)}<small>hours / week</small></div>
+      <dl class="out-list">
+        <dt>Hours per year</dt><dd id="o-year-h">{num(r0.hoursPerYear)}</dd>
+        <dt>Labour value per year</dt><dd id="o-value">{usd(r0.valuePerYear)}</dd>
+        <dt>Minutes left per request</dt><dd id="o-left">{num(r0.minutesLeftPerRequest)} min</dd>
+        <dt>Extra requests per week, same team</dt><dd id="o-extra">{num(r0.extraRequestsPerWeek)}</dd>
+      </dl>
+      <p class="out-note" id="o-note"></p>
+      <div class="btn-row"><a class="btn btn-primary" href="/book/" id="o-book">Discuss these numbers <Arrow /></a></div>
+      <p class="formula">hours/week = requests × minutes × agent share ÷ 60<br />value/year = hours/week × weeks × cost<br />extra requests = minutes saved ÷ minutes left per request</p>
+    </div>
+  </div>
+
+  <Fragment slot="method">
+    <p>The calculator multiplies weekly request volume by the minutes of preparation each request needs, then by the share of that preparation an agent can draft or complete. The result, converted to hours, is the time returned each week. Multiplying by working weeks and your loaded hourly cost gives the yearly labour value.</p>
+    <p>The capacity figure divides the minutes saved each week by the minutes a person still spends per request. It answers a practical question: with the same people, how many more requests could you turn around each week?</p>
+    <h3>What the calculator leaves out</h3>
+    <ul>
+      <li>Shorter turnaround on quotes, which often matters more for win rate than the hours themselves.</li>
+      <li>Fewer re-keying errors between email, spreadsheets and your business system.</li>
+      <li>Review time during the first weeks of a pilot, while people check every draft.</li>
+    </ul>
+  </Fragment>
+</ToolPage>
+
+<script>
+  import { backOffice, usd, num } from '../../lib/calc';
+  import { saveHandoff, track } from '../../lib/handoff';
+  const $ = <T extends HTMLElement = HTMLInputElement>(id: string) => document.getElementById(id) as T;
+  const fmt: Record<string, (v: number) => string> = { req: (v) => num(v), mins: (v) => `${v} min`, share: (v) => `${v}%`, cost: (v) => `$${v}`, weeks: (v) => `${v}` };
+  let started = false;
+  function update() {
+    Object.entries(fmt).forEach(([id, f]) => ($<HTMLOutputElement>(`${id}-out`).textContent = f(+$(id).value)));
+    const r = backOffice({ requestsPerWeek: +$('req').value, minutesPerRequest: +$('mins').value, automatableShare: +$('share').value / 100, hourlyCost: +$('cost').value, workingWeeks: +$('weeks').value });
+    $('o-week').firstChild!.textContent = num(r.hoursPerWeek);
+    $('o-year-h').textContent = num(r.hoursPerYear);
+    $('o-value').textContent = usd(r.valuePerYear);
+    $('o-left').textContent = `${num(r.minutesLeftPerRequest)} min`;
+    $('o-extra').textContent = Number.isFinite(r.extraRequestsPerWeek) ? num(r.extraRequestsPerWeek) : 'No limit';
+    $('o-note').textContent = +$('share').value >= 70 ? 'Shares above 70% are unusual on day one. Most teams start lower and grow it as the agent proves itself.' : '';
+    if (started) saveHandoff('Back-office time savings', {
+      'Requests / week': $('req').value, 'Minutes / request': $('mins').value, 'Agent share': `${$('share').value}%`, 'Hourly cost': `$${$('cost').value}`,
+      'Hours returned / week': num(r.hoursPerWeek), 'Value / year': usd(r.valuePerYear),
+    });
+  }
+  document.querySelectorAll('#bo-calc input').forEach((el) => el.addEventListener('input', () => {
+    if (!started) { started = true; track('calculator_start', { calculator: 'back-office-hours' }); }
+    update();
+  }));
+  $('o-book').addEventListener('click', () => track('calculator_book_click', { calculator: 'back-office-hours' }));
+  update();
+</script>

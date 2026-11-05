@@ -1,0 +1,95 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import SplitTable from '../components/SplitTable.astro';
+import Faq from '../components/Faq.astro';
+import CtaBand from '../components/CtaBand.astro';
+import Arrow from '../components/Arrow.astro';
+import QueueConsole from '../components/QueueConsole.astro';
+import { breadcrumbs, faq, service } from '../lib/schema';
+
+const faqs = [
+  { q: 'Which MSP tasks can AI agents automate?', a: 'Repetitive work such as ticket triage and routing, password resets, access requests, new-starter provisioning, alert correlation and documentation drafts. Technicians review the output and handle complex cases.' },
+  { q: 'Do AI agents work with our PSA and RMM?', a: 'Agents are built on the APIs of the tools you already run, so there is no rip-and-replace. On the first call we review your stack and tell you plainly where an agent can and cannot connect.' },
+  { q: 'Can we offer AI agents to our own clients?', a: 'Yes. We build white-label agents that you deploy and support under your own brand, so AI becomes a service line rather than only an internal saving.' },
+  { q: 'How should an MSP start with AI agents?', a: 'Start with tier-1 support and ticket routing, with clear escalation thresholds and human approval on. Once the results hold up on your own queue, extend to NOC alerting and PSA workflows.' },
+  { q: 'Can small and mid-sized MSPs benefit?', a: 'Yes. Smaller teams often see the clearest gains, because every hour of routine work removed goes straight back to a limited number of engineers.' },
+];
+const plays = [
+  { h: 'Ticket triage and routing', p: 'The agent tags priority, category and likely cause before a technician opens the ticket, and attaches the device record and similar past resolutions. The engineer confirms and owns the fix.' },
+  { h: 'Tier-1 resolution', p: 'Password resets, unlocks, access requests and known fixes are resolved inside the limits you set. A 2 a.m. request gets an immediate answer, and anything outside scope becomes a documented handoff.' },
+  { h: 'NOC alert correlation', p: 'Instead of hundreds of disk or connectivity alerts, the NOC sees one incident with the affected devices grouped and a probable cause attached. The engineer judges the risk.' },
+  { h: 'Documentation as a by-product', p: 'Resolutions are logged, tickets updated and recurring issues tagged as the work happens. Technicians approve each entry, so nothing unverified reaches the knowledge base.' },
+  { h: 'Technician copilot', p: 'While an engineer works a complex case, the copilot pulls ticket and device history, suggests next steps and drafts the resolution note. The engineer keeps every decision.' },
+  { h: 'White-label AI for your clients', p: 'Package agents as your own service: help-desk automation, reporting, or document workflows for client businesses, supported by your team and built by ours.' },
+];
+---
+<Base
+  title="AI Agents for MSPs: Ticket Triage, NOC & Help Desk Automation"
+  description="AI agents for managed service providers: ticket triage, tier-1 resolution, NOC alert correlation and documentation inside your PSA and RMM, with engineers keeping every decision."
+  schema={[service({ name: 'AI agents for MSPs', path: '/msp/', description: 'AI agents for ticket triage, tier-1 resolution, NOC alert correlation and documentation inside an MSP’s existing PSA and RMM.', serviceType: 'AI automation for managed service providers' }), breadcrumbs([{ name: 'For MSPs', path: '/msp/' }]), faq(faqs)]}
+>
+  <PageHero eyebrow="For managed service providers" title="Take tier-1 tickets and alert noise off your technicians" lede="Most MSPs are not short on tools. They are short on capacity. AI agents take the repetitive layer of service delivery so your engineers spend the day on the work clients pay for.">
+    <div class="btn-row">
+      <a class="btn btn-primary" href="/tools/msp-ticket-roi/">Estimate your ticket savings <Arrow /></a>
+      <a class="btn btn-secondary" href="/book/">Book a strategy call</a>
+    </div>
+    <QueueConsole slot="visual" />
+  </PageHero>
+
+  <section class="section">
+    <div class="container">
+      <div class="head"><span class="eyebrow">The pressure</span><h2>Where MSP capacity goes</h2></div>
+      <div class="grid g-3">
+        <div class="pressure"><h3>Rising ticket volumes</h3><p>Password resets and access requests eat hours that should go to engineering and project work.</p></div>
+        <div class="pressure"><h3>Hiring is slow and expensive</h3><p>Qualified technicians are harder and costlier to find, so growth stalls on headcount before it stalls on sales.</p></div>
+        <div class="pressure"><h3>Alert fatigue</h3><p>NOC teams wade through low-priority alerts, and the one that matters is easy to miss.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section sky">
+    <div class="container">
+      <div class="head"><span class="eyebrow">What agents do</span><h2>Six places to start</h2><p class="lede">Each one follows the same pattern: the agent prepares, an engineer decides, the client gets a faster result.</p></div>
+      <div class="grid g-3">
+        {plays.map((p) => (<div class="card"><h3>{p.h}</h3><p>{p.p}</p></div>))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="head"><span class="eyebrow">The split</span><h2>The agent prepares. The engineer decides.</h2></div>
+      <SplitTable />
+    </div>
+  </section>
+
+  <section class="section-tight dark glow">
+    <div class="container sister">
+      <div class="stack-sm">
+        <span class="eyebrow">Need people as well as agents?</span>
+        <h2>Our sister company Moksh Tech provides dedicated MSP engineers</h2>
+      </div>
+      <div class="stack-sm">
+        <p class="lede">If you need more hands while automation ramps up, Moksh Tech supplies outsourced engineers and 24/7 service desk cover, and they work alongside the agents we build.</p>
+        <a class="link-arrow" href="https://www.mokshtech.net/" rel="noopener">Visit Moksh Tech</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container faqg">
+      <div class="stack-sm"><span class="eyebrow">Questions</span><h2>AI agents for MSPs</h2><p><a class="link-arrow" href="/ai-agents-for-msps-what-they-are-how-they-reduce-workload/">Read the full guide</a></p></div>
+      <Faq items={faqs} />
+    </div>
+  </section>
+
+  <CtaBand title="Bring your ticket data. We will show you where the hours are." />
+</Base>
+<style>
+  .pressure { border-top: 3px solid; border-image: var(--grad) 1; padding-top: 18px; display: grid; gap: 8px; }
+  .pressure p { color: var(--muted); }
+  .sister, .faqg { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(28px, 5vw, 72px); align-items: start; }
+  .faqg { grid-template-columns: minmax(0, .7fr) minmax(0, 1.3fr); }
+  @media (max-width: 900px) { .sister, .faqg { grid-template-columns: minmax(0, 1fr); } }
+</style>

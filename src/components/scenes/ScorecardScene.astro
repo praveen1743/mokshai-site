@@ -1,0 +1,39 @@
+---
+const rows = [
+  { m: 'Tier-1 tickets handled by the agent', b: '0%', t: '30%', a: '34%', ok: true },
+  { m: 'Approved without edits', b: '—', t: '90%', a: '93%', ok: true },
+  { m: 'Median first response', b: '42 min', t: '< 5 min', a: '2 min', ok: true },
+  { m: 'Running cost / month', b: '—', t: '≤ $800', a: '$640', ok: true },
+];
+---
+<figure class="scene score" aria-label="Illustration: pilot scorecard comparing baseline, target and result">
+  <div class="scene-bar"><span class="scene-title">Pilot scorecard · week 4</span><span class="scene-tag">Illustrative</span></div>
+  <div class="scene-body">
+    <div class="phases" aria-hidden="true">
+      <span class="ph done">Discovery</span><span class="ln"></span><span class="ph now">Pilot</span><span class="ln dim"></span><span class="ph">Scale</span>
+    </div>
+    <div class="tbl">
+      <div class="hd mono"><span>Metric</span><span>Baseline</span><span>Target</span><span>Result</span></div>
+      {rows.map((r) => (
+        <div class="rw"><span>{r.m}</span><span class="mono">{r.b}</span><span class="mono">{r.t}</span><span class="mono res">{r.a} <i>✓</i></span></div>
+      ))}
+    </div>
+    <div class="decision"><span class="pill pill-ok">Decision</span><span>Targets met. Scale to the NOC queue, keep approval on access requests.</span></div>
+    <p class="stop mono">Stop rule agreed in discovery: accuracy below 85% for two weeks.</p>
+  </div>
+</figure>
+<style>
+  .phases { display: flex; align-items: center; gap: 8px; }
+  .ph { font: 500 11px/1 var(--f-mono); text-transform: uppercase; letter-spacing: .06em; padding: 8px 10px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); background: #fff; }
+  .ph.done { background: var(--mint); color: var(--green-700); border-color: transparent; }
+  .ph.now { background: var(--grad-deep); color: #fff; border-color: transparent; }
+  .ln { flex: 1; height: 2px; background: var(--grad); border-radius: 2px; } .ln.dim { background: var(--line); }
+  .tbl { display: grid; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+  .hd, .rw { display: grid; grid-template-columns: minmax(0, 1.8fr) repeat(3, minmax(0, .8fr)); gap: 8px; padding: 10px 12px; align-items: center; font-size: 12.5px; }
+  .hd { background: linear-gradient(90deg, var(--sky), var(--mint)); font-size: 10.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+  .rw + .rw { border-top: 1px solid var(--line); }
+  .res { color: var(--green-700); font-weight: 500; } .res i { font-style: normal; }
+  .decision { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; font-size: 13px; font-weight: 500; }
+  .stop { font-size: 11.5px; color: var(--muted); }
+  @media (max-width: 480px) { .hd span:nth-child(2), .rw span:nth-child(2) { display: none; } .hd, .rw { grid-template-columns: minmax(0, 1.8fr) repeat(2, minmax(0, .8fr)); } }
+</style>

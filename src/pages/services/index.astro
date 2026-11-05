@@ -1,0 +1,60 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import SplitTable from '../../components/SplitTable.astro';
+import { services } from '../../site.config';
+import { serviceDetails } from '../../lib/serviceDetails';
+import { breadcrumbs, service } from '../../lib/schema';
+import Hub from '../../components/scenes/Hub.astro';
+
+const schema = [
+  breadcrumbs([{ name: 'Services', path: '/services/' }]),
+  ...services.map((s) => service({ name: s.name, path: `/services/${s.slug}/`, description: serviceDetails[s.slug].description, serviceType: serviceDetails[s.slug].serviceType })),
+];
+---
+<Base title="AI Consulting & Implementation Services" description="AI strategy consulting, custom AI agent development, implementation and training, and AI cost optimisation for MSPs and operations-heavy businesses." schema={schema}>
+  <PageHero eyebrow="Services" title="Four services, one way of working" lede="Every engagement follows the same rule: the agent prepares the work, a person makes the decision. Start with any one of these and add the others only if they pay.">
+    <Hub slot="visual" tone="light"
+      core={{ title: 'Your agent', sub: 'built and run by us' }}
+      left={[
+        { label: 'Strategy', sub: 'what to automate', icon: 'compass' },
+        { label: 'Build', sub: 'custom agents', icon: 'code' },
+      ]}
+      right={[
+        { label: 'Rollout', sub: 'training & adoption', icon: 'people' },
+        { label: 'Cost control', sub: 'right-sized spend', icon: 'wallet' },
+      ]}
+      steps={['Discovery', 'Pilot', 'Scale', 'Run']}
+    />
+  </PageHero>
+  <section class="section">
+    <div class="container list">
+      {services.map((s, i) => (
+        <a class="svc-row" href={`/services/${s.slug}/`}>
+          <span class="mono n">0{i + 1}</span>
+          <h2>{s.name}</h2>
+          <p>{serviceDetails[s.slug].answer}</p>
+          <span class="link-arrow">Details</span>
+        </a>
+      ))}
+    </div>
+  </section>
+  <section class="section sky">
+    <div class="container">
+      <div class="head"><span class="eyebrow">The common thread</span><h2>Who does what once an agent is in place</h2></div>
+      <SplitTable />
+    </div>
+  </section>
+  <CtaBand />
+</Base>
+<style>
+  .list { border-top: 1px solid var(--line); }
+  .svc-row { display: grid; grid-template-columns: 64px minmax(0, .9fr) minmax(0, 1.4fr) auto; gap: 24px; align-items: baseline; padding-block: 32px; border-bottom: 1px solid var(--line); color: inherit; text-decoration: none; }
+  .svc-row:hover h2 { color: var(--blue-700); }
+  .svc-row h2 { font-size: var(--t-xl); transition: color .18s var(--ease); }
+  .svc-row p { color: var(--muted); }
+  .svc-row .link-arrow { color: var(--blue-700); }
+  .n { color: var(--muted); font-size: var(--t-sm); }
+  @media (max-width: 900px) { .svc-row { grid-template-columns: minmax(0, 1fr); gap: 10px; } }
+</style>

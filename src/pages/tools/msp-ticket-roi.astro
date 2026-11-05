@@ -1,0 +1,96 @@
+---
+import ToolPage from '../../layouts/ToolPage.astro';
+import Range from '../../components/Range.astro';
+import Arrow from '../../components/Arrow.astro';
+import { ticketRoi, usd, num } from '../../lib/calc';
+
+const d = { ticketsPerMonth: 1500, tier1Share: 0.45, agentShare: 0.35, minutesPerTicket: 15, hourlyCost: 42, buildCost: 15000, runCostPerMonth: 700 };
+const r0 = ticketRoi(d);
+
+const faqs = [
+  { q: 'What counts as a tier-1 ticket?', a: 'Requests that follow a known procedure and need no diagnosis: password resets, account unlocks, access requests, new-starter provisioning, known printer or email fixes and how-to questions. Your PSA categories are usually the quickest way to estimate the share.' },
+  { q: 'What share of tier-1 work should I assume an agent handles?', a: 'Start low. The agent share means tickets the agent resolves, or prepares so fully that the technician only approves. It depends on how clean your categories and documentation are. A pilot measures the real number on your queue, so treat the default here as a starting point, not a forecast.' },
+  { q: 'What should loaded technician cost include?', a: 'Salary or contractor rate plus benefits, payroll taxes, tooling and management overhead, divided by paid hours. If you only know the base rate, multiplying it by 1.25 to 1.4 is a common rough estimate.' },
+  { q: 'Does saved time mean I can reduce headcount?', a: 'That is rarely the goal. Most MSPs use returned hours to absorb ticket growth without hiring, to move technicians to project work, or to improve response times. The calculator shows the capacity and its labour value. How you use it is a business decision.' },
+];
+---
+<ToolPage slug="msp-ticket-roi" title="MSP ticket automation ROI calculator" lede="Estimate how many technician hours an AI agent could return from tier-1 tickets, what that time is worth, and how long a build takes to pay back." faqs={faqs}>
+  <div slot="calc" class="calc" id="ticket-calc">
+    <form class="calc-inputs" novalidate>
+      <span class="example-pill">Example inputs. Replace them with your own</span>
+      <Range id="tickets" label="Tickets per month" min={100} max={10000} step={50} value={1500} display="1,500" />
+      <Range id="tier1" label="Share that are tier-1" min={5} max={80} step={1} value={45} display="45%" hint="Resets, access requests, provisioning, known fixes, how-to questions." />
+      <Range id="agent" label="Share of tier-1 the agent handles" min={5} max={80} step={1} value={35} display="35%" hint="Resolved, or prepared so the technician only approves. Start conservative." />
+      <Range id="minutes" label="Technician minutes per tier-1 ticket" min={2} max={60} step={1} value={15} display="15 min" />
+      <Range id="rate" label="Loaded technician cost per hour" min={15} max={150} step={1} value={42} display="$42" />
+      <div class="num-row">
+        <div class="field"><label for="build">One-time build cost (USD)</label><input class="input mono" id="build" type="number" min="0" step="500" value="15000" inputmode="numeric" /></div>
+        <div class="field"><label for="run">Monthly running cost (USD)</label><input class="input mono" id="run" type="number" min="0" step="50" value="700" inputmode="numeric" /><span class="hint">Model usage, hosting, monitoring.</span></div>
+      </div>
+    </form>
+    <div class="calc-out" aria-live="polite">
+      <span class="eyebrow">Technician time returned</span>
+      <div class="big-out" id="o-hours">{num(r0.hoursPerMonth)}<small>hours / month</small></div>
+      <dl class="out-list">
+        <dt>Tickets handled by the agent</dt><dd id="o-tickets">{num(r0.ticketsHandled)} / mo</dd>
+        <dt>Labour value of that time</dt><dd id="o-value">{usd(r0.valuePerMonth)} / mo</dd>
+        <dt>After running cost</dt><dd id="o-net">{usd(r0.netPerMonth)} / mo</dd>
+        <dt>Payback on the build</dt><dd id="o-payback">{r0.paybackMonths === null ? "Does not pay back" : `${num(r0.paybackMonths, 1)} months`}</dd>
+        <dt>Net after 12 months</dt><dd id="o-year">{usd(r0.firstYearNet)}</dd>
+        <dt>Technician capacity freed</dt><dd id="o-fte">{num(r0.fte, 1)} FTE</dd>
+      </dl>
+      <p class="out-note" id="o-note"></p>
+      <div class="btn-row"><a class="btn btn-primary" href="/book/" id="o-book">Discuss these numbers <Arrow /></a></div>
+      <p class="formula">handled = tickets × tier-1 share × agent share<br />hours = handled × minutes ÷ 60 · value = hours × cost<br />payback = build ÷ (value − running cost) · FTE = hours ÷ 140</p>
+    </div>
+  </div>
+
+  <Fragment slot="method">
+    <p>The calculator multiplies your monthly ticket volume by the share that are tier-1, then by the share of those an agent resolves or fully prepares. That gives the tickets the agent takes off your technicians each month.</p>
+    <p>Each of those tickets saves the minutes a technician would have spent on it. Converted to hours and multiplied by your loaded hourly cost, that is the monthly labour value of the returned time. Subtracting the agent's monthly running cost gives the net monthly value. Dividing the one-time build cost by the net value gives the payback period.</p>
+    <p>Capacity is shown as full-time equivalents using 140 productive hours per technician per month, a common planning figure once meetings, training and leave are removed.</p>
+    <h3>What the calculator leaves out</h3>
+    <ul>
+      <li>Faster response times and after-hours coverage, which affect client satisfaction and contract renewals but are hard to price.</li>
+      <li>Time engineers spend reviewing agent output during the pilot, which falls as approvals are loosened.</li>
+      <li>Fewer errors from consistent triage, and better documentation as a by-product.</li>
+    </ul>
+  </Fragment>
+</ToolPage>
+
+<script>
+  import { ticketRoi, usd, num } from '../../lib/calc';
+  import { saveHandoff, track } from '../../lib/handoff';
+  const $ = <T extends HTMLElement = HTMLInputElement>(id: string) => document.getElementById(id) as T;
+  const ranges: [string, (v: number) => string][] = [
+    ['tickets', (v) => num(v)], ['tier1', (v) => `${v}%`], ['agent', (v) => `${v}%`], ['minutes', (v) => `${v} min`], ['rate', (v) => `$${v}`],
+  ];
+  let started = false;
+  function update() {
+    ranges.forEach(([id, f]) => ($<HTMLOutputElement>(`${id}-out`).textContent = f(+$(id).value)));
+    const r = ticketRoi({
+      ticketsPerMonth: +$('tickets').value, tier1Share: +$('tier1').value / 100, agentShare: +$('agent').value / 100,
+      minutesPerTicket: +$('minutes').value, hourlyCost: +$('rate').value, buildCost: +$('build').value || 0, runCostPerMonth: +$('run').value || 0,
+    });
+    $('o-hours').firstChild!.textContent = num(r.hoursPerMonth);
+    $('o-tickets').textContent = `${num(r.ticketsHandled)} / mo`;
+    $('o-value').textContent = `${usd(r.valuePerMonth)} / mo`;
+    $('o-net').textContent = `${usd(r.netPerMonth)} / mo`;
+    $('o-year').textContent = usd(r.firstYearNet);
+    $('o-fte').textContent = `${num(r.fte, 1)} FTE`;
+    const note = $('o-note');
+    if (r.paybackMonths === null) { $('o-payback').textContent = 'Does not pay back'; note.textContent = 'At these inputs the running cost is higher than the time saved. A higher-volume queue or a narrower agent would change that.'; }
+    else { $('o-payback').textContent = r.paybackMonths < 1 ? 'Under 1 month' : `${num(r.paybackMonths, 1)} months`; note.textContent = r.paybackMonths > 18 ? 'Payback beyond 18 months. Worth checking the inputs before committing to a pilot.' : ''; }
+    if (started) saveHandoff('MSP ticket automation ROI', {
+      'Tickets / month': $('tickets').value, 'Tier-1 share': `${$('tier1').value}%`, 'Agent share': `${$('agent').value}%`,
+      'Minutes / ticket': $('minutes').value, 'Hourly cost': `$${$('rate').value}`, 'Hours returned / month': num(r.hoursPerMonth),
+      'Net value / month': usd(r.netPerMonth), 'Payback': $('o-payback').textContent || '',
+    });
+  }
+  document.querySelectorAll('#ticket-calc input').forEach((el) => el.addEventListener('input', () => {
+    if (!started) { started = true; track('calculator_start', { calculator: 'msp-ticket-roi' }); }
+    update();
+  }));
+  $('o-book').addEventListener('click', () => track('calculator_book_click', { calculator: 'msp-ticket-roi' }));
+  update();
+</script>

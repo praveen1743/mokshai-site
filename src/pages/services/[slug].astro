@@ -1,0 +1,83 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import Faq from '../../components/Faq.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import Arrow from '../../components/Arrow.astro';
+import MatrixScene from '../../components/scenes/MatrixScene.astro';
+import AgentConfigScene from '../../components/scenes/AgentConfigScene.astro';
+import RolloutScene from '../../components/scenes/RolloutScene.astro';
+import SpendScene from '../../components/scenes/SpendScene.astro';
+import { serviceDetails, type ServiceSlug } from '../../lib/serviceDetails';
+import { services } from '../../site.config';
+import { breadcrumbs, faq, service } from '../../lib/schema';
+
+export function getStaticPaths() {
+  return Object.keys(serviceDetails).map((slug) => ({ params: { slug } }));
+}
+const slug = Astro.params.slug as ServiceSlug;
+const s = serviceDetails[slug];
+const path = `/services/${slug}/`;
+const others = services.filter((x) => x.slug !== slug);
+---
+<Base
+  title={s.seoTitle}
+  description={s.description}
+  schema={[service({ name: s.title, path, description: s.description, serviceType: s.serviceType }), breadcrumbs([{ name: 'Services', path: '/services/' }, { name: s.title, path }]), faq(s.faqs as unknown as { q: string; a: string }[])]}
+>
+  <PageHero eyebrow="Service" title={s.title} lede={s.lede} crumbs={[{ name: 'Services', href: '/services/' }]}>
+    <div class="btn-row"><a class="btn btn-primary" href="/book/">Book a strategy call <Arrow /></a></div>
+    {slug === 'ai-consulting' && <MatrixScene slot="visual" />}
+    {slug === 'custom-ai-development' && <AgentConfigScene slot="visual" />}
+    {slug === 'ai-implementation-training' && <RolloutScene slot="visual" />}
+    {slug === 'ai-cost-optimization' && <SpendScene slot="visual" />}
+  </PageHero>
+
+  <section class="section">
+    <div class="container svc">
+      <div class="stack">
+        <span class="eyebrow">In short</span>
+        <p class="answer">{s.answer}</p>
+        <p class="fit"><strong>Best for:</strong> {s.fit}</p>
+      </div>
+      <div class="stack">
+        <h2 class="h-sm">What is included</h2>
+        <ul class="checks">{s.includes.map((i) => <li>{i}</li>)}</ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-tight mint">
+    <div class="container">
+      <h2 class="h-sm">What you leave with</h2>
+      <dl class="facts" style="margin-top:20px">
+        {s.outcomes.map(([k, v]) => (<div><dt>{k}</dt><dd>{v}</dd></div>))}
+      </dl>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container svc">
+      <div class="stack-sm"><span class="eyebrow">Questions</span><h2>Common questions</h2></div>
+      <Faq items={s.faqs as unknown as { q: string; a: string }[]} />
+    </div>
+  </section>
+
+  <section class="section-tight">
+    <div class="container">
+      <span class="eyebrow">Related services</span>
+      <div class="grid g-3" style="margin-top:20px">
+        {others.map((o) => (<a class="card" href={`/services/${o.slug}/`}><h3>{o.name}</h3><p>{o.short}</p><span class="link-arrow">Details</span></a>))}
+      </div>
+    </div>
+  </section>
+
+  <CtaBand />
+</Base>
+<style>
+  .svc { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(32px, 5vw, 80px); align-items: start; }
+  @media (max-width: 900px) { .svc { grid-template-columns: minmax(0, 1fr); } }
+  .answer { font-size: var(--t-lg); line-height: 1.6; max-width: 58ch; }
+  .fit { color: var(--muted); }
+  .h-sm { font-size: var(--t-xl); }
+</style>

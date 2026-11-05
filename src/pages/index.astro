@@ -1,0 +1,301 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Arrow from '../components/Arrow.astro';
+import Icon from '../components/Icon.astro';
+import HexField from '../components/HexField.astro';
+import Hub from '../components/scenes/Hub.astro';
+import SplitTable from '../components/SplitTable.astro';
+import Faq from '../components/Faq.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { services } from '../site.config';
+import { faq } from '../lib/schema';
+import { tools } from '../lib/tools';
+
+const posts = (await getCollection('insights')).sort((a, b) => +b.data.updated - +a.data.updated);
+const serviceIcons: Record<string, string> = { 'ai-consulting': 'compass', 'custom-ai-development': 'code', 'ai-implementation-training': 'people', 'ai-cost-optimization': 'wallet' };
+const toolIcons: Record<string, string> = { 'msp-ticket-roi': 'ticket', 'back-office-hours': 'clock', 'ai-spend-audit': 'coins', 'ai-budget-planner': 'chart' };
+const capabilities = ['Ticket triage', 'Password resets', 'Alert correlation', 'Access requests', 'New-starter provisioning', 'Documentation drafts', 'Quote preparation', 'Document intake', 'Order status updates', 'Weekly reporting', 'Technician copilots', 'White-label AI services'];
+
+const faqs = [
+  { q: 'What does Moksh AI do?', a: 'We design, build and run AI agents and automation for managed service providers and operations-heavy businesses. The agents work inside the tools you already use, take on repetitive work such as ticket triage, alert filtering and document preparation, and hand anything outside their limits to a person with the context attached.' },
+  { q: 'Will AI agents replace our technicians?', a: 'No. Agents take the repetitive layer of the work. Engineers stay responsible for diagnosis, security-sensitive actions, complex cases and client relationships. The change is in what your team spends the day on, not in how many people you need to run the service well.' },
+  { q: 'Which tools do your agents work with?', a: 'Agents are built on the APIs of the systems you already run, typically your PSA or ITSM, RMM, Microsoft 365 and line-of-business software. We do not ask you to replace your stack. On the first call we review your tools and tell you plainly whether an agent can work with them.' },
+  { q: 'Are AI agents secure?', a: 'They can be, when they are configured properly. We scope each agent to the minimum access it needs, log every action it takes, keep client data separated, and route security-sensitive actions to an engineer for approval. See our security page for the questions we answer before any build.' },
+  { q: 'How does an engagement start?', a: 'With a short discovery on one workflow. We map how the work runs today, agree the baseline and the metric a pilot will be judged on, and give you a ranked list of what is worth automating. You decide whether to pilot.' },
+  { q: 'Where is the Moksh AI team?', a: 'Moksh AI is the AI practice of Moksh Infotech Pvt Ltd. We contract from our US office in Lake Hiawatha, New Jersey, and our delivery team works from Ahmedabad, India.' },
+];
+---
+<Base
+  title="AI Agents for MSPs & Operations Teams | Moksh AI"
+  description="Moksh AI builds AI agents that triage tickets, filter alerts and prepare routine work inside your PSA, RMM and Microsoft 365, while your engineers keep every decision."
+  schema={[faq(faqs)]}
+>
+  <!-- HERO -->
+  <section class="hero dark glow">
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <span class="eyebrow">AI agents for MSPs and operations teams</span>
+        <h1>The agent clears the routine work. <span class="grad-text">Your engineers keep the decisions.</span></h1>
+        <p class="lede">Moksh AI designs, builds and runs AI agents inside the tools you already use. They triage, prepare and close repetitive work within limits you set. Anything outside those limits goes to a person, with the context already attached.</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="/book/">Book a strategy call <Arrow /></a>
+          <a class="btn btn-secondary" href="/tools/msp-ticket-roi/">Estimate your ticket savings</a>
+        </div>
+        <ul class="hero-facts" role="list">
+          <li><span class="hexi sm"><Icon name="handshake" /></span><span><strong>US contracts</strong>New Jersey office</span></li>
+          <li><span class="hexi sm"><Icon name="people" /></span><span><strong>Delivery team</strong>Ahmedabad, India</span></li>
+          <li><span class="hexi sm"><Icon name="stack" /></span><span><strong>Your stack</strong>No rip-and-replace</span></li>
+        </ul>
+      </div>
+      <div class="hero-visual">
+        <HexField class="hero-hex" />
+        <Hub
+          core={{ title: 'Moksh agent', sub: 'your rules, your stack' }}
+          left={[
+            { label: 'Email', sub: 'requests in', icon: 'inbox' },
+            { label: 'PSA / ITSM', sub: 'tickets', icon: 'ticket' },
+            { label: 'RMM', sub: 'alerts', icon: 'alert' },
+            { label: 'Microsoft 365', sub: 'users', icon: 'people' },
+          ]}
+          right={[
+            { label: 'ERP', sub: 'jobs, orders', icon: 'database' },
+            { label: 'Docs & KB', sub: 'past fixes', icon: 'doc' },
+            { label: 'Teams / Slack', sub: 'updates', icon: 'quote' },
+            { label: 'Engineer', sub: 'approves', icon: 'shield', human: true },
+          ]}
+          steps={['Observe', 'Decide', 'Act', 'Hand off']}
+          caption="Illustrative: one agent connected to the systems you already run."
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- CAPABILITY MARQUEE -->
+  <section class="marquee" aria-label="Work our agents take on">
+    <div class="track">
+      {[0, 1].map((k) => (
+        <ul class="row" aria-hidden={k === 1 ? 'true' : undefined} role="list">
+          {capabilities.map((c) => (<li><span class="dot dot-agent"></span>{c}</li>))}
+        </ul>
+      ))}
+    </div>
+  </section>
+
+  <!-- PATHS -->
+  <section class="section">
+    <div class="container">
+      <div class="head center reveal">
+        <span class="eyebrow">Start where your work is</span>
+        <h2>Two kinds of teams. <span class="grad-text">One way of working.</span></h2>
+      </div>
+      <div class="grid g-2 paths">
+        <a class="card path path-sky reveal" href="/msp/">
+          <div class="path-top"><span class="hexi"><Icon name="ticket" /></span><span class="tag">Managed service providers</span></div>
+          <h3>Take tier-1 tickets and alert noise off your technicians</h3>
+          <ul class="notes">
+            <li>Ticket triage, routing and routine resolutions</li>
+            <li>NOC alert correlation into single incidents</li>
+            <li>Documentation drafted for engineer approval</li>
+            <li>White-label AI services for your own clients</li>
+          </ul>
+          <span class="link-arrow">AI for MSPs</span>
+        </a>
+        <a class="card path path-mint reveal" href="/operations/">
+          <div class="path-top"><span class="hexi"><Icon name="inbox" /></span><span class="tag">Operations-heavy businesses</span></div>
+          <h3>Get hours back from quoting, intake and back-office handoffs</h3>
+          <ul class="notes">
+            <li>Quote and estimate preparation from incoming requests</li>
+            <li>Document intake: drawings, POs, invoices, forms</li>
+            <li>Status updates and reporting across systems</li>
+            <li>Cost review of the AI tools you already pay for</li>
+          </ul>
+          <span class="link-arrow">AI for operations</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- OPERATING MODEL -->
+  <section class="section wash glow">
+    <div class="container model">
+      <div class="stack reveal">
+        <span class="eyebrow">The operating model</span>
+        <h2>The agent prepares. <span class="grad-text">A person decides.</span></h2>
+        <p class="lede">Every agent we build follows the same split. It handles the repetitive layer, and it hands off anything that needs judgement, carries security risk, or touches a client relationship.</p>
+        <p class="muted-sm">From our guide, <a href="/ai-agents-for-msps-what-they-are-how-they-reduce-workload/">AI agents for MSPs: what they are and how they reduce workload</a>.</p>
+      </div>
+      <div class="reveal"><SplitTable /></div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="section">
+    <div class="container">
+      <div class="head reveal">
+        <span class="eyebrow">Services</span>
+        <h2>From the first roadmap to <span class="grad-text">agents in production</span></h2>
+      </div>
+      <div class="grid g-4">
+        {services.map((s) => (
+          <a class="card reveal" href={`/services/${s.slug}/`}>
+            <span class="hexi soft"><Icon name={serviceIcons[s.slug]} /></span>
+            <h3>{s.name}</h3>
+            <p>{s.short}</p>
+            <span class="link-arrow">Details</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section class="section sky">
+    <div class="container">
+      <div class="head reveal">
+        <span class="eyebrow">How an engagement runs</span>
+        <h2>Small, measured steps, <span class="grad-text">with a decision at each one</span></h2>
+      </div>
+      <ol class="steps" role="list">
+        <li class="step reveal">
+          <span class="step-n">01</span>
+          <h3>Discovery</h3>
+          <p>We map one workflow end to end: who touches it, which systems hold the data, and where the time goes. We agree the baseline and the metric a pilot will be judged on.</p>
+          <dl><dt>You get</dt><dd>A ranked list of what is worth automating, and what is not</dd><dt>You decide</dt><dd>Whether to pilot, and which workflow</dd></dl>
+        </li>
+        <li class="step reveal">
+          <span class="step-n">02</span>
+          <h3>Pilot</h3>
+          <p>We build one agent on one queue, with human approval switched on. It runs against live work and is measured against the baseline from discovery.</p>
+          <dl><dt>You get</dt><dd>Measured results on your own data</dd><dt>You decide</dt><dd>Keep it, change it, or stop</dd></dl>
+        </li>
+        <li class="step reveal">
+          <span class="step-n">03</span>
+          <h3>Scale</h3>
+          <p>We extend to neighbouring workflows, loosen approvals where the data supports it, train your team and hand over runbooks. Accuracy and running cost are reviewed every month.</p>
+          <dl><dt>You get</dt><dd>Agents your team owns and trusts</dd><dt>You decide</dt><dd>What comes next, on evidence</dd></dl>
+        </li>
+      </ol>
+      <p class="after-steps"><a class="link-arrow" href="/how-we-work/">How we work in detail</a></p>
+    </div>
+  </section>
+
+  <!-- CALCULATORS -->
+  <section class="section dark glow">
+    <div class="container">
+      <div class="head center reveal">
+        <span class="eyebrow">Free calculators</span>
+        <h2>Run the numbers <span class="grad-text">before you talk to anyone</span></h2>
+        <p class="lede">No email required. Each calculator shows its formula, so you can check the maths and use it in your own business case.</p>
+      </div>
+      <div class="grid g-4">
+        {tools.map((t) => (
+          <a class="card reveal" href={`/tools/${t.slug}/`}>
+            <span class="hexi"><Icon name={toolIcons[t.slug]} /></span>
+            <span class="tag">{t.audience}</span>
+            <h3>{t.name}</h3>
+            <p>{t.question}</p>
+            <span class="link-arrow">Open calculator</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY -->
+  <section class="section mint">
+    <div class="container">
+      <div class="head reveal">
+        <span class="eyebrow">Why teams work with us</span>
+        <h2>Built by a services group, <span class="grad-text">not a software vendor</span></h2>
+      </div>
+      <div class="grid g-2 why">
+        <div class="why-item reveal"><span class="hexi soft"><Icon name="stack" /></span><div><h3>We work around your stack</h3><p>Agents run inside your existing PSA, RMM, Microsoft 365 and business systems. No new platform for your team to learn, and nothing to rip out.</p></div></div>
+        <div class="why-item reveal"><span class="hexi soft"><Icon name="shield" /></span><div><h3>Human approval is the default</h3><p>Every agent starts with a person approving its actions. Approvals are loosened only where the pilot data shows the agent gets it right.</p></div></div>
+        <div class="why-item reveal"><span class="hexi soft"><Icon name="handshake" /></span><div><h3>US contract, Ahmedabad delivery</h3><p>You contract with our New Jersey office. The build team works from Ahmedabad, which keeps engagements affordable for mid-sized firms.</p></div></div>
+        <div class="why-item reveal"><span class="hexi soft"><Icon name="coins" /></span><div><h3>Cost is part of the design</h3><p>We use open-source models and low-code tools where they do the job, and we review running costs monthly so the agent keeps paying for itself.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INSIGHTS -->
+  <section class="section">
+    <div class="container">
+      <div class="row-head reveal">
+        <div class="stack-sm"><span class="eyebrow">Insights</span><h2>Notes from the work</h2></div>
+        <a class="link-arrow" href="/insights/">All insights</a>
+      </div>
+      <div class="grid g-2">
+        {posts.map((p) => (
+          <a class={`card post reveal ${p.data.audience === 'msp' ? 'post-sky' : 'post-mint'}`} href={`/${p.id}/`}>
+            <span class="tag">{p.data.audience === 'msp' ? 'For MSPs' : 'For operations'} · <time datetime={p.data.updated.toISOString()}>Updated {p.data.updated.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</time></span>
+            <h3>{p.data.title}</h3>
+            <p>{p.data.summary}</p>
+            <span class="link-arrow">Read</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section sky">
+    <div class="container faq-grid">
+      <div class="stack-sm reveal">
+        <span class="eyebrow">Questions</span>
+        <h2>What buyers <span class="grad-text">ask us first</span></h2>
+        <p class="lede">Straight answers. If yours is not here, ask it on the call.</p>
+      </div>
+      <Faq items={faqs} />
+    </div>
+  </section>
+
+  <CtaBand />
+</Base>
+
+<style>
+  .hero { padding-block: clamp(64px, 9vw, 128px) clamp(64px, 8vw, 112px); }
+  .hero::before { opacity: .7; }
+  .hero::after { opacity: .5; }
+  .hero-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: clamp(36px, 5vw, 80px); align-items: center; }
+  @media (max-width: 980px) { .hero-grid { grid-template-columns: minmax(0, 1fr); } }
+  .hero-copy { display: grid; gap: 26px; position: relative; z-index: 1; }
+  .hero h1 { color: #fff; max-width: 17ch; }
+  .hero-visual { position: relative; isolation: isolate; }
+  .hero-visual :global(.hero-hex) { width: 130%; left: -15%; top: -12%; opacity: .55; }
+  .hero-facts { list-style: none; margin: 8px 0 0; padding: 22px 0 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; border-top: 1px solid rgba(255, 255, 255, .1); }
+  .hero-facts li { display: flex; gap: 12px; align-items: center; font-size: var(--t-sm); color: var(--on-dark-muted); line-height: 1.35; }
+  .hero-facts strong { display: block; color: #fff; font-weight: 600; }
+  @media (max-width: 620px) { .hero-facts { grid-template-columns: minmax(0, 1fr); } }
+
+  .marquee { background: var(--ink-2); color: var(--on-dark); overflow: hidden; border-block: 1px solid rgba(255, 255, 255, .06); padding-block: 18px; }
+  .track { display: flex; width: max-content; }
+  .row { display: flex; gap: 40px; padding-right: 40px; margin: 0; list-style: none; }
+  .row li { display: inline-flex; align-items: center; gap: 12px; font: 500 var(--t-sm)/1 var(--f-mono); letter-spacing: .04em; white-space: nowrap; color: var(--on-dark-muted); }
+  .row li:nth-child(3n+2) .dot { background: var(--teal); }
+  .row li:nth-child(3n) .dot { background: var(--green); }
+  @media (prefers-reduced-motion: no-preference) {
+    .track { animation: marquee 48s linear infinite; }
+    .marquee:hover .track { animation-play-state: paused; }
+  }
+  @keyframes marquee { to { transform: translateX(-50%); } }
+
+  .path { padding: clamp(28px, 3vw, 44px); gap: 16px; overflow: hidden; }
+  .path-sky { background: linear-gradient(160deg, #ffffff 30%, var(--sky)); }
+  .path-mint { background: linear-gradient(160deg, #ffffff 30%, var(--mint)); }
+  .path-top { display: flex; align-items: center; gap: 14px; }
+  .path h3 { font-size: var(--t-xl); max-width: 22ch; }
+  .model { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: clamp(32px, 5vw, 72px); align-items: center; }
+  @media (max-width: 980px) { .model { grid-template-columns: minmax(0, 1fr); } }
+  .muted-sm { font-size: var(--t-sm); color: var(--muted); }
+  .after-steps { margin-top: 32px; }
+  .why { gap: 20px; }
+  .why-item { display: flex; gap: 18px; align-items: flex-start; padding: 26px; background: rgba(255, 255, 255, .7); border: 1px solid rgba(21, 127, 40, .14); border-radius: var(--radius); }
+  .why-item h3 { margin-bottom: 6px; }
+  .why-item p { color: var(--muted); max-width: 52ch; }
+  .row-head { display: flex; justify-content: space-between; align-items: end; gap: 16px; flex-wrap: wrap; margin-bottom: clamp(32px, 5vw, 52px); }
+  .post-sky { background: linear-gradient(170deg, #fff 40%, var(--sky)); }
+  .post-mint { background: linear-gradient(170deg, #fff 40%, var(--mint)); }
+  .faq-grid { display: grid; grid-template-columns: minmax(0, .75fr) minmax(0, 1.25fr); gap: clamp(32px, 5vw, 72px); align-items: start; }
+  @media (max-width: 900px) { .faq-grid { grid-template-columns: minmax(0, 1fr); } }
+</style>

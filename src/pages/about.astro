@@ -1,0 +1,66 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { site } from '../site.config';
+import { breadcrumbs } from '../lib/schema';
+import Hub from '../components/scenes/Hub.astro';
+---
+<Base title="About Moksh AI" description="Moksh AI is the AI practice of Moksh Infotech Pvt Ltd and part of Moksh Group, with a US office in New Jersey and a delivery team in Ahmedabad, India." schema={[{ '@type': 'AboutPage', name: 'About Moksh AI', url: `${site.url}/about/`, about: { '@id': `${site.url}/#organization` } }, breadcrumbs([{ name: 'About', path: '/about/' }])]}>
+  <PageHero eyebrow="About" title="Practical AI, built by a services group" lede="Moksh AI is the AI practice of Moksh Group. We build agents and automation for businesses whose people are stretched by repetitive work, and we judge every project by whether it pays back.">
+    <Hub slot="visual" tone="light"
+      core={{ title: 'Moksh AI', sub: 'AI practice' }}
+      left={[
+        { label: 'Moksh Tech', sub: 'IT services', icon: 'ticket' },
+        { label: 'Moksh CAD', sub: 'CAD drafting', icon: 'layers' },
+        { label: 'Estimating', sub: 'takeoffs', icon: 'chart' },
+      ]}
+      right={[
+        { label: 'Digital', sub: 'marketing', icon: 'target' },
+        { label: 'Recruiting', sub: 'hiring', icon: 'people' },
+        { label: 'Accountants', sub: 'finance', icon: 'coins' },
+      ]}
+      caption="Moksh AI works alongside the specialist teams of Moksh Group."
+    />
+  </PageHero>
+
+  <section class="section">
+    <div class="container two">
+      <div class="stack-sm"><span class="eyebrow">What we believe</span><h2>AI should make your people more useful, not less needed</h2></div>
+      <div class="prose">
+        <p>Most companies we talk to are not short on AI tools. They are short on time, and on a clear answer to which work an agent should take and which should stay with a person.</p>
+        <p>We start from the work, not the technology. We map how a workflow runs, measure where the hours go, and build agents that handle the repetitive layer inside the tools you already use. Anything that needs judgement, carries security risk or touches a client relationship goes to a person, with the context attached.</p>
+        <p>We prefer small, measured pilots over large programmes, open-source models where they are good enough, and handing you everything you need to run the result without us.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-tight mint">
+    <div class="container">
+      <span class="eyebrow">Company facts</span>
+      <dl class="facts" style="margin-top:20px">
+        <div><dt>Legal entity</dt><dd>{site.legalName}</dd></div>
+        <div><dt>Corporate ID (CIN)</dt><dd class="mono">{site.cin}</dd></div>
+        {site.offices.map((o) => (<div><dt>{o.label}</dt><dd>{o.locality}, {o.region}, {o.countryName}</dd></div>))}
+        <div><dt>Contact</dt><dd><a href={`mailto:${site.email}`}>{site.email}</a></dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="head"><span class="eyebrow">Moksh Group</span><h2>One group, several specialist teams</h2><p class="lede">Moksh AI works alongside sister companies that deliver outsourced IT, drafting, estimating and back-office services. When a project needs people as well as automation, we can bring both.</p></div>
+      <div class="grid g-4">
+        {site.group.filter((g) => g.name !== 'Moksh Group').map((g) => (
+          <a class="card" href={g.url} rel="noopener"><h3>{g.name}</h3><p>{g.what}</p><span class="link-arrow">Visit</span></a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CtaBand />
+</Base>
+<style>
+  .two { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: clamp(28px, 5vw, 72px); align-items: start; }
+  @media (max-width: 900px) { .two { grid-template-columns: minmax(0, 1fr); } }
+</style>

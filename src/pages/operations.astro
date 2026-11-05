@@ -1,0 +1,82 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Faq from '../components/Faq.astro';
+import CtaBand from '../components/CtaBand.astro';
+import Arrow from '../components/Arrow.astro';
+import IntakeScene from '../components/scenes/IntakeScene.astro';
+import SplitTable from '../components/SplitTable.astro';
+import { breadcrumbs, faq, service } from '../lib/schema';
+
+const faqs = [
+  { q: 'What kind of businesses is this for?', a: 'Operations-heavy firms where skilled people spend hours on preparation and admin: fabrication and manufacturing shops, construction trades, distributors and professional services. If quotes, orders or documents queue up waiting for someone to process them, it is a fit.' },
+  { q: 'Is automation about robots on the shop floor?', a: 'No. The automation that usually pays for itself first is software: reading incoming requests, pulling records, filling templates and keeping systems in sync. It protects margins by cutting rework, overtime and manual handoffs.' },
+  { q: 'Will it work with our ERP or estimating software?', a: 'Agents work through the APIs, exports or email flows your systems already support. On the first call we look at what you run and tell you where an agent can connect and where a person still needs to step in.' },
+  { q: 'Who checks the agent’s work?', a: 'Your team does. Prices, technical decisions and anything that goes to a customer are approved by a person. The agent saves the time spent getting the work ready for that decision.' },
+];
+const plays = [
+  { h: 'Quote and estimate preparation', p: 'Incoming requests are read, the customer and job history pulled, and a draft quote or takeoff summary prepared in your template. Your estimator checks and sends.' },
+  { h: 'Document intake', p: 'Drawings, purchase orders, invoices and forms arriving by email are logged, matched to the right job and checked for missing information before anyone opens them.' },
+  { h: 'Order and status updates', p: 'Routine “where is my order?” questions are answered from your systems, and exceptions go to the right person with the details attached.' },
+  { h: 'Reporting without spreadsheets', p: 'Weekly operations reports are compiled from your systems and drafted for a manager to review, instead of assembled by hand on Friday afternoon.' },
+];
+const rows = [
+  { area: 'Quotes & estimates', agent: 'Reading the request, pulling history, drafting in your template', human: 'Pricing, technical judgement, sending to the customer' },
+  { area: 'Document intake', agent: 'Logging, matching to jobs, flagging gaps', human: 'Resolving discrepancies and approvals' },
+  { area: 'Customer updates', agent: 'Routine status answers from your systems', human: 'Delays, complaints and commercial conversations' },
+  { area: 'Reporting', agent: 'Collecting figures and drafting the report', human: 'Interpreting results and deciding actions' },
+];
+---
+<Base
+  title="AI Automation for Operations Teams: Quoting, Intake & Back Office"
+  description="AI agents that prepare quotes and estimates, process incoming documents and handle routine status updates for fabrication, construction-trade and operations-heavy businesses."
+  schema={[service({ name: 'AI automation for operations teams', path: '/operations/', description: 'AI agents for quote preparation, document intake, status updates and reporting in operations-heavy businesses.', serviceType: 'Business process automation' }), breadcrumbs([{ name: 'For operations', path: '/operations/' }]), faq(faqs)]}
+>
+  <PageHero eyebrow="For operations-heavy businesses" title="Get hours back from quoting, intake and back-office handoffs" lede="Automation is a margin strategy, not a robotics project. The first wins usually come from software that gets work ready for the skilled people who make the decisions.">
+    <div class="btn-row">
+      <a class="btn btn-primary" href="/tools/back-office-hours/">Estimate your time savings <Arrow /></a>
+      <a class="btn btn-secondary" href="/book/">Book a strategy call</a>
+    </div>
+    <IntakeScene slot="visual" />
+  </PageHero>
+
+  <section class="section">
+    <div class="container">
+      <div class="head"><span class="eyebrow">Where to start</span><h2>Four workflows that usually pay back first</h2></div>
+      <div class="grid g-2">
+        {plays.map((p) => (<div class="card"><h3>{p.h}</h3><p>{p.p}</p></div>))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section sky">
+    <div class="container">
+      <div class="head"><span class="eyebrow">The split</span><h2>The agent gets the work ready. Your people decide.</h2></div>
+      <SplitTable rows={rows} caption="Who does what in back-office automation" />
+    </div>
+  </section>
+
+  <section class="section-tight dark glow">
+    <div class="container group">
+      <div class="stack-sm"><span class="eyebrow">Part of Moksh Group</span><h2>We already work alongside fabrication and construction teams</h2></div>
+      <div class="stack-sm">
+        <p class="lede">Our sister companies provide CAD drafting, construction estimating and sign design. That gives us a working knowledge of how drawings, takeoffs and quotes move through a business.</p>
+        <p><a class="link-arrow" href="https://www.mokshcad.com/" rel="noopener">Moksh CAD</a> &nbsp; <a class="link-arrow" href="https://mokshestimating.com/" rel="noopener">Moksh Estimating</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container faqg">
+      <div class="stack-sm"><span class="eyebrow">Questions</span><h2>Automation for operations teams</h2><p><a class="link-arrow" href="/why-automation-isnt-about-robots-its-about-profit-margins/">Why automation is about margins</a></p></div>
+      <Faq items={faqs} />
+    </div>
+  </section>
+
+  <CtaBand title="Pick the workflow that queues up the most. Start there." secondaryHref="/tools/back-office-hours/" secondaryLabel="Estimate the hours first" />
+</Base>
+<style>
+  .group, .faqg { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(28px, 5vw, 72px); align-items: start; }
+  .faqg { grid-template-columns: minmax(0, .7fr) minmax(0, 1.3fr); }
+  @media (max-width: 900px) { .group, .faqg { grid-template-columns: minmax(0, 1fr); } }
+</style>

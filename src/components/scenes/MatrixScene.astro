@@ -1,0 +1,50 @@
+---
+// Value vs effort: where to automate first.
+const items = [
+  { l: 'Password resets', x: 16, y: 18, hot: true },
+  { l: 'Ticket triage', x: 34, y: 26, hot: true },
+  { l: 'Quote preparation', x: 44, y: 36, hot: true },
+  { l: 'Invoice matching', x: 58, y: 52 },
+  { l: 'Weekly reporting', x: 30, y: 62 },
+  { l: 'Contract review', x: 80, y: 70 },
+];
+---
+<figure class="scene matrix" aria-label="Illustration: workflows ranked by value and effort">
+  <div class="scene-bar"><span class="scene-title">Automation candidates</span><span class="scene-tag">Illustrative</span></div>
+  <div class="scene-body">
+    <div class="plot">
+      <div class="q q-start"><span>Start here</span></div>
+      <div class="q q-plan"><span>Plan</span></div>
+      <div class="q q-later"><span>Later</span></div>
+      <div class="q q-skip"><span>Skip</span></div>
+      {items.map((it) => (
+        <div class={`pt${it.hot ? ' hot' : ''}`} style={`left:${it.x}%;top:${it.y}%`}><i></i><span>{it.l}</span></div>
+      ))}
+      <span class="ax ax-y">Value ↑</span>
+      <span class="ax ax-x">Effort →</span>
+    </div>
+    <ol class="rank" role="list">
+      <li><span class="mono">01</span>Password resets<span class="pill pill-ok">Pilot</span></li>
+      <li><span class="mono">02</span>Ticket triage<span class="pill pill-info">Next</span></li>
+      <li><span class="mono">03</span>Quote preparation<span class="pill pill-info">Next</span></li>
+    </ol>
+  </div>
+</figure>
+<style>
+  .plot { position: relative; aspect-ratio: 16 / 10; border-radius: 12px; overflow: hidden; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; border: 1px solid var(--line); }
+  .q { position: relative; }
+  .q span { position: absolute; font: 500 10.5px/1 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); padding: 8px; }
+  .q-start { background: linear-gradient(140deg, #dcf1e2, #e3f1fb); } .q-start span { color: var(--green-700); }
+  .q-plan { background: #f3f8fc; } .q-plan span { right: 0; }
+  .q-later { background: #f7f9f8; } .q-later span { bottom: 0; }
+  .q-skip { background: #fbfbfa; } .q-skip span { right: 0; bottom: 0; }
+  .pt { position: absolute; translate: -8px -8px; display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; white-space: nowrap; }
+  .pt i { width: 15px; height: 17px; clip-path: var(--hex); background: var(--line-strong); flex: none; }
+  .pt.hot i { background: var(--grad); }
+  .pt.hot span { color: var(--ink); } .pt span { color: var(--muted); }
+  .ax { position: absolute; font: 500 10px/1 var(--f-mono); color: var(--muted); }
+  .ax-y { left: 50%; top: 6px; translate: -50% 0; } .ax-x { left: 50%; bottom: 6px; translate: -50% 0; }
+  .rank { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .rank li { display: grid; grid-template-columns: 28px 1fr auto; align-items: center; gap: 8px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; font-weight: 500; font-size: 13px; }
+  .rank .mono { color: var(--muted); font-size: 12px; }
+</style>

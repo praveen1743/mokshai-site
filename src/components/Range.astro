@@ -1,0 +1,25 @@
+---
+interface Props { id: string; label: string; min: number; max: number; step: number; value: number; hint?: string; display?: string }
+const { id, label, min, max, step, value, hint, display = String(value) } = Astro.props;
+const pct = `${(((value - min) / (max - min)) * 100).toFixed(1)}%`;
+---
+<div class="range">
+  <div class="range-top">
+    <label for={id}>{label}</label>
+    <output for={id} id={`${id}-out`} aria-live="off">{display}</output>
+  </div>
+  <input type="range" id={id} name={id} min={min} max={max} step={step} value={value} style={`--p:${pct}`} aria-describedby={hint ? `${id}-hint` : undefined} />
+  {hint && <span class="hint" id={`${id}-hint`}>{hint}</span>}
+</div>
+
+<script>
+  // Keep the gradient fill of each slider in step with its value.
+  const sync = (el: HTMLInputElement) => {
+    const min = +el.min || 0, max = +el.max || 100;
+    el.style.setProperty('--p', `${((+el.value - min) / (max - min)) * 100}%`);
+  };
+  document.querySelectorAll<HTMLInputElement>('input[type="range"]').forEach((el) => {
+    sync(el);
+    el.addEventListener('input', () => sync(el));
+  });
+</script>

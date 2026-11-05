@@ -1,0 +1,114 @@
+---
+import ToolPage from '../../layouts/ToolPage.astro';
+import Arrow from '../../components/Arrow.astro';
+import { spendAudit, usd } from '../../lib/calc';
+
+// Generic example rows: no vendor names or list prices are implied.
+const rows = [
+  { tool: 'Chat assistant A', category: 'Chat assistant', seats: 40, pricePerSeat: 30, activeUsers: 22 },
+  { tool: 'Chat assistant B', category: 'Chat assistant', seats: 15, pricePerSeat: 25, activeUsers: 12 },
+  { tool: 'Meeting notes tool', category: 'Meeting notes', seats: 25, pricePerSeat: 18, activeUsers: 9 },
+  { tool: 'Writing assistant', category: 'Writing', seats: 10, pricePerSeat: 20, activeUsers: 10 },
+];
+const r0 = spendAudit(rows);
+const faqs = [
+  { q: 'Where do I find active users?', a: 'Most AI tools show this in their admin console as monthly active users or last sign-in date. Count anyone who has not used the tool in the last 30 days as inactive.' },
+  { q: 'What does overlap mean here?', a: 'Two or more tools in the same category, for example two chat assistants. The calculator keeps the tool with the most active spend and counts the used seats of the others as a consolidation opportunity. Unused seats are counted separately so nothing is counted twice.' },
+  { q: 'Is cancelling tools the only option?', a: 'No. Sometimes the better move is a cheaper plan, pooled licences, an open-source model for a specific task, or a small automation that replaces a per-seat tool. That is the work our AI cost optimisation service does.' },
+];
+---
+<ToolPage slug="ai-spend-audit" title="AI subscription audit" lede="List the AI tools your company pays for. See how much goes to seats nobody uses and to tools that do the same job, and what you could save in a year." faqs={faqs}>
+  <div slot="calc" class="calc" id="spend-calc">
+    <div class="calc-inputs">
+      <span class="example-pill">Example rows. Replace them with your own tools</span>
+      <div class="table-scroll">
+        <table class="spend-table">
+          <thead><tr><th scope="col">Tool</th><th scope="col">Category</th><th scope="col">Seats</th><th scope="col">$ / seat / mo</th><th scope="col">Active users</th><th scope="col"><span class="sr-only">Remove</span></th></tr></thead>
+          <tbody id="rows">
+            {rows.map((r, i) => (
+              <tr>
+                <td><input class="input" aria-label={`Tool ${i + 1} name`} data-k="tool" value={r.tool} /></td>
+                <td><input class="input" aria-label={`Tool ${i + 1} category`} data-k="category" value={r.category} list="cats" /></td>
+                <td><input class="input mono" type="number" min="0" aria-label={`Tool ${i + 1} seats`} data-k="seats" value={r.seats} /></td>
+                <td><input class="input mono" type="number" min="0" step="0.5" aria-label={`Tool ${i + 1} price per seat per month`} data-k="pricePerSeat" value={r.pricePerSeat} /></td>
+                <td><input class="input mono" type="number" min="0" aria-label={`Tool ${i + 1} active users`} data-k="activeUsers" value={r.activeUsers} /></td>
+                <td><button type="button" class="icon-btn" aria-label={`Remove tool ${i + 1}`} data-remove>×</button></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <datalist id="cats"><option value="Chat assistant"></option><option value="Meeting notes"></option><option value="Writing"></option><option value="Coding assistant"></option><option value="Image generation"></option><option value="Transcription"></option><option value="Search / research"></option></datalist>
+      <div><button type="button" class="btn btn-secondary" id="add-row">Add a tool</button></div>
+    </div>
+    <div class="calc-out" aria-live="polite">
+      <span class="eyebrow">Potential savings per year</span>
+      <div class="big-out" id="o-save">{usd(r0.potentialAnnualSavings)}</div>
+      <dl class="out-list">
+        <dt>Current spend</dt><dd id="o-spend">{usd(r0.monthlySpend)} / mo</dd>
+        <dt>Unused seats</dt><dd id="o-unused">{usd(r0.unusedSeatCost)} / mo</dd>
+        <dt>Overlapping tools</dt><dd id="o-overlap">{usd(r0.overlapCost)} / mo</dd>
+        <dt>Categories with overlap</dt><dd id="o-cats">{r0.overlapCategories.join(', ') || 'None'}</dd>
+      </dl>
+      <p class="out-note" id="o-note"></p>
+      <div class="btn-row"><a class="btn btn-primary" href="/services/ai-cost-optimization/" id="o-book">See cost optimisation <Arrow /></a></div>
+      <p class="formula">unused = Σ (seats − active) × price<br />overlap = used seats of every tool except the largest in a shared category<br />savings/year = (unused + overlap) × 12</p>
+    </div>
+  </div>
+
+  <Fragment slot="method">
+    <p>Monthly spend is seats multiplied by price per seat, summed across tools. Unused-seat cost is the seats with no active user, multiplied by their price.</p>
+    <p>Overlap looks at categories. Where two or more tools share a category, the tool with the most active spend is treated as the one to keep. The active seats on the others are counted as a consolidation opportunity. Their unused seats are already in the unused figure, so nothing is counted twice.</p>
+    <p>The result is an upper bound on what consolidation and right-sizing could save. Contract terms, annual commitments and genuine differences between tools can reduce it.</p>
+  </Fragment>
+</ToolPage>
+
+<style>
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .spend-table td:nth-child(1) { min-width: 150px; } .spend-table td:nth-child(2) { min-width: 140px; } .spend-table td:nth-child(n+3):nth-child(-n+5) { min-width: 84px; }
+</style>
+
+<script>
+  import { spendAudit, usd, type SpendRow } from '../../lib/calc';
+  import { saveHandoff, track } from '../../lib/handoff';
+  const tbody = document.getElementById('rows') as HTMLTableSectionElement;
+  const out = (id: string) => document.getElementById(id) as HTMLElement;
+  let started = false;
+  function readRows(): SpendRow[] {
+    return Array.from(tbody.rows).map((tr) => {
+      const v = (k: string) => (tr.querySelector(`[data-k="${k}"]`) as HTMLInputElement).value;
+      return { tool: v('tool'), category: v('category'), seats: +v('seats'), pricePerSeat: +v('pricePerSeat'), activeUsers: +v('activeUsers') };
+    });
+  }
+  function update() {
+    const r = spendAudit(readRows());
+    out('o-save').textContent = usd(r.potentialAnnualSavings);
+    out('o-spend').textContent = `${usd(r.monthlySpend)} / mo`;
+    out('o-unused').textContent = `${usd(r.unusedSeatCost)} / mo`;
+    out('o-overlap').textContent = `${usd(r.overlapCost)} / mo`;
+    out('o-cats').textContent = r.overlapCategories.join(', ') || 'None';
+    out('o-note').textContent = r.monthlySpend > 0 && r.potentialAnnualSavings / (r.monthlySpend * 12) > 0.3 ? 'More than 30% of spend looks recoverable. Check admin consoles before cancelling anything.' : '';
+    if (started) saveHandoff('AI subscription audit', { 'Monthly spend': usd(r.monthlySpend), 'Unused seats / mo': usd(r.unusedSeatCost), 'Overlap / mo': usd(r.overlapCost), 'Potential savings / yr': usd(r.potentialAnnualSavings) });
+  }
+  function renumber() {
+    Array.from(tbody.rows).forEach((tr, i) => {
+      const labels: Record<string, string> = { tool: 'name', category: 'category', seats: 'seats', pricePerSeat: 'price per seat per month', activeUsers: 'active users' };
+      tr.querySelectorAll<HTMLInputElement>('[data-k]').forEach((inp) => inp.setAttribute('aria-label', `Tool ${i + 1} ${labels[inp.dataset.k!]}`));
+      tr.querySelector('[data-remove]')?.setAttribute('aria-label', `Remove tool ${i + 1}`);
+    });
+  }
+  tbody.addEventListener('input', () => { if (!started) { started = true; track('calculator_start', { calculator: 'ai-spend-audit' }); } update(); });
+  tbody.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement).closest('[data-remove]');
+    if (!btn) return;
+    if (tbody.rows.length > 1) { btn.closest('tr')!.remove(); renumber(); started = true; update(); }
+  });
+  document.getElementById('add-row')!.addEventListener('click', () => {
+    const tr = tbody.rows[0].cloneNode(true) as HTMLTableRowElement;
+    tr.querySelectorAll('input').forEach((i) => (i.value = ''));
+    tbody.appendChild(tr);
+    renumber();
+    (tr.querySelector('input') as HTMLInputElement).focus();
+  });
+  update();
+</script>

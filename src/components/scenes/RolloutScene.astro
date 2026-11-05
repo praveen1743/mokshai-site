@@ -1,0 +1,44 @@
+---
+const teams = [
+  { t: 'Service desk', v: 86, s: 'Live' },
+  { t: 'NOC', v: 64, s: 'Live' },
+  { t: 'Projects', v: 31, s: 'Rolling out' },
+  { t: 'Account managers', v: 12, s: 'Training' },
+];
+const sessions = [
+  { t: 'Working with the triage agent', d: true },
+  { t: 'Approving and correcting drafts', d: true },
+  { t: 'Safe use of AI assistants', d: false },
+];
+---
+<figure class="scene roll" aria-label="Illustration: rollout tracker with adoption by team and training sessions">
+  <div class="scene-bar"><span class="scene-title">Rollout · week 6</span><span class="scene-tag">Illustrative</span></div>
+  <div class="scene-body">
+    <p class="lbl mono">Weekly active use of the agent</p>
+    <ul class="bars" role="list">
+      {teams.map((x) => (
+        <li>
+          <span class="bt">{x.t}<small>{x.s}</small></span>
+          <span class="track"><span class="fill" style={`width:${x.v}%`}></span></span>
+          <span class="mono bv">{x.v}%</span>
+        </li>
+      ))}
+    </ul>
+    <p class="lbl mono">Training</p>
+    <ul class="sess" role="list">
+      {sessions.map((s) => (<li><span class={`pill ${s.d ? 'pill-ok' : 'pill-wait'}`}>{s.d ? 'Done' : 'Thu'}</span>{s.t}</li>))}
+    </ul>
+  </div>
+</figure>
+<style>
+  .lbl { font-size: 11px; letter-spacing: .07em; text-transform: uppercase; color: var(--teal-700); }
+  .bars, .sess { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+  .bars li { display: grid; grid-template-columns: 130px 1fr 44px; align-items: center; gap: 12px; }
+  .bt { display: grid; font-weight: 500; font-size: 13px; } .bt small { font-weight: 400; font-size: 11.5px; color: var(--muted); }
+  .track { height: 10px; border-radius: 99px; background: #e4edf2; overflow: hidden; }
+  .fill { display: block; height: 100%; border-radius: inherit; background: var(--grad); transform-origin: left; }
+  @media (prefers-reduced-motion: no-preference) { .fill { animation: grow 1.4s var(--ease) both; } }
+  @keyframes grow { from { transform: scaleX(0); } }
+  .bv { text-align: right; font-size: 13px; }
+  .sess li { display: flex; align-items: center; gap: 10px; font-size: 13px; }
+</style>

@@ -1,0 +1,109 @@
+---
+// Integration map: an agent core connected to surrounding systems or teams.
+// HTML nodes sit over an SVG line layer that shares the same 1000x800 space.
+import Icon from '../Icon.astro';
+interface Node { label: string; sub?: string; icon?: string; human?: boolean }
+interface Props {
+  core: { title: string; sub?: string };
+  left: Node[];
+  right: Node[];
+  tone?: 'dark' | 'light';
+  caption?: string;
+  steps?: string[];
+}
+const { core, left, right, tone = 'dark', caption, steps = [] } = Astro.props;
+const W = 1000, H = 800, cx = 500, cy = 400;
+const place = (list: Node[], side: 'l' | 'r') =>
+  list.map((n, i) => {
+    const y = ((i + 1) * H) / (list.length + 1);
+    const x = side === 'l' ? 170 : 830;
+    return { ...n, x, y, side };
+  });
+const nodes = [...place(left, 'l'), ...place(right, 'r')];
+const rows = Math.max(left.length, right.length);
+const ar = rows <= 2 ? '10 / 5.5' : rows === 3 ? '10 / 6.8' : '10 / 8';
+const arM = rows <= 2 ? '10 / 7' : rows === 3 ? '10 / 9' : '10 / 11';
+const path = (n: { x: number; y: number; side: string }) => {
+  const ex = n.side === 'l' ? n.x + 170 : n.x - 170;
+  const mx = (cx + ex) / 2;
+  return `M${cx},${cy} C${mx},${cy} ${mx},${n.y} ${ex},${n.y}`;
+};
+---
+<figure class={`hub hub-${tone}`} aria-label={caption ?? core.title}>
+  <div class="stage" style={`--ar:${ar};--ar-m:${arM}`}>
+    <svg class="lines" viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" aria-hidden="true">
+      <defs>
+        <linearGradient id="hub-g" x1="0" x2="1">
+          <stop offset="0" stop-color="#2583DB" /><stop offset=".5" stop-color="#16A3B0" /><stop offset="1" stop-color="#1FA92F" />
+        </linearGradient>
+      </defs>
+      {nodes.map((n) => <path d={path(n)} class="wire" />)}
+      {nodes.map((n, i) => <path d={path(n)} class={`pulse${n.human ? ' human' : ''}`} style={`--dur:${3.2 + (i % 4) * 0.7}s;--delay:${(i * 0.45).toFixed(2)}s`} />)}
+    </svg>
+    {nodes.map((n) => (
+      <div class={`node ${n.side}${n.human ? ' human' : ''}`} style={`left:${(n.x / W) * 100}%;top:${(n.y / H) * 100}%`}>
+        {n.icon && <span class="ni"><Icon name={n.icon} /></span>}
+        <span class="nt"><strong>{n.label}</strong>{n.sub && <small>{n.sub}</small>}</span>
+      </div>
+    ))}
+    <div class="core">
+      <img src="/favicon.svg" alt="" width="34" height="38" />
+      <strong>{core.title}</strong>
+      {core.sub && <small>{core.sub}</small>}
+    </div>
+  </div>
+  {steps.length > 0 && (
+    <ol class="flow" role="list">{steps.map((s) => <li>{s}</li>)}</ol>
+  )}
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>
+
+<style>
+  .hub { margin: 0; position: relative; min-width: 0; }
+  .stage { position: relative; width: 100%; aspect-ratio: var(--ar, 10 / 8); }
+  .lines { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+  .wire { fill: none; stroke-width: 2; stroke: url(#hub-g); opacity: .35; }
+  .pulse { fill: none; stroke-width: 3.5; stroke: url(#hub-g); stroke-linecap: round; stroke-dasharray: 14 520; stroke-dashoffset: 0; opacity: 0; }
+  .pulse.human { stroke: #f2b45c; }
+  @media (prefers-reduced-motion: no-preference) {
+    .pulse { opacity: 1; animation: flow var(--dur) linear infinite; animation-delay: var(--delay); }
+    .core { animation: breathe 4s ease-in-out infinite; }
+  }
+  @keyframes flow { from { stroke-dashoffset: 534; } to { stroke-dashoffset: 0; } }
+  @keyframes breathe { 0%, 100% { box-shadow: 0 0 0 0 rgba(37, 131, 219, .35), 0 20px 50px -20px rgba(31, 169, 47, .6); } 50% { box-shadow: 0 0 0 14px rgba(37, 131, 219, 0), 0 20px 50px -20px rgba(31, 169, 47, .6); } }
+
+  .node { position: absolute; translate: -50% -50%; width: 34%; display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 12px; font-size: 13px; line-height: 1.25; }
+  .ni { width: 30px; height: 33px; flex: none; clip-path: var(--hex); display: grid; place-items: center; background: var(--grad); color: #fff; }
+  .ni :global(svg) { width: 16px; height: 16px; }
+  .node.human .ni { background: linear-gradient(140deg, #f2b45c, #d98a1c); }
+  .nt { display: grid; min-width: 0; }
+  .nt strong { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .nt small { font: 400 11px/1.3 var(--f-mono); opacity: .8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .core { position: absolute; left: 50%; top: 50%; translate: -50% -50%; width: 25%; aspect-ratio: 1 / 1.1; clip-path: var(--hex); background: var(--grad-deep); color: #fff; display: grid; place-content: center; justify-items: center; gap: 4px; text-align: center; padding: 8px; }
+  .core img { width: 30px; height: auto; background: #fff; padding: 3px 4px; border-radius: 6px; }
+  .core strong { font: 700 15px/1.15 var(--f-display); font-stretch: 90%; }
+  .core small { font: 400 10.5px/1.3 var(--f-mono); opacity: .9; }
+
+  .hub-dark .node { background: rgba(16, 48, 77, .72); border: 1px solid rgba(255, 255, 255, .12); color: #fff; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+  .hub-dark .node small { color: var(--on-dark-muted); opacity: 1; }
+  .hub-light .wire { opacity: .6; }
+  .hub-light .node { background: #fff; border: 1px solid var(--line); color: var(--ink); box-shadow: var(--shadow-1); }
+  .hub-light .node small { color: var(--muted); opacity: 1; }
+
+  .flow { list-style: none; margin: 14px auto 0; padding: 0; display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; counter-reset: f; }
+  .flow li { counter-increment: f; font: 500 12px/1 var(--f-mono); letter-spacing: .06em; text-transform: uppercase; padding: 8px 12px; border-radius: 999px; }
+  .flow li::before { content: counter(f) " · "; opacity: .7; }
+  .hub-dark .flow li { background: rgba(255, 255, 255, .06); border: 1px solid rgba(255, 255, 255, .14); color: var(--on-dark); }
+  .hub-light .flow li { background: #fff; border: 1px solid var(--line); color: var(--teal-700); }
+  figcaption { margin-top: 12px; text-align: center; font-size: 12.5px; }
+  .hub-dark figcaption { color: var(--on-dark-muted); }
+  .hub-light figcaption { color: var(--muted); }
+
+  @media (max-width: 560px) {
+    .stage { aspect-ratio: var(--ar-m, 10 / 11); }
+    .node { width: 34%; padding: 8px; gap: 6px; font-size: 11.5px; }
+    .ni { width: 24px; height: 26px; } .ni :global(svg) { width: 13px; height: 13px; }
+    .nt small { display: none; }
+    .core { width: 28%; } .core small { display: none; } .core strong { font-size: 12px; }
+  }
+</style>

@@ -1,0 +1,39 @@
+---
+const scopes = [
+  { s: 'Read tickets and device records', st: 'ok', l: 'Allowed' },
+  { s: 'Write ticket notes and categories', st: 'ok', l: 'Allowed' },
+  { s: 'Reset passwords (identity verified)', st: 'ok', l: 'Allowed' },
+  { s: 'Grant shared-drive access', st: 'wait', l: 'Approval' },
+  { s: 'Change firewall rules', st: 'no', l: 'Never' },
+  { s: 'Read other clients’ data', st: 'no', l: 'Never' },
+];
+---
+<figure class="scene perm" aria-label="Illustration: an agent service account with allowed, approval-only and blocked permissions, and an audit log">
+  <div class="scene-bar"><span class="scene-title">svc-agent-triage · permissions</span><span class="scene-tag">Illustrative</span></div>
+  <div class="scene-body">
+    <ul class="scopes" role="list">
+      {scopes.map((x) => (<li><span>{x.s}</span><span class={`pill pill-${x.st}`}>{x.l}</span></li>))}
+    </ul>
+    <div class="audit">
+      <p class="lbl mono">Audit log</p>
+      <p class="mono"><span>09:14:02</span> read psa.ticket#48213</p>
+      <p class="mono"><span>09:14:05</span> reset_password user=j.alvarez <b class="ok">ok</b></p>
+      <p class="mono"><span>09:17:40</span> request_approval drive_access → manager <b class="wait">pending</b></p>
+    </div>
+    <div class="kill"><span>Agent status</span><span class="switch" aria-hidden="true"><i></i></span><span class="mono">Running · pause any time</span></div>
+  </div>
+</figure>
+<style>
+  .scopes { list-style: none; margin: 0; padding: 0; display: grid; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+  .scopes li { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 10px 12px; font-size: 13px; }
+  .scopes li + li { border-top: 1px solid var(--line); }
+  .audit { background: #071b2c; border-radius: 12px; padding: 12px 14px; display: grid; gap: 4px; }
+  .audit p { font-size: 11.5px; color: #c8d8e5; margin: 0; }
+  .audit span { color: #6f8aa3; margin-right: 6px; }
+  .audit .lbl { color: var(--teal-on-dark); text-transform: uppercase; letter-spacing: .07em; font-size: 10.5px; margin-bottom: 4px; }
+  .audit b { font-weight: 500; } .ok { color: #7fdc8c; } .wait { color: #f2b45c; }
+  .kill { display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 500; }
+  .kill .mono { font-size: 11.5px; color: var(--muted); font-weight: 400; }
+  .switch { width: 40px; height: 22px; border-radius: 99px; background: var(--grad-deep); position: relative; }
+  .switch i { position: absolute; right: 3px; top: 3px; width: 16px; height: 16px; border-radius: 50%; background: #fff; }
+</style>

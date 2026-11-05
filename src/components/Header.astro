@@ -1,0 +1,83 @@
+---
+import { nav } from '../site.config';
+import Arrow from './Arrow.astro';
+const path = Astro.url.pathname;
+const isActive = (href: string) => path === href || (href !== '/' && path.startsWith(href));
+---
+<header class="site-header">
+  <div class="container bar">
+    <a href="/" class="brand" aria-label="Moksh AI home">
+      <img src="/logo-wordmark.svg" alt="Moksh AI" width="151" height="58" />
+    </a>
+    <nav class="primary" aria-label="Main">
+      <ul>
+        {nav.map((n) => (
+          <li><a href={n.href} aria-current={isActive(n.href) ? 'page' : undefined}>{n.label}</a></li>
+        ))}
+      </ul>
+    </nav>
+    <div class="actions">
+      <a class="btn btn-primary book" href="/book/">Book a call <Arrow /></a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="mobile-nav">
+        <span class="sr">Menu</span>
+        <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path class="l1" d="M4 8h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path class="l2" d="M4 16h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  </div>
+  <div id="mobile-nav" class="mobile-nav" hidden>
+    <nav class="container" aria-label="Mobile">
+      <ul>
+        {nav.map((n) => (<li><a href={n.href} aria-current={isActive(n.href) ? 'page' : undefined}>{n.label}</a></li>))}
+      </ul>
+      <a class="btn btn-primary" href="/book/">Book a strategy call <Arrow /></a>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header { position: sticky; top: 0; z-index: 50; background: rgba(255, 255, 255, .82); backdrop-filter: saturate(1.6) blur(14px); -webkit-backdrop-filter: saturate(1.6) blur(14px); padding-top: env(safe-area-inset-top, 0px); }
+  .site-header::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: var(--grad); opacity: .5; }
+  .bar { display: flex; align-items: center; gap: 28px; height: 76px; }
+  .brand { display: block; flex: none; }
+  .brand img { width: 128px; height: auto; }
+  .primary { flex: 1; }
+  .primary ul { display: flex; gap: 4px; list-style: none; margin: 0; padding: 0; }
+  .primary a { display: inline-flex; align-items: center; min-height: 40px; padding: 0 14px; font: 500 var(--t-sm)/1 var(--f-body); color: var(--ink); text-decoration: none; border-radius: 999px; position: relative; transition: background-color .2s var(--ease), color .2s var(--ease); }
+  .primary a:hover { color: var(--blue-700); background: var(--sky); }
+  .primary a[aria-current='page'] { background: linear-gradient(90deg, var(--sky), var(--mint)); color: var(--blue-700); }
+  .actions { display: flex; align-items: center; gap: 8px; margin-left: auto; }
+  .book { min-height: 44px; padding: 10px 18px; }
+  .menu-btn { display: none; width: 44px; height: 44px; border: 1px solid var(--line-strong); border-radius: 999px; background: var(--surface); color: var(--ink); cursor: pointer; align-items: center; justify-content: center; }
+  .menu-btn svg path { transition: transform .2s var(--ease); transform-origin: center; }
+  .menu-btn[aria-expanded='true'] .l1 { transform: translateY(4px) rotate(45deg); }
+  .menu-btn[aria-expanded='true'] .l2 { transform: translateY(-4px) rotate(-45deg); }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .mobile-nav { border-top: 1px solid var(--line); background: var(--surface); padding-block: 12px 24px; }
+  .mobile-nav ul { list-style: none; margin: 0 0 16px; padding: 0; }
+  .mobile-nav li a { display: flex; align-items: center; min-height: 52px; font: 600 var(--t-lg)/1 var(--f-display); font-stretch: 90%; color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--line); }
+  .mobile-nav li a[aria-current='page'] { color: var(--blue-700); }
+  @media (max-width: 1080px) {
+    .primary { display: none; }
+    .menu-btn { display: inline-flex; }
+  }
+  @media (max-width: 480px) { .book { display: none; } }
+</style>
+
+<script>
+  const btn = document.querySelector<HTMLButtonElement>('.menu-btn');
+  const panel = document.getElementById('mobile-nav');
+  if (btn && panel) {
+    btn.addEventListener('click', () => {
+      const open = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', String(!open));
+      panel.hidden = open;
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && btn.getAttribute('aria-expanded') === 'true') {
+        btn.setAttribute('aria-expanded', 'false');
+        panel.hidden = true;
+        btn.focus();
+      }
+    });
+  }
+</script>

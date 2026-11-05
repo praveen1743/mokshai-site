@@ -1,0 +1,28 @@
+# Moksh AI
+
+> Moksh AI (Moksh Infotech Pvt Ltd, part of Moksh Group) designs, builds and runs AI agents and automation for managed service providers (MSPs) and operations-heavy businesses. Agents work inside existing tools (PSA/ITSM, RMM, Microsoft 365, business systems), handle repetitive work such as ticket triage, alert correlation and document preparation, and route anything that needs judgement or carries security risk to a person. US office: Lake Hiawatha, New Jersey. Delivery team: Ahmedabad, India. Contact: info@mokshtech.net.
+
+## Services
+- [AI strategy & consulting](https://mokshai.net/services/ai-consulting/): workflow mapping, ranked automation candidates, business case and pilot brief
+- [Custom AI agents & development](https://mokshai.net/services/custom-ai-development/): agents on your PSA, RMM, Microsoft 365 and business systems
+- [Implementation & training](https://mokshai.net/services/ai-implementation-training/): staged rollout and role-based training
+- [AI cost optimisation](https://mokshai.net/services/ai-cost-optimization/): remove unused and overlapping AI subscriptions
+
+## Who it is for
+- [AI agents for MSPs](https://mokshai.net/msp/): ticket triage, tier-1 resolution, NOC alert correlation, documentation, white-label AI
+- [AI automation for operations teams](https://mokshai.net/operations/): quote preparation, document intake, status updates, reporting
+
+## Calculators (free, formulas shown)
+- [MSP ticket automation ROI](https://mokshai.net/tools/msp-ticket-roi/)
+- [Back-office time savings](https://mokshai.net/tools/back-office-hours/)
+- [AI subscription audit](https://mokshai.net/tools/ai-spend-audit/)
+- [AI project budget planner](https://mokshai.net/tools/ai-budget-planner/)
+
+## Method and trust
+- [How we work](https://mokshai.net/how-we-work/): discovery, pilot, scale, run
+- [Pricing](https://mokshai.net/pricing/): fixed-fee discovery, fixed-scope pilot, monthly scale and run
+- [Security](https://mokshai.net/security/): least access, human approval, audit logs, client data separation
+
+## Insights
+- [AI Agents for MSPs: What They Are & How They Reduce Workload](https://mokshai.net/ai-agents-for-msps-what-they-are-how-they-reduce-workload/)
+- [Why Automation Isn’t About Robots. It’s About Profit Margins](https://mokshai.net/why-automation-isnt-about-robots-its-about-profit-margins/)

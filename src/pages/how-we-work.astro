@@ -1,0 +1,68 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import CtaBand from '../components/CtaBand.astro';
+import SplitTable from '../components/SplitTable.astro';
+import { breadcrumbs } from '../lib/schema';
+import ScorecardScene from '../components/scenes/ScorecardScene.astro';
+
+const phases = [
+  { n: '01', h: 'Discovery', p: 'We map one workflow end to end with the people who do it: what arrives, which systems hold the data, where time goes, and where mistakes happen. We pull a baseline from your own systems and agree the metric a pilot will be judged on.', get: 'Ranked list of automation candidates, business case, pilot brief', decide: 'Whether to pilot, and which workflow first' },
+  { n: '02', h: 'Pilot', p: 'We build one agent on one queue. It runs on live work with a person approving its actions, and we report weekly against the baseline: volume handled, accuracy, time saved and running cost.', get: 'Measured results on your own work', decide: 'Keep it, change it, or stop. The stop rule is agreed before we start' },
+  { n: '03', h: 'Scale', p: 'We extend the agent to neighbouring workflows, loosen approvals only where the pilot data supports it, train your team by role, and hand over runbooks so you can change or switch it off without us.', get: 'Agents in daily use, runbooks, trained owners', decide: 'What to automate next, on evidence' },
+  { n: '04', h: 'Run and improve', p: 'If you want us to, we keep running the agents: monitoring accuracy and cost, updating them when your tools change, and reviewing results with you each month.', get: 'A monthly review of accuracy, usage and cost', decide: 'Whether the agent still earns its running cost' },
+];
+const principles = [
+  ['One workflow at a time', 'Big programmes fail on scope. We prove value on one queue before touching the next.'],
+  ['Human approval first', 'Every agent starts with a person approving its actions. Autonomy is earned with data.'],
+  ['Your stack, not ours', 'Agents work inside the tools you already run. Nothing to rip out, no new platform to learn.'],
+  ['You own the result', 'Configuration, prompts, integrations and runbooks are handed over. No lock-in.'],
+  ['Cost is a design input', 'We pick models and tools for the job and its budget, including open-source where it is good enough.'],
+  ['Measured, not promised', 'Every pilot has a baseline, a target and a stop rule written down before the build.'],
+];
+---
+<Base title="How We Work: Discovery, Pilot, Scale" description="How Moksh AI runs AI automation engagements: discovery on one workflow, a measured pilot with human approval, then scale with training, runbooks and monthly review." schema={[breadcrumbs([{ name: 'How we work', path: '/how-we-work/' }])]}>
+  <PageHero eyebrow="How we work" title="Small, measured steps, with a decision at each one" lede="AI projects go wrong when they start big and measure late. Ours start with one workflow, a baseline and a stop rule, and grow only on evidence.">
+    <ScorecardScene slot="visual" />
+  </PageHero>
+
+  <section class="section">
+    <div class="container">
+      <ol class="steps" role="list">
+        {phases.map((ph) => (
+          <li class="step">
+            <span class="step-n">{ph.n}</span>
+            <div><h2 class="h-step">{ph.h}</h2></div>
+            <div class="stack-sm">
+              <p>{ph.p}</p>
+              <dl><dt>You get</dt><dd>{ph.get}</dd><dt>You decide</dt><dd>{ph.decide}</dd></dl>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section sky">
+    <div class="container">
+      <div class="head"><span class="eyebrow">Principles</span><h2>Six rules we do not bend</h2></div>
+      <div class="grid g-3">
+        {principles.map(([h, p]) => (<div class="pr"><h3>{h}</h3><p>{p}</p></div>))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="head"><span class="eyebrow">Operating model</span><h2>What the agent does, and what stays with people</h2></div>
+      <SplitTable />
+    </div>
+  </section>
+
+  <CtaBand />
+</Base>
+<style>
+  .h-step { font-size: var(--t-xl); }
+  .pr { border-top: 3px solid; border-image: var(--grad) 1; padding-top: 18px; display: grid; gap: 8px; }
+  .pr p { color: var(--muted); }
+</style>

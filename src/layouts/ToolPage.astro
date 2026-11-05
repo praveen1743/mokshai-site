@@ -1,0 +1,67 @@
+---
+import Base from './Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Faq from '../components/Faq.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { tools } from '../lib/tools';
+import { breadcrumbs, faq, webApp } from '../lib/schema';
+
+interface Props { slug: (typeof tools)[number]['slug']; title: string; lede: string; faqs: { q: string; a: string }[] }
+const { slug, title, lede, faqs } = Astro.props;
+const tool = tools.find((t) => t.slug === slug)!;
+const path = `/tools/${slug}/`;
+const others = tools.filter((t) => t.slug !== slug);
+---
+<Base
+  title={`${tool.name} calculator`}
+  description={tool.description}
+  schema={[webApp({ name: tool.name, path, description: tool.description }), breadcrumbs([{ name: 'Calculators', path: '/tools/' }, { name: tool.name, path }]), faq(faqs)]}
+>
+  <PageHero eyebrow={`Calculator · ${tool.audience}`} title={title} lede={lede} crumbs={[{ name: 'Calculators', href: '/tools/' }]} />
+
+  <section class="section-tight">
+    <div class="container">
+      <slot name="calc" />
+      <p class="privacy-note">Everything runs in your browser. Nothing you type here is sent anywhere unless you choose to attach it to a booking.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container method">
+      <div class="stack-sm">
+        <span class="eyebrow">Method</span>
+        <h2>How this is calculated</h2>
+      </div>
+      <div class="prose"><slot name="method" /></div>
+    </div>
+  </section>
+
+  <section class="section sky">
+    <div class="container method">
+      <div class="stack-sm">
+        <span class="eyebrow">Questions</span>
+        <h2>About this calculator</h2>
+      </div>
+      <Faq items={faqs} />
+    </div>
+  </section>
+
+  <section class="section-tight">
+    <div class="container">
+      <span class="eyebrow">Other calculators</span>
+      <div class="grid g-3" style="margin-top:20px">
+        {others.map((t) => (
+          <a class="card" href={`/tools/${t.slug}/`}><span class="tag">{t.audience}</span><h3>{t.name}</h3><p>{t.question}</p><span class="link-arrow">Open</span></a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CtaBand title="Want these numbers checked against your real queue?" text="Book a call and attach your inputs. We will tell you which assumptions look optimistic, which look conservative, and what a pilot would need to prove." />
+</Base>
+
+<style>
+  .privacy-note { margin-top: 14px; font-size: var(--t-xs); color: var(--muted); }
+  .method { display: grid; grid-template-columns: minmax(0, .7fr) minmax(0, 1.3fr); gap: clamp(28px, 5vw, 72px); }
+  @media (max-width: 900px) { .method { grid-template-columns: minmax(0, 1fr); } }
+</style>

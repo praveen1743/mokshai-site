@@ -1,0 +1,65 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { breadcrumbs } from '../lib/schema';
+import PermissionScene from '../components/scenes/PermissionScene.astro';
+
+const controls = [
+  ['Least access', 'Each agent gets the minimum permissions its task needs, in a dedicated service account, never a shared admin login.'],
+  ['Human approval for sensitive actions', 'Permission changes, security alerts, firewall rules, payments and anything client-facing go to a person. These are never automated away.'],
+  ['Every action logged', 'Agents write an audit trail of what they read, what they decided and what they changed, reviewable by your team.'],
+  ['Client data kept apart', 'For MSPs, each client’s data stays separated. An agent working one client’s ticket cannot see another client’s records.'],
+  ['Model choice follows your data rules', 'We choose between enterprise model APIs and self-hosted open-source models based on where your data is allowed to go.'],
+  ['A switch you control', 'Every agent can be paused or turned off by your team, and the runbook says exactly how.'],
+];
+const questions = [
+  'Which systems will the agent read from, and which can it write to?',
+  'Where is data processed and stored, and for how long?',
+  'Is any of our data used to train a model? (It should not be.)',
+  'Which actions need human approval, and who approves them?',
+  'How are errors detected, and how fast can the agent be switched off?',
+  'Who has access to the agent’s logs and configuration?',
+  'What happens to our data and access when the engagement ends?',
+];
+---
+<Base title="Security & Data Handling for AI Agents" description="How Moksh AI builds AI agents safely: least-privilege access, human approval for sensitive actions, audit logs, client data separation and model choices that follow your data rules." schema={[breadcrumbs([{ name: 'Security', path: '/security/' }])]}>
+  <PageHero eyebrow="Security" title="Agents with limits you can see" lede="An AI agent is software with access to your systems. It should be built with the same care as any privileged account, and you should be able to check that it is.">
+    <PermissionScene slot="visual" />
+  </PageHero>
+
+  <section class="section">
+    <div class="container">
+      <div class="head"><span class="eyebrow">How we build</span><h2>Six controls in every agent</h2></div>
+      <div class="grid g-3">
+        {controls.map(([h, p]) => (<div class="ctl"><h3>{h}</h3><p>{p}</p></div>))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section sky">
+    <div class="container two">
+      <div class="stack-sm">
+        <span class="eyebrow">Due diligence</span>
+        <h2>Questions to ask any AI vendor, including us</h2>
+        <p class="lede">We answer these in writing before any build. If a vendor cannot answer them clearly, that tells you something.</p>
+      </div>
+      <ol class="qs">{questions.map((q) => <li>{q}</li>)}</ol>
+    </div>
+  </section>
+
+  <section class="section-tight">
+    <div class="container"><p class="measure note">For how we handle personal information collected through this website, see our <a href="/privacy-policy/">privacy policy</a>.</p></div>
+  </section>
+  <CtaBand title="Want the answers for your environment?" text="Book a call and bring your security questions. We will answer them in writing for the workflow you have in mind." />
+</Base>
+<style>
+  .ctl { border-top: 3px solid; border-image: var(--grad) 1; padding-top: 18px; display: grid; gap: 8px; }
+  .ctl p { color: var(--muted); }
+  .two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(28px, 5vw, 72px); align-items: start; }
+  @media (max-width: 900px) { .two { grid-template-columns: minmax(0, 1fr); } }
+  .qs { margin: 0; padding: 0; list-style: none; counter-reset: q; border-top: 1px solid var(--line); }
+  .qs li { counter-increment: q; display: grid; grid-template-columns: 40px 1fr; padding: 16px 0; border-bottom: 1px solid var(--line); }
+  .qs li::before { content: counter(q, decimal-leading-zero); font: 500 var(--t-sm)/1.6 var(--f-mono); color: var(--muted); }
+  .note { color: var(--muted); font-size: var(--t-sm); }
+</style>

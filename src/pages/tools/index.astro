@@ -1,0 +1,38 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { tools } from '../../lib/tools';
+import { breadcrumbs } from '../../lib/schema';
+import CalcPreviewScene from '../../components/scenes/CalcPreviewScene.astro';
+---
+<Base title="AI ROI & Budget Calculators" description="Free calculators for MSPs and operations teams: ticket automation ROI, back-office time savings, AI subscription audit and AI project budget planning. Formulas shown, no email required." schema={[breadcrumbs([{ name: 'Calculators', path: '/tools/' }])]}>
+  <PageHero eyebrow="Calculators" title="Size the opportunity before anyone sells you anything" lede="Four free calculators. Each one shows its formula and runs in your browser, so you can check the maths and reuse the numbers in your own business case.">
+    <CalcPreviewScene slot="visual" />
+  </PageHero>
+  <section class="section">
+    <div class="container">
+      <div class="grid g-2">
+        {tools.map((t, i) => (
+          <a class="card tool" href={`/tools/${t.slug}/`}>
+            <span class="tag"><span class="mono">0{i + 1}</span> · {t.audience}</span>
+            <h2 class="h3">{t.name}</h2>
+            <p>{t.question}</p>
+            <span class="link-arrow">Open calculator</span>
+          </a>
+        ))}
+      </div>
+      <div class="order">
+        <h2 class="h3">A sensible order</h2>
+        <p>Start with the calculator that matches your work (MSP tickets or back-office time) to estimate the monthly value. Then put that value into the budget planner to see the most a project should cost. Run the subscription audit any time: it often funds the first pilot.</p>
+      </div>
+    </div>
+  </section>
+  <CtaBand />
+</Base>
+<style>
+  .h3 { font-size: var(--t-xl); font-weight: 700; font-stretch: 90%; }
+  .tool { min-height: 230px; }
+  .order { margin-top: 48px; max-width: 70ch; display: grid; gap: 10px; border-top: 3px solid; border-image: var(--grad) 1; padding-top: 20px; }
+  .order p { color: var(--muted); }
+</style>

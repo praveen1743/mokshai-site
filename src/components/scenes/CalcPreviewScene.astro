@@ -1,0 +1,29 @@
+---
+---
+<figure class="scene calcp" aria-label="Illustration: a calculator turning ticket volumes into hours returned">
+  <div class="scene-bar"><span class="scene-title">MSP ticket automation ROI</span><span class="scene-tag">Example inputs</span></div>
+  <div class="cp">
+    <div class="inputs">
+      <div class="r"><span>Tickets per month</span><b class="mono">1,500</b></div><div class="t"><i style="width:14%"></i></div>
+      <div class="r"><span>Share that are tier-1</span><b class="mono">45%</b></div><div class="t"><i style="width:53%"></i></div>
+      <div class="r"><span>Agent handles</span><b class="mono">35%</b></div><div class="t"><i style="width:40%"></i></div>
+    </div>
+    <div class="out">
+      <span class="mono lbl">Technician time returned</span>
+      <strong class="big-out">59<small>hours / month</small></strong>
+      <p class="mono">Payback 8.4 months · 0.4 FTE</p>
+    </div>
+  </div>
+</figure>
+<style>
+  .cp { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); }
+  .inputs { padding: 18px; display: grid; gap: 8px; }
+  .r { display: flex; justify-content: space-between; font-size: 13px; font-weight: 500; }
+  .r b { color: var(--blue-700); font-weight: 500; }
+  .t { height: 6px; border-radius: 99px; background: #dbe5ec; margin-bottom: 8px; }
+  .t i { display: block; height: 100%; border-radius: inherit; background: var(--grad); }
+  .out { padding: 18px; background: radial-gradient(120% 80% at 100% 0%, rgba(31, 169, 47, .25), transparent 60%), radial-gradient(100% 80% at 0% 100%, rgba(37, 131, 219, .3), transparent 60%), var(--ink); color: var(--on-dark); display: grid; gap: 8px; align-content: center; }
+  .lbl { font-size: 10.5px; letter-spacing: .07em; text-transform: uppercase; color: var(--teal-on-dark); }
+  .out p { font-size: 12px; color: var(--on-dark-muted); }
+  @media (max-width: 480px) { .cp { grid-template-columns: minmax(0, 1fr); } }
+</style>

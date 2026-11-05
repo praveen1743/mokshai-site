@@ -1,0 +1,80 @@
+---
+import { site, nav, services } from '../site.config';
+const year = new Date().getFullYear();
+---
+<footer class="site-footer dark">
+  <div class="container">
+    <div class="top">
+      <div class="intro">
+        <img src="/logo-wordmark.svg" alt="Moksh AI" width="151" height="58" class="logo" />
+        <p>AI agents and automation for MSPs and operations teams. The agent prepares the work. Your people make the decisions.</p>
+        <p class="mail">Email <a href={`mailto:${site.email}`}>{site.email}</a></p>
+      </div>
+      <nav aria-label="Footer: site">
+        <h2 class="fh">Site</h2>
+        <ul>
+          {nav.map((n) => <li><a href={n.href}>{n.label}</a></li>)}
+          <li><a href="/how-we-work/">How we work</a></li>
+          <li><a href="/pricing/">Pricing</a></li>
+          <li><a href="/security/">Security</a></li>
+          <li><a href="/book/">Book a call</a></li>
+        </ul>
+      </nav>
+      <nav aria-label="Footer: services">
+        <h2 class="fh">Services</h2>
+        <ul>
+          {services.map((s) => <li><a href={`/services/${s.slug}/`}>{s.name}</a></li>)}
+        </ul>
+      </nav>
+      <div class="offices">
+        <h2 class="fh">Offices</h2>
+        {site.offices.map((o) => (
+          <address>
+            <strong>{o.label}</strong><br />
+            {o.street}<br />
+            {o.locality}, {o.region} {o.postalCode}<br />
+            <a href={`tel:${o.phone.replace(/[^+\d]/g, '')}`}>{o.phone}</a>
+          </address>
+        ))}
+      </div>
+    </div>
+
+    <div class="group">
+      <h2 class="fh">Part of Moksh Group</h2>
+      <ul>
+        {site.group.map((g) => <li><a href={g.url} rel="noopener">{g.name}</a></li>)}
+      </ul>
+    </div>
+
+    <div class="legal">
+      <p>© {year} {site.legalName} (Moksh AI). CIN {site.cin}.</p>
+      <ul>
+        <li><a href="/privacy-policy/">Privacy policy</a></li>
+        <li><a href={site.social.linkedin} rel="noopener">LinkedIn</a></li>
+        <li><a href={site.social.facebook} rel="noopener">Facebook</a></li>
+        <li><a href={site.social.instagram} rel="noopener">Instagram</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer { padding-block: 72px calc(32px + env(safe-area-inset-bottom, 0px)); font-size: var(--t-sm); background: radial-gradient(90% 60% at 100% 0%, rgba(31, 169, 47, .12), transparent 60%), radial-gradient(80% 60% at 0% 100%, rgba(37, 131, 219, .16), transparent 60%), var(--ink); }
+  .top { display: grid; grid-template-columns: minmax(0, 1.5fr) repeat(3, minmax(0, 1fr)); gap: 40px; padding-bottom: 48px; border-bottom: 1px solid rgba(255, 255, 255, .1); }
+  @media (max-width: 960px) { .top { grid-template-columns: repeat(2, minmax(0, 1fr)); } .intro { grid-column: 1 / -1; } }
+  @media (max-width: 520px) { .top { grid-template-columns: minmax(0, 1fr); } }
+  .logo { width: 132px; margin-bottom: 18px; }
+  .intro p { color: var(--on-dark-muted); max-width: 40ch; }
+  .mail { margin-top: 14px; }
+  .fh { font: 500 var(--t-xs)/1.2 var(--f-mono); letter-spacing: .09em; text-transform: uppercase; color: var(--on-dark-muted); margin-bottom: 14px; font-stretch: 100%; }
+  ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+  li a, .offices a { color: var(--on-dark) !important; text-decoration: none; display: inline-flex; min-height: 32px; align-items: center; }
+  li a:hover, .offices a:hover { color: #fff !important; text-decoration: underline; }
+  address { font-style: normal; color: var(--on-dark-muted); line-height: 1.6; }
+  address + address { margin-top: 18px; }
+  address strong { color: var(--on-dark); font-weight: 600; }
+  .group { padding-block: 28px; border-bottom: 1px solid rgba(255, 255, 255, .1); }
+  .group ul { display: flex; flex-wrap: wrap; gap: 4px 22px; }
+  .legal { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 24px; padding-top: 24px; color: var(--on-dark-muted); font-size: var(--t-xs); }
+  .legal ul { display: flex; flex-wrap: wrap; gap: 4px 20px; }
+</style>

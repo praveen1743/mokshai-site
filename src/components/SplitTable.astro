@@ -1,0 +1,30 @@
+---
+// The operating model: what an agent handles vs. what an engineer owns.
+// Source: Moksh AI's own article "AI Agents for MSPs".
+interface Row { area: string; agent: string; human: string }
+interface Props { rows?: Row[]; caption?: string }
+const defaultRows: Row[] = [
+  { area: 'Ticket triage', agent: 'Categorising, priority tagging, routing', human: 'Confirming the diagnosis, resolving complex cases' },
+  { area: 'Alert management', agent: 'Correlating anomalies, filtering noise', human: 'Judging genuine risk and deciding the response' },
+  { area: 'Help desk', agent: 'Password resets, access requests, provisioning', human: 'Exceptions, permissions, security-sensitive actions' },
+  { area: 'Documentation', agent: 'Drafting notes, tagging recurring issues', human: 'Checking accuracy and approving entries' },
+  { area: 'Client communication', agent: 'Status updates on routine tickets', human: 'Escalations and incident updates' },
+];
+const { rows = defaultRows, caption = 'Who does what once an agent is in the queue' } = Astro.props;
+---
+<div class="split-wrap">
+  <table class="split">
+    <caption class="sr-cap">{caption}</caption>
+    <thead>
+      <tr><th scope="col">Work</th><th scope="col"><span class="who"><span class="dot dot-agent"></span>Agent handles</span></th><th scope="col"><span class="who"><span class="dot dot-human"></span>Engineer owns</span></th></tr>
+    </thead>
+    <tbody>
+      {rows.map((r) => (
+        <tr><th scope="row">{r.area}</th><td data-label="Agent handles">{r.agent}</td><td data-label="Engineer owns">{r.human}</td></tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+<style>
+  .sr-cap { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+</style>

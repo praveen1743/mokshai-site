@@ -1,0 +1,40 @@
+---
+import Icon from '../Icon.astro';
+---
+<figure class="scene intake" aria-label="Illustration: an incoming request for quote turned into a draft quote by an agent">
+  <div class="scene-bar"><span class="scene-title">Quote desk</span><span class="scene-tag">Illustrative</span></div>
+  <div class="scene-body">
+    <div class="mail">
+      <div class="m-head"><span class="pill pill-info">Inbox</span><span class="m-time mono">08:42</span></div>
+      <p class="m-from mono">purchasing@client-co.com</p>
+      <p class="m-sub"><strong>RFQ: 40 × mounting bracket, rev C</strong></p>
+      <p class="m-text">Please quote 40 pcs per attached drawing. Need delivery in two weeks.</p>
+      <span class="att"><Icon name="doc" />BRK-220-revC.pdf</span>
+    </div>
+    <div class="agent-row" aria-hidden="true"><span class="hexi sm"><Icon name="copilot" /></span><span class="mono">Agent reads email + drawing, checks job history</span></div>
+    <div class="draft">
+      <div class="m-head"><strong>Draft quote Q-1187</strong><span class="pill pill-wait">Estimator review</span></div>
+      <dl class="kv">
+        <dt>Customer</dt><dd>Existing · 12 past jobs</dd>
+        <dt>Part</dt><dd class="mono">BRK-220 rev C</dd>
+        <dt>Quantity</dt><dd class="mono">40</dd>
+        <dt>Material</dt><dd>6061-T6 aluminium</dd>
+        <dt>Due</dt><dd>14 days</dd>
+      </dl>
+      <p class="flag"><span class="pill pill-no">Missing</span> Finish not specified. Question drafted to customer.</p>
+    </div>
+  </div>
+</figure>
+<style>
+  .mail, .draft { border: 1px solid var(--line); border-radius: 12px; padding: 14px; display: grid; gap: 6px; background: #fff; }
+  .draft { border-color: transparent; box-shadow: 0 0 0 1.5px rgba(22, 163, 176, .55), var(--shadow-2); }
+  .m-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+  .m-time, .m-from { font-size: 12px; color: var(--muted); }
+  .m-text { color: var(--muted); font-size: 13px; }
+  .att { justify-self: start; display: inline-flex; align-items: center; gap: 6px; font: 500 12px/1 var(--f-mono); padding: 7px 10px; border-radius: 8px; background: var(--paper); border: 1px solid var(--line); }
+  .att :global(svg) { width: 14px; height: 14px; color: var(--blue-700); }
+  .agent-row { display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--teal-700); padding-left: 6px; }
+  .kv { display: grid; grid-template-columns: auto 1fr; gap: 6px 16px; margin: 4px 0 0; font-size: 13px; }
+  .kv dt { color: var(--muted); } .kv dd { margin: 0; font-weight: 500; }
+  .flag { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 12.5px; color: var(--muted); margin-top: 4px; }
+</style>

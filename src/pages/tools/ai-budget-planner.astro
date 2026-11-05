@@ -1,0 +1,86 @@
+---
+import ToolPage from '../../layouts/ToolPage.astro';
+import Range from '../../components/Range.astro';
+import Arrow from '../../components/Arrow.astro';
+import { budgetPlan, usd, num } from '../../lib/calc';
+
+const d = { monthlyBenefit: 4000, runCostPerMonth: 700, targetPaybackMonths: 12, contingencyShare: 0.15, split: { discovery: 10, pilot: 35, scale: 55 } };
+const r0 = budgetPlan(d);
+const faqs = [
+  { q: 'Where does the monthly benefit come from?', a: 'From your own estimate of what the automation is worth each month: hours returned multiplied by loaded cost, plus any revenue effect you can defend. Our MSP ticket ROI and back-office time calculators both produce this figure.' },
+  { q: 'Why plan a budget backwards from payback?', a: 'Because it gives you a ceiling before you see any quote. If a proposal costs more than the investment ceiling, either the scope is too large for the benefit or your payback target needs to move. Both are better discovered before the project starts.' },
+  { q: 'Why hold back contingency?', a: 'Integration work with older systems and data clean-up are the usual sources of overrun. Reserving part of the budget up front means an unexpected issue does not force you to abandon the pilot.' },
+  { q: 'How should I split the budget between phases?', a: 'Spend little on discovery and enough on the pilot to measure real results on live work. Commit the largest share to scale only after the pilot meets its target. The default split is a starting point you can change.' },
+];
+---
+<ToolPage slug="ai-budget-planner" title="AI project budget planner" lede="Work out the most you should spend on an AI project for it to pay back within your target, with contingency held back and the budget split across discovery, pilot and scale." faqs={faqs}>
+  <div slot="calc" class="calc" id="budget-calc">
+    <form class="calc-inputs" novalidate>
+      <span class="example-pill">Example inputs. Replace them with your own</span>
+      <div class="num-row">
+        <div class="field"><label for="benefit">Expected value per month (USD)</label><input class="input mono" id="benefit" type="number" min="0" step="100" value={d.monthlyBenefit} inputmode="numeric" /><span class="hint">From a calculator or your own estimate.</span></div>
+        <div class="field"><label for="runc">Running cost per month (USD)</label><input class="input mono" id="runc" type="number" min="0" step="50" value={d.runCostPerMonth} inputmode="numeric" /></div>
+      </div>
+      <Range id="payback" label="Target payback" min={3} max={36} step={1} value={12} display="12 months" />
+      <Range id="cont" label="Contingency held back" min={0} max={40} step={5} value={15} display="15%" />
+      <fieldset class="field">
+        <legend>Budget split across phases</legend>
+        <span class="hint">Relative weights. They do not need to add up to 100.</span>
+        <div class="num-row">
+          <div class="field"><label for="w-d">Discovery</label><input class="input mono" id="w-d" type="number" min="0" max="100" value={d.split.discovery} /></div>
+          <div class="field"><label for="w-p">Pilot</label><input class="input mono" id="w-p" type="number" min="0" max="100" value={d.split.pilot} /></div>
+          <div class="field"><label for="w-s">Scale</label><input class="input mono" id="w-s" type="number" min="0" max="100" value={d.split.scale} /></div>
+        </div>
+      </fieldset>
+    </form>
+    <div class="calc-out" aria-live="polite">
+      <span class="eyebrow">Investment ceiling</span>
+      <div class="big-out" id="o-max">{usd(r0.maxInvestment)}</div>
+      <dl class="out-list">
+        <dt>Net value per month</dt><dd id="o-net">{usd(r0.netPerMonth)}</dd>
+        <dt>Contingency reserve</dt><dd id="o-cont">{usd(r0.contingency)}</dd>
+        <dt>Working budget</dt><dd id="o-work">{usd(r0.workingBudget)}</dd>
+        <dt>Discovery</dt><dd id="o-d">{usd(r0.phases.discovery)}</dd>
+        <dt>Pilot</dt><dd id="o-p">{usd(r0.phases.pilot)}</dd>
+        <dt>Scale</dt><dd id="o-s">{usd(r0.phases.scale)}</dd>
+      </dl>
+      <p class="out-note" id="o-note"></p>
+      <div class="btn-row"><a class="btn btn-primary" href="/book/" id="o-book">Get a scoped quote <Arrow /></a></div>
+      <p class="formula">ceiling = (value − running cost) × payback months<br />working budget = ceiling − contingency<br />phase = working budget × weight ÷ total weight</p>
+    </div>
+  </div>
+
+  <Fragment slot="method">
+    <p>The planner works backwards from the outcome. It subtracts the running cost from the monthly value to get net value, then multiplies by your target payback period. That is the largest one-time investment that still pays back on time: the investment ceiling.</p>
+    <p>Part of the ceiling is held back as contingency. The rest, the working budget, is split across discovery, pilot and scale using the weights you set.</p>
+    <p>Use the result to test a proposal. If a quote is above the ceiling, narrow the scope, raise the expected value with evidence, or accept a longer payback, and make that choice before the project starts.</p>
+  </Fragment>
+</ToolPage>
+
+<script>
+  import { budgetPlan, usd } from '../../lib/calc';
+  import { saveHandoff, track } from '../../lib/handoff';
+  const v = (id: string) => +(document.getElementById(id) as HTMLInputElement).value || 0;
+  const out = (id: string) => document.getElementById(id) as HTMLElement;
+  let started = false;
+  function update() {
+    out('payback-out').textContent = `${v('payback')} months`;
+    out('cont-out').textContent = `${v('cont')}%`;
+    const r = budgetPlan({ monthlyBenefit: v('benefit'), runCostPerMonth: v('runc'), targetPaybackMonths: v('payback'), contingencyShare: v('cont') / 100, split: { discovery: v('w-d'), pilot: v('w-p'), scale: v('w-s') } });
+    out('o-max').textContent = usd(r.maxInvestment);
+    out('o-net').textContent = usd(r.netPerMonth);
+    out('o-cont').textContent = usd(r.contingency);
+    out('o-work').textContent = usd(r.workingBudget);
+    out('o-d').textContent = usd(r.phases.discovery);
+    out('o-p').textContent = usd(r.phases.pilot);
+    out('o-s').textContent = usd(r.phases.scale);
+    out('o-note').textContent = r.netPerMonth <= 0 ? 'Running cost is higher than the expected value, so no build budget pays back. Revisit the scope or the value estimate.' : '';
+    if (started) saveHandoff('AI project budget planner', { 'Value / month': usd(v('benefit')), 'Running cost / month': usd(v('runc')), 'Target payback': `${v('payback')} months`, 'Investment ceiling': usd(r.maxInvestment) });
+  }
+  document.querySelectorAll('#budget-calc input').forEach((el) => el.addEventListener('input', () => {
+    if (!started) { started = true; track('calculator_start', { calculator: 'ai-budget-planner' }); }
+    update();
+  }));
+  out('o-book').addEventListener('click', () => track('calculator_book_click', { calculator: 'ai-budget-planner' }));
+  update();
+</script>

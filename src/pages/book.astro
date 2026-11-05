@@ -1,0 +1,175 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../site.config';
+import { breadcrumbs } from '../lib/schema';
+const endpoint = site.formEndpoint;
+---
+<Base title="Book a Strategy Call" description="Book a 30-minute strategy call with Moksh AI. Tell us about one workflow and get a straight answer on whether an AI agent fits, what it would touch and how a pilot would be measured." schema={[{ '@type': 'ContactPage', name: 'Book a strategy call', url: `${site.url}/book/` }, breadcrumbs([{ name: 'Book a call', path: '/book/' }])]}>
+  <section class="book">
+    <div class="container grid-book">
+      <div class="intro stack">
+        <span class="eyebrow">Book a strategy call</span>
+        <h1>Bring one workflow. Leave with a straight answer.</h1>
+        <p class="lede">Thirty minutes, no slides. Tell us what eats your team’s time and we will tell you whether an agent fits, which systems it would touch, and how a pilot would be measured.</p>
+        <ol class="what">
+          <li><span class="mono">01</span><div><strong>You send three answers</strong><p>Who you are, what kind of team, and the workflow you want off your plate.</p></div></li>
+          <li><span class="mono">02</span><div><strong>We reply within one business day</strong><p>With times for a call and any questions about your stack.</p></div></li>
+          <li><span class="mono">03</span><div><strong>The call</strong><p>Fit, risks, rough effort, and what a pilot would need to prove.</p></div></li>
+        </ol>
+        <div class="direct">
+          <p class="tag">Prefer to reach us directly</p>
+          <p><a href={`mailto:${site.email}`}>{site.email}</a></p>
+          {site.offices.map((o) => (<p>{o.label}: <a href={`tel:${o.phone.replace(/[^+\d]/g, '')}`}>{o.phone}</a></p>))}
+        </div>
+      </div>
+
+      <div class="panel">
+        <form id="book-form" class="form" novalidate data-endpoint={endpoint} data-booking={site.bookingUrl} data-email={site.email}>
+          <div class="pair">
+            <div class="field"><label for="name">Your name</label><input class="input" id="name" name="name" autocomplete="name" required /></div>
+            <div class="field"><label for="email">Work email</label><input class="input" id="email" name="email" type="email" autocomplete="email" required /></div>
+          </div>
+          <div class="pair">
+            <div class="field"><label for="company">Company</label><input class="input" id="company" name="company" autocomplete="organization" required /></div>
+            <div class="field"><label for="phone">Phone <span class="opt">(optional)</span></label><input class="input" id="phone" name="phone" type="tel" autocomplete="tel" /></div>
+          </div>
+          <fieldset class="field">
+            <legend>What kind of team are you?</legend>
+            <div class="choices">
+              <label class="choice"><input type="radio" name="team" value="MSP" required /><span>MSP / IT services</span></label>
+              <label class="choice"><input type="radio" name="team" value="Operations" /><span>Manufacturing, fabrication or trades</span></label>
+              <label class="choice"><input type="radio" name="team" value="Other" /><span>Something else</span></label>
+            </div>
+          </fieldset>
+          <fieldset class="field">
+            <legend>Team size</legend>
+            <div class="choices">
+              {['1–10', '11–50', '51–200', '200+'].map((s) => (<label class="choice"><input type="radio" name="size" value={s} /><span>{s}</span></label>))}
+            </div>
+          </fieldset>
+          <div class="field">
+            <label for="workflow">Which workflow would you most like off your team’s plate?</label>
+            <textarea class="input" id="workflow" name="workflow" rows="4" required placeholder="e.g. Password resets and access requests take two technicians most of Monday."></textarea>
+            <span class="hint">One or two sentences is plenty. Please do not include passwords or client personal data.</span>
+          </div>
+          <div class="calc-attach" id="calc-attach" hidden>
+            <label class="check"><input type="checkbox" id="attach" checked /> <span>Attach my calculator results: <strong id="calc-name"></strong></span></label>
+            <dl id="calc-summary"></dl>
+          </div>
+          <input type="text" name="company_website" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
+          <p class="error" id="form-error" role="alert" hidden></p>
+          <button class="btn btn-primary submit" type="submit">Request a call</button>
+          <p class="legal">We use your details only to reply to this request. See our <a href="/privacy-policy/">privacy policy</a>.</p>
+        </form>
+        <div id="done" class="done" hidden tabindex="-1">
+          <span class="eyebrow">Request received</span>
+          <h2>Thank you. We will reply within one business day.</h2>
+          <p id="done-text">Look out for an email from {site.email} with times for a call.</p>
+          <p id="done-booking" hidden><a class="btn btn-primary" id="booking-link" href="#" rel="noopener">Pick a time now</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .book { padding-block: clamp(48px, 7vw, 96px); background: linear-gradient(160deg, #e7f1fc 0%, #eef7f6 50%, #eaf6ee 100%); }
+  .grid-book { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(32px, 5vw, 80px); align-items: start; }
+  @media (max-width: 960px) { .grid-book { grid-template-columns: minmax(0, 1fr); } }
+  .intro h1 { font-size: var(--t-2xl); max-width: 16ch; }
+  .what { list-style: none; padding: 0; margin: 0; border-top: 1px solid var(--line); }
+  .what li { display: grid; grid-template-columns: 44px 1fr; gap: 8px; padding: 16px 0; border-bottom: 1px solid var(--line); }
+  .what .mono { color: var(--muted); font-size: var(--t-sm); padding-top: 2px; }
+  .what p { color: var(--muted); font-size: var(--t-sm); margin-top: 2px; }
+  .direct { display: grid; gap: 4px; font-size: var(--t-sm); }
+  .direct .tag { margin-bottom: 6px; }
+  .panel { background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow-glow); border-radius: 18px; padding: clamp(20px, 3vw, 36px); }
+  .pair { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; }
+  @media (max-width: 560px) { .pair { grid-template-columns: minmax(0, 1fr); } }
+  .opt { color: var(--muted); font-weight: 400; }
+  .hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+  .submit { justify-content: center; width: 100%; min-height: 52px; font-size: var(--t-md); }
+  .legal { font-size: var(--t-xs); color: var(--muted); }
+  .calc-attach { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; display: grid; gap: 10px; font-size: var(--t-sm); }
+  .calc-attach dl { display: grid; grid-template-columns: auto 1fr; gap: 2px 14px; margin: 0; font-size: var(--t-xs); }
+  .calc-attach dt { color: var(--muted); } .calc-attach dd { margin: 0; font-family: var(--f-mono); }
+  .check { display: flex; gap: 10px; align-items: flex-start; cursor: pointer; }
+  .check input { width: 18px; height: 18px; margin-top: 2px; accent-color: var(--blue-700); }
+  .done { display: grid; gap: 14px; }
+  .done h2 { font-size: var(--t-xl); }
+</style>
+
+<script>
+  import { readHandoff, track } from '../lib/handoff';
+  const form = document.getElementById('book-form') as HTMLFormElement;
+  const err = document.getElementById('form-error') as HTMLElement;
+  const handoff = readHandoff();
+  if (handoff) {
+    (document.getElementById('calc-attach') as HTMLElement).hidden = false;
+    (document.getElementById('calc-name') as HTMLElement).textContent = handoff.tool;
+    const dl = document.getElementById('calc-summary') as HTMLElement;
+    for (const [k, v] of Object.entries(handoff.summary)) {
+      const dt = document.createElement('dt'); dt.textContent = k;
+      const dd = document.createElement('dd'); dd.textContent = v;
+      dl.append(dt, dd);
+    }
+  }
+  let started = false;
+  form.addEventListener('input', () => { if (!started) { started = true; track('form_start', { form: 'book' }); } }, { once: true });
+
+  function validate(): string | null {
+    const required: [string, string][] = [['name', 'your name'], ['email', 'a work email'], ['company', 'your company'], ['workflow', 'the workflow']];
+    for (const [id, label] of required) {
+      const el = form.elements.namedItem(id) as HTMLInputElement;
+      el.removeAttribute('aria-invalid');
+      if (!el.value.trim()) { el.setAttribute('aria-invalid', 'true'); el.focus(); return `Please add ${label}.`; }
+    }
+    const email = form.elements.namedItem('email') as HTMLInputElement;
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())) { email.setAttribute('aria-invalid', 'true'); email.focus(); return 'Please check the email address. It should look like name@company.com.'; }
+    if (!form.querySelector('input[name="team"]:checked')) { (form.querySelector('input[name="team"]') as HTMLInputElement).focus(); return 'Please choose what kind of team you are.'; }
+    return null;
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    err.hidden = true;
+    const problem = validate();
+    if (problem) { err.textContent = problem; err.hidden = false; return; }
+    if ((form.elements.namedItem('company_website') as HTMLInputElement).value) return; // bot
+
+    const data = Object.fromEntries(new FormData(form).entries()) as Record<string, string>;
+    delete data.company_website;
+    const attach = document.getElementById('attach') as HTMLInputElement | null;
+    if (handoff && attach?.checked) data.calculator = `${handoff.tool}: ` + Object.entries(handoff.summary).map(([k, v]) => `${k} ${v}`).join('; ');
+    data.page = location.href;
+
+    const endpoint = form.dataset.endpoint;
+    const btn = form.querySelector('button[type="submit"]') as HTMLButtonElement;
+    if (!endpoint) {
+      // No form backend configured: hand the request to the visitor's email app.
+      const body = Object.entries(data).map(([k, v]) => `${k}: ${v}`).join('\n');
+      window.location.href = `mailto:${form.dataset.email}?subject=${encodeURIComponent('Strategy call request: ' + (data.company || ''))}&body=${encodeURIComponent(body)}`;
+      err.textContent = `Your email app should open with the request filled in. If it does not, email us at ${form.dataset.email}.`;
+      err.hidden = false;
+      return;
+    }
+    btn.disabled = true; btn.textContent = 'Sending…';
+    try {
+      const res = await fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(data) });
+      if (!res.ok) throw new Error(String(res.status));
+      track('generate_lead', { form: 'book', team: data.team, calculator: handoff?.tool || 'none' });
+      form.hidden = true;
+      const done = document.getElementById('done') as HTMLElement;
+      done.hidden = false;
+      if (form.dataset.booking) {
+        (document.getElementById('booking-link') as HTMLAnchorElement).href = form.dataset.booking;
+        (document.getElementById('done-booking') as HTMLElement).hidden = false;
+      }
+      done.focus();
+    } catch {
+      btn.disabled = false; btn.textContent = 'Request a call';
+      err.textContent = `Something went wrong sending the form. Please try again, or email us at ${form.dataset.email}.`;
+      err.hidden = false;
+    }
+  });
+</script>

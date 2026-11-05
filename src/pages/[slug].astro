@@ -1,0 +1,57 @@
+---
+// Articles live at the site root so the old WordPress URLs keep working unchanged.
+import { getCollection, render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import CtaBand from '../components/CtaBand.astro';
+import Arrow from '../components/Arrow.astro';
+import { article, breadcrumbs } from '../lib/schema';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('insights');
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+const { post } = Astro.props;
+const { Content, headings } = await render(post);
+const path = `/${post.id}/`;
+const fmt = (d: Date) => d.toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' });
+const toc = headings.filter((h) => h.depth === 2);
+const tool = post.data.audience === 'msp' ? { href: '/tools/msp-ticket-roi/', label: 'Estimate your ticket savings' } : { href: '/tools/back-office-hours/', label: 'Estimate your time savings' };
+---
+<Base title={post.data.title} description={post.data.description} ogType="article" published={post.data.published} updated={post.data.updated}
+  schema={[article({ title: post.data.title, description: post.data.description, path, published: post.data.published, updated: post.data.updated }), breadcrumbs([{ name: 'Insights', path: '/insights/' }, { name: post.data.title, path }])]}>
+  <article>
+    <header class="a-head">
+      <div class="container narrow stack">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/insights/">Insights</a></nav>
+        <span class="eyebrow">{post.data.audience === 'msp' ? 'For MSPs' : 'For operations'}</span>
+        <h1>{post.data.title}</h1>
+        <p class="byline">By the Moksh AI team · Published <time datetime={post.data.published.toISOString()}>{fmt(post.data.published)}</time> · Updated <time datetime={post.data.updated.toISOString()}>{fmt(post.data.updated)}</time></p>
+        <div class="summary"><span class="tag">Summary</span><p>{post.data.summary}</p></div>
+      </div>
+    </header>
+    <div class="container a-body">
+      <aside class="toc" aria-label="On this page">
+        <p class="tag">On this page</p>
+        <ol>{toc.map((h) => <li><a href={`#${h.slug}`}>{h.text}</a></li>)}</ol>
+        <a class="btn btn-primary toc-cta" href={tool.href}>{tool.label} <Arrow /></a>
+      </aside>
+      <div class="prose"><Content /></div>
+    </div>
+  </article>
+  <CtaBand />
+</Base>
+<style>
+  .a-head { background: linear-gradient(160deg, #e7f1fc 0%, #eef7f6 50%, #eaf6ee 100%); padding-block: clamp(48px, 7vw, 88px) 40px; }
+  .narrow { max-width: 920px; }
+  .a-head h1 { font-size: var(--t-2xl); max-width: 22ch; }
+  .byline { color: var(--muted); font-size: var(--t-sm); }
+  .summary { border-left: 3px solid var(--blue-700); padding: 4px 0 4px 18px; display: grid; gap: 6px; max-width: 68ch; }
+  .summary p { font-size: var(--t-lg); line-height: 1.55; }
+  .a-body { display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: clamp(32px, 5vw, 72px); padding-block: 56px 96px; align-items: start; }
+  .toc { position: sticky; top: 96px; display: grid; gap: 12px; font-size: var(--t-sm); }
+  .toc ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; border-left: 1px solid var(--line); }
+  .toc li a { display: block; padding-left: 14px; color: var(--muted); text-decoration: none; line-height: 1.4; }
+  .toc li a:hover { color: var(--blue-700); }
+  .toc-cta { margin-top: 12px; white-space: normal; }
+  @media (max-width: 960px) { .a-body { grid-template-columns: minmax(0, 1fr); } .toc { position: static; } }
+</style>
