@@ -1,0 +1,105 @@
+---
+import ToolPage from '../../layouts/ToolPage.astro';
+import Arrow from '../../components/Arrow.astro';
+import { readinessQuestions, readinessScore, READINESS_BAND_LABEL } from '../../lib/calc';
+
+// Example answers: a typical business with paid tools and no AI policy yet.
+const d: Record<string, number> = { access: 1, sensitive: 1, baseline: 1, owner: 2, policy: 0, inventory: 1, apis: 2, accounts: 1 };
+const r0 = readinessScore(d);
+const faqs = [
+  { q: 'What does an AI readiness assessment check?', a: 'Four things: whether data access is tidy enough that an AI tool will not surface files people should not see, whether there is a measured workflow with an owner, whether staff have a policy and you know which AI tools are in use, and whether the systems involved can be connected safely with their own accounts and audit logs.' },
+  { q: 'Is the score a benchmark against other companies?', a: 'No. The bands are our own rule of thumb for what to do next, based on what a first pilot needs in place. They are not an industry average and should not be quoted as one.' },
+  { q: 'Why does one weak area stop a "ready" result?', a: 'Because a pilot stalls on its weakest part. If the systems cannot be connected, or nobody owns the workflow, a high score elsewhere does not help. The scorecard caps the result until every area has at least something in place.' },
+  { q: 'Does this cover Microsoft 365 Copilot readiness?', a: 'Partly. The data access questions are the main Copilot risk, because Copilot can show a user any content their account can open. A full Copilot readiness review also checks licensing, sensitivity labels, retention and a rollout plan by team.' },
+  { q: 'What should I do with a low score?', a: 'Work through the three next steps shown, starting at the top. Most can be done internally in a few weeks. A policy and a tool inventory are usually the quickest wins.' },
+];
+---
+<ToolPage slug="ai-readiness-scorecard" title="AI readiness scorecard" lede="Eight questions about your data, process, policies and systems. You get a readiness score, the weakest area, and the three things to fix before you spend money on an AI pilot." faqs={faqs}>
+  <div slot="calc" class="calc" id="ready-calc">
+    <form class="calc-inputs" novalidate>
+      <span class="example-pill">Example inputs. Replace them with your own</span>
+      {readinessQuestions.map((q, i) => (
+        <fieldset class="field rq">
+          <legend><span class="mono rq-n">{String(i + 1).padStart(2, '0')}</span> <span class="rq-area">{q.area}</span> {q.text}</legend>
+          <div class="choices">
+            {q.options.map((o, v) => (
+              <label class="choice"><input type="radio" name={q.id} value={v} checked={d[q.id] === v} /><span>{o}</span></label>
+            ))}
+          </div>
+        </fieldset>
+      ))}
+    </form>
+    <div class="calc-out" aria-live="polite">
+      <div class="out-inner">
+      <span class="eyebrow">Readiness score</span>
+      <div class="big-out"><span id="o-score">{r0.score}</span><small>/ {r0.max}</small></div>
+      <p class="band" id="o-band">{READINESS_BAND_LABEL[r0.band]}</p>
+      <dl class="out-list">
+        {r0.areas.map((a, i) => (<><dt>{a.area}</dt><dd id={`o-a${i}`}>{a.score} / {a.max}</dd></>))}
+      </dl>
+      <div class="next">
+        <p class="next-h">Fix these first</p>
+        <ol id="o-next">{r0.nextSteps.map((s) => <li>{s}</li>)}</ol>
+        <p id="o-none" class="next-none" hidden>Nothing obvious to fix. Choose the workflow and set the pilot target.</p>
+      </div>
+      <div class="btn-row"><a class="btn btn-primary" href="/book/" id="o-book">Talk through the results <Arrow /></a></div>
+      <p class="formula">score = sum of answers (0, 1 or 2 each), out of 16<br />below 40%: fix foundations · 40–74%: narrow pilot · 75%+: ready<br />any area at 0 caps the result at “narrow pilot”</p>
+      </div>
+    </div>
+  </div>
+
+  <Fragment slot="method">
+    <p>Each question has three answers worth 0, 1 or 2 points. The total is out of 16, and each of the four areas is out of 4.</p>
+    <p>Below 40%, the foundations need work before a pilot is worth paying for. From 40% to 74%, a narrow pilot can work if it avoids the weak area. At 75% and above, you are ready to choose a workflow and set a target. If any area scores zero, the result is capped at "narrow pilot", because a pilot stalls on its weakest part.</p>
+    <p>These thresholds are our own rule of thumb for deciding the next step, not a benchmark against other businesses. The next steps list the lowest answers first. For the background, read the <a href="/ai-readiness-assessment-checklist/">AI readiness assessment checklist</a>; for the policy questions, start with the <a href="/ai-acceptable-use-policy-template/">AI acceptable use policy template</a>.</p>
+  </Fragment>
+</ToolPage>
+
+<style>
+  /* overflow: clip keeps the rounded corners without creating a scroll
+     container, so the results can stay in view beside the long form. */
+  #ready-calc { overflow: clip; }
+  .out-inner { display: grid; gap: 20px; align-content: start; position: sticky; top: 96px; }
+  .out-inner > * { min-width: 0; }
+  .rq legend { line-height: 1.45; }
+  .rq-n { color: var(--muted); margin-right: 4px; }
+  .rq-area { display: block; font-family: var(--f-mono); font-size: var(--t-xs); font-weight: 500; letter-spacing: .04em; text-transform: uppercase; color: var(--teal-700); margin-bottom: 4px; }
+  .band { font-family: var(--f-display); font-stretch: 90%; font-size: var(--t-lg); font-weight: 700; }
+  .next { display: grid; gap: 10px; }
+  .next-h { font-weight: 600; }
+  .next ol { margin: 0; padding-left: 20px; display: grid; gap: 8px; font-size: var(--t-sm); line-height: 1.5; }
+  .next-none { font-size: var(--t-sm); }
+</style>
+
+<script>
+  import { readinessQuestions, readinessScore, READINESS_BAND_LABEL } from '../../lib/calc';
+  import { saveHandoff, track } from '../../lib/handoff';
+  const out = (id: string) => document.getElementById(id) as HTMLElement;
+  let started = false;
+  function answers() {
+    const a: Record<string, number> = {};
+    for (const q of readinessQuestions) {
+      const el = document.querySelector<HTMLInputElement>(`#ready-calc input[name="${q.id}"]:checked`);
+      a[q.id] = el ? +el.value : 0;
+    }
+    return a;
+  }
+  function update() {
+    const a = answers();
+    const r = readinessScore(a);
+    out('o-score').textContent = String(r.score);
+    out('o-band').textContent = READINESS_BAND_LABEL[r.band];
+    r.areas.forEach((x, i) => { out(`o-a${i}`).textContent = `${x.score} / ${x.max}`; });
+    const list = out('o-next');
+    list.replaceChildren(...r.nextSteps.map((s) => { const li = document.createElement('li'); li.textContent = s; return li; }));
+    list.hidden = r.nextSteps.length === 0;
+    out('o-none').hidden = r.nextSteps.length > 0;
+    if (started) saveHandoff('AI readiness scorecard', { Score: `${r.score} / ${r.max}`, Result: READINESS_BAND_LABEL[r.band], ...Object.fromEntries(r.areas.map((x) => [x.area, `${x.score} / ${x.max}`])) });
+  }
+  document.querySelectorAll('#ready-calc input').forEach((el) => el.addEventListener('change', () => {
+    if (!started) { started = true; track('calculator_start', { calculator: 'ai-readiness-scorecard' }); }
+    update();
+  }));
+  out('o-book').addEventListener('click', () => track('calculator_book_click', { calculator: 'ai-readiness-scorecard' }));
+  update();
+</script>

@@ -1,13 +1,13 @@
 ---
-title: "AI Agents for MSPs: What They Are & How They Reduce Workload"
-description: "How AI agents for MSPs observe, decide and act to triage tickets, filter IT alerts and draft documentation, while engineers keep every real decision."
+title: "AI for MSPs: What AI Agents Do and How They Reduce Technician Workload"
+description: "AI for MSPs explained: how AI agents triage tickets, group alerts and draft documentation inside your PSA and RMM, while engineers keep every real decision."
 published: 2025-10-29
-updated: 2026-09-18
+updated: 2026-11-06
 audience: msp
 topic: msp-automation
 summary: "AI agents take the repetitive layer of MSP service delivery: sorting tickets, filtering alerts, drafting documentation and preparing context. Engineers keep every decision that matters."
 services: [custom-ai-development, ai-consulting]
-tools: [msp-ticket-roi]
+tools: [msp-ticket-roi, ai-readiness-scorecard]
 takeaways:
   - "An AI agent reads context, so it can resolve or route routine tickets that fixed-rule automation cannot."
   - "The agent prepares the work and the engineer decides: triage, alerts, help desk, documentation and client updates all follow that split."
@@ -95,3 +95,5 @@ The goal is not to adopt AI, but to automate the right tasks while people stay a
 - To plan a first deployment, follow [How to automate tier-1 tickets with an AI agent](/how-to-automate-tier-1-tickets-with-an-ai-agent/), which covers choosing the queue, the baseline and the supervised pilot.
 - Before giving an agent access to client systems, work through the [AI agent security checklist](/ai-agent-security-checklist/).
 - To size the opportunity in your own queue, use the [MSP ticket automation ROI calculator](/tools/msp-ticket-roi/).
+- To see how agents can connect to your PSA, RMM and documentation tools through one standard, read [MCP for MSPs](/model-context-protocol-for-msps/).
+- For a wider list of patterns, including back-office work your clients may ask about, see [AI agents for business: 12 examples](/ai-agents-for-business-examples/).

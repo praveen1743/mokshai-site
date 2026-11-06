@@ -1,8 +1,8 @@
 ---
-title: "How to Calculate the ROI of an AI Agent"
+title: "AI Agent ROI: How to Calculate It, Step by Step"
 description: "A step-by-step method to calculate AI agent ROI: hours returned, labour value, running cost, build cost, payback period and the effects that are hard to price."
 published: 2026-11-05
-updated: 2026-11-05
+updated: 2026-11-06
 audience: general
 topic: strategy-and-roi
 summary: "Multiply the items the agent handles by the minutes it saves per item to get hours returned, value those hours at the loaded cost of the people who did the work, subtract the agent's monthly running cost, and divide the one-time build cost by that net monthly value to get the payback period. Use your own baseline numbers, not a vendor's averages."
@@ -92,4 +92,4 @@ Before building anything new, check what AI tools the business already pays for.
 
 ## Confirm it with a pilot
 
-Every number above is an estimate until the agent runs on your own work. A supervised pilot replaces the uncertain inputs, especially the share the agent handles and the minutes saved, with measured ones. [What a 30-day AI agent pilot should measure](/ai-agent-pilot-metrics/) explains how to set that up so the result is clear.
+Every number above is an estimate until the agent runs on your own work. A supervised pilot replaces the uncertain inputs, especially the share the agent handles and the minutes saved, with measured ones. [What a 30-day AI agent pilot should measure](/ai-agent-pilot-metrics/) explains how to set that up so the result is clear. For the cost side in more detail, including the costs most quotes leave out, see [how much an AI agent costs](/how-much-does-an-ai-agent-cost/).

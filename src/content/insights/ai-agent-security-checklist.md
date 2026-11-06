@@ -1,13 +1,13 @@
 ---
-title: "AI Agent Security Checklist: Permissions, Approvals and Audit Logs"
-description: "A practical security checklist for AI agents working in business systems: access, approvals, logging, data handling, client separation and how to switch an agent off."
+title: "AI Agent Security and Governance Checklist: Permissions, Approvals and Audit Logs"
+description: "An AI agent security and governance checklist for business systems: access, approvals, audit logs, data handling, client separation and switch-off."
 published: 2026-11-05
-updated: 2026-11-05
+updated: 2026-11-06
 audience: general
 topic: security-and-governance
 summary: "Treat an AI agent like a privileged user. Give it a dedicated account with the minimum permissions its task needs, require human approval for security-sensitive actions, log everything it reads and does, keep each client's data separate, know where your data is processed, and make sure your own team can pause it at any time."
 services: [custom-ai-development, ai-consulting]
-tools: []
+tools: [ai-readiness-scorecard]
 takeaways:
   - "An agent is software with access to your systems; secure it like a privileged account."
   - "Separate actions into three lists: allowed, needs approval, never."
@@ -90,4 +90,4 @@ Where data rules are strict, a self-hosted open-source model can keep processing
 6. Who has access to the agent's logs and configuration?
 7. What happens to our data and access when the engagement ends?
 
-A vendor who cannot answer these clearly, in writing, is telling you something. For how agents and engineers divide the work in practice, see [How to automate tier-1 tickets with an AI agent](/how-to-automate-tier-1-tickets-with-an-ai-agent/).
+A vendor who cannot answer these clearly, in writing, is telling you something. For how agents and engineers divide the work in practice, see [How to automate tier-1 tickets with an AI agent](/how-to-automate-tier-1-tickets-with-an-ai-agent/). To place these controls inside a wider set of owners, a register and reviews, use the [AI governance framework](/ai-governance-framework-small-business/), and for approval design specifically, [human-in-the-loop AI](/human-in-the-loop-ai-approval-design/).

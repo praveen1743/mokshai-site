@@ -17,6 +17,11 @@
 - [Back-office time savings](https://mokshai.net/tools/back-office-hours/)
 - [AI subscription audit](https://mokshai.net/tools/ai-spend-audit/)
 - [AI project budget planner](https://mokshai.net/tools/ai-budget-planner/)
+- [AI readiness scorecard](https://mokshai.net/tools/ai-readiness-scorecard/): eight questions on data access, process, governance and systems
+
+## Templates (Word, free)
+- [AI acceptable use policy template](https://mokshai.net/templates/ai-acceptable-use-policy-template.docx)
+- [One-page AI governance framework template](https://mokshai.net/templates/ai-governance-one-page-template.docx)
 
 ## Method and trust
 - [How we work](https://mokshai.net/how-we-work/): discovery, pilot, scale, run
@@ -26,11 +31,21 @@
 ## Insights
 Topic hubs: [MSP automation](https://mokshai.net/insights/msp-automation/), [Strategy and ROI](https://mokshai.net/insights/strategy-and-roi/), [Security and governance](https://mokshai.net/insights/security-and-governance/), [Operations automation](https://mokshai.net/insights/operations/)
 
-- [How to Automate Tier-1 Tickets with an AI Agent](https://mokshai.net/how-to-automate-tier-1-tickets-with-an-ai-agent/)
-- [What a 30-Day AI Agent Pilot Should Measure](https://mokshai.net/ai-agent-pilot-metrics/)
-- [Custom AI Agents, Automation Platforms or Built-In AI Features: How to Choose](https://mokshai.net/custom-ai-agents-vs-automation-platforms-vs-built-in-ai/)
-- [AI Agent Security Checklist](https://mokshai.net/ai-agent-security-checklist/)
-- [Automating Quote Preparation in Fabrication and Manufacturing Shops](https://mokshai.net/automating-quote-preparation-for-fabrication-shops/)
-- [How to Calculate the ROI of an AI Agent](https://mokshai.net/how-to-calculate-ai-agent-roi/)
-- [AI Agents for MSPs: What They Are & How They Reduce Workload](https://mokshai.net/ai-agents-for-msps-what-they-are-how-they-reduce-workload/)
+- [What Is Shadow AI? Risks, Examples and How to Bring It Under Control](https://mokshai.net/what-is-shadow-ai/)
+- [AI Governance Framework for Small and Mid-Sized Businesses](https://mokshai.net/ai-governance-framework-small-business/)
+- [AI Acceptable Use Policy Template for Employees](https://mokshai.net/ai-acceptable-use-policy-template/)
+- [AI Agents for Business: 12 Examples From the Service Desk and Back Office](https://mokshai.net/ai-agents-for-business-examples/)
+- [AI Readiness Assessment: What to Check Before You Spend on AI or Copilot](https://mokshai.net/ai-readiness-assessment-checklist/)
+- [AI Document Processing for Invoices, Purchase Orders and Order Forms](https://mokshai.net/ai-document-processing-invoices-purchase-orders/)
+- [Human-in-the-Loop AI: How to Design Approval Steps](https://mokshai.net/human-in-the-loop-ai-approval-design/)
+- [How Much Does an AI Agent Cost?](https://mokshai.net/how-much-does-an-ai-agent-cost/)
+- [AI for Small Manufacturers: Back-Office Jobs to Automate First](https://mokshai.net/ai-for-small-manufacturers/)
+- [MCP for MSPs: What the Model Context Protocol Means for Your PSA and RMM](https://mokshai.net/model-context-protocol-for-msps/)
+- [AI Help Desk for MSPs: How to Automate Tier-1 Tickets with an AI Agent](https://mokshai.net/how-to-automate-tier-1-tickets-with-an-ai-agent/)
+- [AI Pilot Metrics: What a 30-Day AI Agent Proof of Concept Should Measure](https://mokshai.net/ai-agent-pilot-metrics/)
+- [AI Agent vs Chatbot vs Automation Platform vs Built-In AI](https://mokshai.net/custom-ai-agents-vs-automation-platforms-vs-built-in-ai/)
+- [AI Agent Security and Governance Checklist](https://mokshai.net/ai-agent-security-checklist/)
+- [Quote Automation for Fabrication and Manufacturing Shops](https://mokshai.net/automating-quote-preparation-for-fabrication-shops/)
+- [AI Agent ROI: How to Calculate It, Step by Step](https://mokshai.net/how-to-calculate-ai-agent-roi/)
+- [AI for MSPs: What AI Agents Do and How They Reduce Technician Workload](https://mokshai.net/ai-agents-for-msps-what-they-are-how-they-reduce-workload/)
 - [Why Automation Isn’t About Robots. It’s About Profit Margins](https://mokshai.net/why-automation-isnt-about-robots-its-about-profit-margins/)

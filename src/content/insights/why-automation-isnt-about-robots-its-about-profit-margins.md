@@ -69,7 +69,7 @@ Speed is a critical competitive edge. Automation shortens cycle times, accelerat
 
 ### Human Capital Reallocation
 
-Automation isn’t about eliminating jobs—it’s about shifting talent toward higher-value work. By removing repetitive, low-value tasks, businesses empower employees to focus on innovation, customer experience, and strategic growth. That translates into:
+Automation isn’t about eliminating jobs—it’s about shifting talent toward higher-value work. By removing repetitive, low-value tasks, businesses let employees focus on innovation, customer experience, and strategic growth. That translates into:
 
 - New product development.
 - Better customer engagement.

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { ticketRoi, backOffice, spendAudit, budgetPlan, usd } from '../src/lib/calc';
+import { ticketRoi, backOffice, spendAudit, budgetPlan, readinessScore, readinessQuestions, usd } from '../src/lib/calc';
 
 describe('ticketRoi', () => {
   const base = { ticketsPerMonth: 1500, tier1Share: 0.45, agentShare: 0.4, minutesPerTicket: 15, hourlyCost: 42, buildCost: 15000, runCostPerMonth: 700 };
@@ -89,5 +89,39 @@ describe('usd', () => {
   it('formats negatives with a real minus sign', () => {
     expect(usd(-1234)).toBe('−$1,234');
     expect(usd(1234.5, 0)).toBe('$1,235');
+  });
+});
+
+describe('readinessScore', () => {
+  const all = (v: number) => Object.fromEntries(readinessQuestions.map((q) => [q.id, v]));
+
+  it('scores a fully ready business as ready with no next steps', () => {
+    const r = readinessScore(all(2));
+    expect(r.score).toBe(16);
+    expect(r.percent).toBe(100);
+    expect(r.band).toBe('ready');
+    expect(r.nextSteps).toHaveLength(0);
+  });
+
+  it('bands by percentage and lists the lowest answers first', () => {
+    const r = readinessScore({ ...all(1), policy: 0 });
+    expect(r.score).toBe(7);
+    expect(r.band).toBe('conditional');
+    expect(r.nextSteps[0]).toMatch(/acceptable-use policy/);
+    expect(r.nextSteps).toHaveLength(3);
+    expect(readinessScore(all(0)).band).toBe('foundations');
+  });
+
+  it('caps the band when a whole area scores zero', () => {
+    const r = readinessScore({ ...all(2), apis: 0, accounts: 0 });
+    expect(r.percent).toBe(75);
+    expect(r.band).toBe('conditional');
+    expect(r.areas.find((a) => a.area === 'Systems')!.score).toBe(0);
+  });
+
+  it('treats missing and out-of-range answers safely', () => {
+    const r = readinessScore({ access: 9, sensitive: -3 });
+    expect(r.score).toBe(2);
+    expect(Number.isNaN(r.percent)).toBe(false);
   });
 });

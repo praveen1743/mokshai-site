@@ -1,8 +1,8 @@
 ---
-title: "How to Automate Tier-1 Tickets with an AI Agent: A Step-by-Step Plan for MSPs"
-description: "A practical plan for MSPs to automate tier-1 tickets with an AI agent: pick the queue, set a baseline, define limits, run a supervised pilot and scale."
+title: "AI Help Desk for MSPs: How to Automate Tier-1 Tickets with an AI Agent"
+description: "A step-by-step plan for an AI help desk at an MSP: pick the tier-1 queue, set a baseline, define the agent's limits, run a supervised pilot and scale."
 published: 2026-11-05
-updated: 2026-11-05
+updated: 2026-11-06
 audience: msp
 topic: msp-automation
 summary: "Pick one tier-1 category with high volume and a documented fix, measure how it runs today, give the agent the minimum access it needs, keep a technician approving every action for the first weeks, and loosen approvals only where the pilot data shows the agent gets it right."
@@ -112,4 +112,4 @@ Two things help adoption as you scale:
 - **Shared admin credentials.** A dedicated, least-privilege service account is the only safe setup, and the only one a client's security review will accept.
 - **Removing approvals too early.** One bad week of unsupervised actions can cost more trust than months of good work earned.
 
-If you want help choosing the first category and writing the agent's limits, that is what [custom AI agent development](/services/custom-ai-development/) starts with.
+For how to set the approval points so they stay quick, see [human-in-the-loop AI](/human-in-the-loop-ai-approval-design/). If you want help choosing the first category and writing the agent's limits, that is what [custom AI agent development](/services/custom-ai-development/) starts with.

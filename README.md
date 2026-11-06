@@ -6,11 +6,11 @@ It is a fully static site built with [Astro](https://astro.build) and deployed o
 
 | | |
 | --- | --- |
-| Pages | 19 content pages, 4 calculators, 4 topic hubs, 8 articles, 3 legacy redirects |
+| Pages | 19 content pages, 4 calculators + 1 readiness scorecard, 4 topic hubs, 18 articles, 2 Word templates, 3 legacy redirects |
 | Lighthouse (mobile, lab) | Performance 98–99 · Accessibility 100 · Best practices 100 · SEO 100 |
 | Core Web Vitals (lab) | LCP 2.1–2.3 s · CLS 0 · TBT 0 ms |
 | Accessibility | 0 axe-core violations (WCAG 2.2 AA rules) at 390 px and 1440 px |
-| Tests | 10 unit tests on calculator formulas |
+| Tests | 14 unit tests on calculator and scorecard formulas |
 
 ## Documentation
 
@@ -45,10 +45,12 @@ mokshai-site/
 ├── vercel.json               Vercel build settings, redirects, security + cache headers, noindex on *.vercel.app
 ├── package.json
 ├── scripts/
-│   └── copy-fonts.mjs        Copies self-hosted fonts from node_modules before dev/build
+│   ├── copy-fonts.mjs        Copies self-hosted fonts from node_modules before dev/build
+│   └── build-templates.py    Regenerates the Word templates in public/templates/ (needs python-docx)
 ├── public/                   Served as-is
 │   ├── favicon.svg, apple-touch-icon.png, logo-wordmark.svg, logo.svg
 │   ├── og/default.jpg        Social share image (1200×630)
+│   ├── templates/*.docx      Downloadable AI policy and governance templates
 │   ├── robots.txt, llms.txt
 │   └── .htaccess, _redirects, _headers   Equivalents of vercel.json for Apache / Netlify / Cloudflare
 ├── src/
@@ -86,7 +88,7 @@ mokshai-site/
 | `/pricing/` | `pages/pricing.astro` | How engagements are priced |
 | `/security/` | `pages/security.astro` | Agent controls and vendor due-diligence questions |
 | `/about/` | `pages/about.astro` | Company facts and Moksh Group |
-| `/tools/` + 4 calculators | `pages/tools/*.astro` | MSP ticket ROI, back-office time, AI spend audit, AI budget planner |
+| `/tools/` + 5 tools | `pages/tools/*.astro` | MSP ticket ROI, back-office time, AI spend audit, AI budget planner, AI readiness scorecard |
 | `/insights/` | `pages/insights/index.astro` | Article index with topic navigation and featured article |
 | `/insights/<topic>/` | `pages/insights/[topic].astro` | Four topic hubs: MSP automation, strategy and ROI, security and governance, operations |
 | `/<article-slug>/` | `pages/[slug].astro` | Articles at their original WordPress URLs |

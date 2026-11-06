@@ -3,7 +3,7 @@ import { glob } from 'astro/loaders';
 import { topicSlugs } from './lib/topics';
 
 const serviceSlugs = ['ai-consulting', 'custom-ai-development', 'ai-implementation-training', 'ai-cost-optimization'] as const;
-const toolSlugs = ['msp-ticket-roi', 'back-office-hours', 'ai-spend-audit', 'ai-budget-planner'] as const;
+const toolSlugs = ['msp-ticket-roi', 'back-office-hours', 'ai-spend-audit', 'ai-budget-planner', 'ai-readiness-scorecard'] as const;
 
 const insights = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/insights' }),

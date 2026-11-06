@@ -1,8 +1,8 @@
 ---
-title: "Automating Quote Preparation in Fabrication and Manufacturing Shops"
-description: "How an AI agent can prepare quotes from incoming RFQs and drawings in fabrication shops: what it reads, what it drafts, what estimators keep, and how to start."
+title: "Quote Automation for Fabrication and Manufacturing Shops: How an AI Agent Prepares Quotes"
+description: "Quote automation for fabrication and manufacturing: how an AI agent reads RFQs and drawings, drafts the quote, what estimators keep, and how to start."
 published: 2026-11-05
-updated: 2026-11-05
+updated: 2026-11-06
 audience: operations
 topic: operations
 summary: "An AI agent can read an incoming request for quote and its attachments, match the customer and similar past jobs, extract part, quantity, material and due date, flag what is missing, and fill a draft in your quoting template. The estimator still sets the price, checks the technical judgement and sends the quote."
@@ -82,5 +82,7 @@ Hours saved are easy to count. Turnaround time is often worth more. A shop that 
 - **Automating a quoting process nobody agrees on.** If two estimators fill the template differently, settle the template first. Our older piece, [Why automation isn't about robots](/why-automation-isnt-about-robots-its-about-profit-margins/), covers why redesigning the process comes before automating it.
 - **Trusting extracted numbers without a check.** Anything the agent reads from a drawing is a draft. Show the source next to every extracted value so checking takes seconds.
 - **Ignoring the customer's side.** If many requests arrive incomplete, the drafted questions to customers can save more time than the extraction.
+
+For the other office jobs worth automating alongside quoting, see [AI for small manufacturers](/ai-for-small-manufacturers/).
 
 Moksh Group's sister companies work with drawings and takeoffs every day through [Moksh CAD](https://www.mokshcad.com/) and [Moksh Estimating](https://mokshestimating.com/). To scope an agent for your quoting flow, start with [AI strategy and consulting](/services/ai-consulting/) or go straight to [custom AI agent development](/services/custom-ai-development/).

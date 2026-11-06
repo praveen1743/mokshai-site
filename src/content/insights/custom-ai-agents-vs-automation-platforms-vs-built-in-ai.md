@@ -1,8 +1,8 @@
 ---
-title: "Custom AI Agents, Automation Platforms or Built-In AI Features: How to Choose"
-description: "How to choose between your PSA or ERP's built-in AI features, an automation platform, and a custom AI agent, with a comparison table and decision questions."
+title: "AI Agent vs Chatbot vs Automation Platform vs Built-In AI: How to Choose"
+description: "AI agent vs chatbot vs RPA and automation platforms vs built-in AI features: what each does, a comparison table and five questions to choose."
 published: 2026-11-05
-updated: 2026-11-05
+updated: 2026-11-06
 audience: general
 topic: strategy-and-roi
 summary: "Use the AI features already built into your PSA, ERP or Microsoft 365 when they cover the job. Use an automation platform when the work follows fixed rules across several systems. Build a custom agent when the work needs judgement over unstructured input, spans systems the others cannot reach, or has to follow your own approval rules."
@@ -25,6 +25,19 @@ faqs:
 There are three common ways to add AI to a service desk or back office: switch on the AI features built into the tools you already use, build workflows on an automation platform, or have a custom AI agent built for the job. Use built-in features when they already cover the task. Use a platform when the work follows fixed rules. Build a custom agent when the work needs judgement over messy input, spans systems the other two cannot reach, or must follow your own approval rules.
 
 Most mature setups end up using more than one. The decision is which layer each workflow belongs in.
+
+## AI agent vs chatbot vs RPA
+
+The terms get mixed up, so it helps to separate them first:
+
+| | Chatbot | RPA / rule-based automation | AI agent |
+|---|---|---|---|
+| What it does | Answers questions in a conversation | Repeats fixed steps exactly as recorded or configured | Reads a piece of work, decides what it is, gathers context and acts or prepares the action |
+| Input | A person's question | Structured data in a known format | Messy input: emails, tickets, PDFs, drawings |
+| Handles the unexpected | Answers or hands over | Stops or fails | Flags it for a person with the reason |
+| Typical use | FAQs, self-service | Data entry between fixed screens, scheduled jobs | Triage, intake, drafting, matching |
+
+A chatbot talks, RPA repeats, and an agent works a queue. For real examples of agents in a service desk and back office, see [AI agents for business: 12 examples](/ai-agents-for-business-examples/).
 
 ## The three options
 

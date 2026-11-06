@@ -1,8 +1,8 @@
 ---
-title: "What a 30-Day AI Agent Pilot Should Measure"
-description: "The scorecard for an AI agent pilot: baseline, coverage, accuracy, time saved, running cost, user trust and the stop rule to agree before you start."
+title: "AI Pilot Metrics: What a 30-Day AI Agent Proof of Concept Should Measure"
+description: "What an AI pilot or proof of concept should measure: baseline, coverage, accuracy, time saved, running cost, user trust and the stop rule to agree first."
 published: 2026-11-05
-updated: 2026-11-05
+updated: 2026-11-06
 audience: general
 topic: strategy-and-roi
 summary: "Measure five things against a baseline recorded before the build: how much of the workflow the agent handles, how often its work is accepted without edits, the time saved per item, the net monthly value after running cost, and whether the people working with it trust it. Agree the targets and a stop rule before day one."
@@ -92,4 +92,4 @@ At the end of the month there are three honest outcomes:
 
 All three are good results if the numbers are clear. The bad outcome is a pilot that ends with nobody sure whether it worked.
 
-For the tier-1 service desk version of this process, see [How to automate tier-1 tickets with an AI agent](/how-to-automate-tier-1-tickets-with-an-ai-agent/). To estimate the value before a pilot, use the [MSP ticket automation ROI calculator](/tools/msp-ticket-roi/).
+For the tier-1 service desk version of this process, see [How to automate tier-1 tickets with an AI agent](/how-to-automate-tier-1-tickets-with-an-ai-agent/). To estimate the value before a pilot, use the [MSP ticket automation ROI calculator](/tools/msp-ticket-roi/), and check the foundations first with the [AI readiness scorecard](/tools/ai-readiness-scorecard/).

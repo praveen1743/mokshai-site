@@ -6,8 +6,8 @@ import { tools } from '../../lib/tools';
 import { breadcrumbs } from '../../lib/schema';
 import CalcPreviewScene from '../../components/scenes/CalcPreviewScene.astro';
 ---
-<Base title="AI ROI & Budget Calculators" description="Free calculators for MSPs and operations teams: ticket automation ROI, back-office time savings, AI subscription audit and AI project budget planning. Formulas shown, no email required." schema={[breadcrumbs([{ name: 'Calculators', path: '/tools/' }])]}>
-  <PageHero eyebrow="Calculators" title="Size the opportunity before anyone sells you anything" lede="Four free calculators. Each one shows its formula and runs in your browser, so you can check the maths and reuse the numbers in your own business case.">
+<Base title="AI ROI & Budget Calculators" description="Free calculators for MSPs and operations teams: ticket automation ROI, back-office time savings, AI subscription audit, AI project budget planning and an AI readiness scorecard. Formulas shown, no email required." schema={[breadcrumbs([{ name: 'Calculators', path: '/tools/' }])]}>
+  <PageHero eyebrow="Calculators" title="Size the opportunity before anyone sells you anything" lede="Four free calculators and a readiness scorecard. Each one shows its method and runs in your browser, so you can check the maths and reuse the numbers in your own business case.">
     <CalcPreviewScene slot="visual" />
   </PageHero>
   <section class="section">
@@ -24,7 +24,7 @@ import CalcPreviewScene from '../../components/scenes/CalcPreviewScene.astro';
       </div>
       <div class="order">
         <h2 class="h3">A sensible order</h2>
-        <p>Start with the calculator that matches your work (MSP tickets or back-office time) to estimate the monthly value. Then put that value into the budget planner to see the most a project should cost. Run the subscription audit any time: it often funds the first pilot.</p>
+        <p>If you are not sure the business is ready for AI at all, start with the readiness scorecard. Otherwise, start with the calculator that matches your work (MSP tickets or back-office time) to estimate the monthly value. Then put that value into the budget planner to see the most a project should cost. Run the subscription audit any time: it often funds the first pilot.</p>
       </div>
     </div>
   </section>

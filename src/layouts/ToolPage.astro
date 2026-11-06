@@ -17,11 +17,11 @@ const others = tools.filter((t) => t.slug !== slug);
 const reading = postsForTool(await allPosts(), slug).slice(0, 3);
 ---
 <Base
-  title={`${tool.name} calculator`}
+  title={tool.kind === 'Calculator' ? `${tool.name} calculator` : tool.name}
   description={tool.description}
   schema={[webApp({ name: tool.name, path, description: tool.description }), breadcrumbs([{ name: 'Calculators', path: '/tools/' }, { name: tool.name, path }]), faq(faqs)]}
 >
-  <PageHero eyebrow={`Calculator · ${tool.audience}`} title={title} lede={lede} crumbs={[{ name: 'Calculators', href: '/tools/' }]} />
+  <PageHero eyebrow={`${tool.kind} · ${tool.audience}`} title={title} lede={lede} crumbs={[{ name: 'Calculators', href: '/tools/' }]} />
 
   <section class="section-tight">
     <div class="container">
@@ -52,7 +52,7 @@ const reading = postsForTool(await allPosts(), slug).slice(0, 3);
 
   <section class="section-tight">
     <div class="container">
-      <span class="eyebrow">Other calculators</span>
+      <span class="eyebrow">Other free tools</span>
       <div class="grid g-3" style="margin-top:20px">
         {others.map((t) => (
           <a class="card" href={`/tools/${t.slug}/`}><span class="tag">{t.audience}</span><h3>{t.name}</h3><p>{t.question}</p><span class="link-arrow">Open</span></a>

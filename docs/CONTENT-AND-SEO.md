@@ -61,8 +61,18 @@ These articles were drafted for the relaunch and must be read and fact-checked b
 - `ai-agent-security-checklist.md`
 - `automating-quote-preparation-for-fabrication-shops.md`
 - `how-to-calculate-ai-agent-roi.md`
+- `what-is-shadow-ai.md` (cites IBM Cost of a Data Breach 2025 and the 2023 Samsung case)
+- `ai-governance-framework-small-business.md` (cites NIST AI RMF, ISO/IEC 42001, EU AI Act amendment of 2026)
+- `ai-acceptable-use-policy-template.md` (template text must match `public/templates/ai-acceptable-use-policy-template.docx`)
+- `ai-agents-for-business-examples.md`
+- `ai-readiness-assessment-checklist.md` (cites Microsoft's Copilot privacy documentation)
+- `ai-document-processing-invoices-purchase-orders.md`
+- `human-in-the-loop-ai-approval-design.md` (cites EU AI Act Article 14)
+- `how-much-does-an-ai-agent-cost.md`
+- `ai-for-small-manufacturers.md`
+- `model-context-protocol-for-msps.md` (cites Anthropic's donation of MCP to the Agentic AI Foundation)
 
-They contain no statistics or client claims; the ROI example is labelled hypothetical. Check that the practices they describe match how Moksh AI actually delivers, and add real examples where you have them.
+They contain no client claims. The only statistics are cited to a public source, linked in the text; re-check those sources before launch. The ROI example is labelled hypothetical. Check that the practices they describe match how Moksh AI actually delivers, and add real examples where you have them.
 
 ## Writing rules
 
@@ -116,3 +126,30 @@ After launch:
 1. Verify `mokshai.net` in Google Search Console and Bing Webmaster Tools; submit `https://mokshai.net/sitemap-index.xml`.
 2. Request indexing for `/`, `/msp/`, `/operations/` and the four calculators.
 3. Track a fixed set of 30–50 buyer prompts monthly across ChatGPT, Perplexity, Google AI Mode and Gemini, and record whether Moksh AI is mentioned or cited.
+
+## Keyword map
+
+Target keywords per article, from US search volume and keyword difficulty (OpenSEO / DataForSEO, November 2026). Volumes under 100 are rough. One primary keyword per page; do not write a second article for a keyword already listed here.
+
+| Article | Primary keyword (monthly US volume, difficulty) | Secondary |
+| --- | --- | --- |
+| `what-is-shadow-ai` | shadow ai (3,600, 14) | what is shadow ai (1,900), shadow ai risks |
+| `ai-governance-framework-small-business` | ai governance framework (2,900, 10) | ai governance policy, nist ai governance framework |
+| `ai-acceptable-use-policy-template` | ai policy template (320, 9) | ai usage policy, ai acceptable use policy (260, 0) |
+| `ai-agents-for-business-examples` | ai agents for business (3,600, 14) | ai agent examples (1,600), ai agent use cases |
+| `ai-readiness-assessment-checklist` | ai readiness assessment (720, 13) | copilot readiness assessment, ai readiness checklist |
+| `ai-document-processing-invoices-purchase-orders` | ai document processing (2,400, 29) | accounts payable automation, invoice processing automation |
+| `human-in-the-loop-ai-approval-design` | human in the loop ai (1,000, 25) | |
+| `how-much-does-an-ai-agent-cost` | ai agent cost (110, 9) | how much does an ai agent cost, ai implementation cost |
+| `ai-for-small-manufacturers` | ai for manufacturing (2,900, 30) | manufacturing quoting software |
+| `model-context-protocol-for-msps` | mcp for msps (long tail) | model context protocol |
+| `ai-agents-for-msps-…` | ai for msp (390, 5) | ai for msps, msp ai, ai msp |
+| `how-to-automate-tier-1-tickets-…` | ai help desk (480, 16) | ai service desk, ai ticketing system, tier 1 support |
+| `ai-agent-security-checklist` | ai agent security (480, 21) | ai agent governance |
+| `custom-ai-agents-vs-…` | ai agent vs chatbot (320, 12) | ai agents vs automation, rpa vs ai agents |
+| `ai-agent-pilot-metrics` | ai proof of concept (170, 0) | |
+| `automating-quote-preparation-…` | quote automation (170, 0) | manufacturing quoting software |
+| `how-to-calculate-ai-agent-roi` | ai agent roi | ai roi calculator |
+| `/tools/ai-readiness-scorecard/` | ai readiness assessment tool | |
+
+Checked and deliberately not targeted: "ai quoting software" (the results suggest most searchers want quotation generators), "copilot vs chatgpt" (consumer traffic), "mcp server" (developers looking for the tool).
