@@ -137,12 +137,12 @@ export function videoObject(v: { title: string; description: string; src: string
   };
 }
 
-export function person(p: { name: string; role: string; linkedin: string; photo: string }, worksFor: { name: string; url: string }) {
+export function person(p: { name: string; role: string; linkedin: string; photo: string; portrait?: string }, worksFor: { name: string; url: string }) {
   return {
     '@type': 'Person',
     name: p.name,
     jobTitle: p.role.split(',')[0].trim(),
-    image: abs(p.photo),
+    image: abs(p.portrait ?? p.photo),
     sameAs: [p.linkedin],
     worksFor: { '@type': 'Organization', name: worksFor.name, url: worksFor.url },
   };
