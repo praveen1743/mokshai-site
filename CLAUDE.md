@@ -28,7 +28,8 @@ Vercel, from `main`. Settings live in `vercel.json`; keep `public/.htaccess` and
 - Use the tokens at the top of `src/styles/global.css`. No new hex values in components.
 - Palette comes from the logo: `--blue` #2583DB and `--green` #1FA92F, bridged by `--teal`. On light backgrounds use the `-700` text variants; the raw logo colours are for decoration and dark backgrounds only.
 - Gradient text (`.grad-text`) appears once on the whole site: the homepage H1. All other headings are solid ink. `--grad-deep` is for primary buttons and the CTA band; `--grad` for small decorative accents.
-- Ambient lighting (`.glow`) is used only in the homepage hero. Every other section is a flat tint or flat ink.
+- Ambient lighting (`.glow`) is used only in the homepage hero. Every other section is a flat tint or flat ink. One exception: the static logo-colour light behind the footer glass panel.
+- Glass (frosted `backdrop-filter` panel with a specular rim) is used once: the footer panel in `Footer.astro`. Never stack glass on glass, never put it on content, never set `opacity` below 1 on it or its parents, and keep the `prefers-reduced-transparency` fallback.
 - Hexagons do three jobs only: icon badges (`.hexi`, hub node icons), step numbers (`.step-n`) and the hub core. `HexField` appears only in the homepage hero. Bullets, eyebrow markers, FAQ toggles and slider handles are plain. No grid-line backgrounds.
 - Sections alternate surfaces: paper, `.sky`, `.mint`, `.wash`, `.dark`. Avoid two of the same tint in a row.
 - Vary section layouts. No more than two card grids per page; prefer editorial lists, statements and live components. Not every section needs an eyebrow label.

@@ -81,7 +81,16 @@ Hard rule: **CLS stays 0.** No animation may change layout.
 - No stock photos of robots, brains, handshakes or circuit boards.
 - No AI-generated photos of people.
 - No grid-line backgrounds, purple-to-blue gradients or emoji section markers.
-- No gradient text outside the homepage H1, and no corner glows outside the homepage hero.
+- No gradient text outside the homepage H1, and no corner glows outside the homepage hero (the footer light, below, is the one exception).
+
+### Footer glass
+
+The footer is the only glass surface on the site. Static pools of logo blue, teal and green (`.lights`) sit behind one frosted panel (`.glass`): translucent white fill, `backdrop-filter: blur(22px) saturate(165%)`, a bright top edge and a specular rim drawn with a masked gradient border.
+
+- Glass needs something behind it to bend; over flat ink it would look like a grey box. That is why the light pools exist.
+- One panel only. Glass is never stacked or applied to body content.
+- Fallbacks: no `backdrop-filter` support gives a solid translucent ink fill; `prefers-reduced-transparency` gives solid `--ink-2` and hides the light; `prefers-contrast: more` gives a solid rim.
+- Contrast was measured against the brightest point behind the panel: muted text 4.71:1, links 8.06:1. Re-measure if the light colours or strength change.
 - No two-beat contrast headlines ("X. Y.", "X, not Y").
 - Never give a decorative element the class `dark` (it paints the ink background).
 - Collapsing grid columns use `minmax(0, 1fr)`, never bare `1fr`.
