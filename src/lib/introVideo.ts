@@ -2,6 +2,7 @@
 // public/media/ is trimmed, compressed, and has one burned-in caption
 // corrected at 0:45 ("You don't even need the humans" → "You need the humans
 // to supervise"), which matches what is said and the point being made.
+// "15 years" is Moksh's experience supporting manufacturing and fabrication.
 // The transcript is lightly edited for reading; keep it in step with the video.
 export const introVideo = {
   title: 'Mick Shah, CEO of Moksh Group, on why Moksh AI exists',

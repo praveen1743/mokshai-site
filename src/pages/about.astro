@@ -47,6 +47,7 @@ import Hub from '../components/scenes/Hub.astro';
       <dl class="facts" style="margin-top:20px">
         <div><dt>Legal entity</dt><dd>{site.legalName}</dd></div>
         <div><dt>Corporate ID (CIN)</dt><dd class="mono">{site.cin}</dd></div>
+        <div><dt>Industry experience</dt><dd>15 years supporting manufacturing and fabrication (Moksh)</dd></div>
         {site.offices.map((o) => (<div><dt>{o.label}</dt><dd>{o.locality}, {o.region}, {o.countryName}</dd></div>))}
         <div><dt>Contact</dt><dd><a href={`mailto:${site.email}`}>{site.email}</a></dd></div>
       </dl>

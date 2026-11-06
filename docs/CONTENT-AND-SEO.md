@@ -147,9 +147,9 @@ author:
 
 - Files: `public/media/mick-shah-moksh-ai.mp4` (540×960, trimmed to 1:11, about 3.6 MB), `mick-shah-moksh-ai-poster.jpg`, and the portrait `mick-shah.jpg`.
 - Portrait: `mick-shah-photo.png` is the original supplied by the company; `mick-shah.jpg` (256px square, name block) and `mick-shah-portrait.jpg` (600px, Person schema) are cut from it.
-- The web copy corrects one burned-in caption at 0:45. The LinkedIn original reads "You don't even need the humans"; what is said, and the point being made, is "you need the humans to supervise". Fix the original for any other use.
+- The web copy corrects one burned-in caption at 0:45 ("You don't even need the humans" → "You need the humans to supervise"). The LinkedIn version is left as posted.
 - Transcript and quotes live in `src/lib/introVideo.ts`; keep them in step with the video. The "80%, maybe 90%" remark stays in the video and transcript as the CEO's view; do not lift it onto pages as a statistic.
-- "15 years" is spoken in the video. Confirm it refers to Moksh Group's experience before it is repeated anywhere else.
+- "15 years" in the video is Moksh's experience supporting the manufacturing and fabrication industry (confirmed by the company, November 2026). It is used on `/operations/` and in the About page facts.
 - Schema: `VideoObject` (with transcript) on `/` and `/about/`; `Person` for Mick Shah on `/about/`.
 
 ## Keyword map

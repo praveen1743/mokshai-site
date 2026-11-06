@@ -123,6 +123,7 @@ The copy avoids invented numbers, clients and testimonials. It does describe how
 - Security controls on `/security/` (least-privilege service accounts, audit logs, client data separation, switch-off, written answers before any build)
 - Configuration, prompts and runbooks are handed over with no lock-in
 - Sister-company descriptions in `src/site.config.ts`
+- "15 years supporting the manufacturing and fabrication industry" (`/operations/`, `/about/`, CEO video), confirmed by the company
 
 Two facts conflicted on the old site and need confirming in `src/site.config.ts`: the contact email (`info@mokshtech.net` is used) and the US phone number (`+1-301-960-4037` is used; the privacy policy lists `+1-301-252-2673`).
 
