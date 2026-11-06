@@ -1,4 +1,6 @@
 ---
+// Closing call to action. It sits on ink directly above the footer, so the
+// two read as one dark area instead of two stacked panels.
 import Arrow from './Arrow.astro';
 interface Props { title?: string; text?: string; secondaryHref?: string; secondaryLabel?: string }
 const {
@@ -8,21 +10,19 @@ const {
   secondaryLabel = 'Size it first with a calculator',
 } = Astro.props;
 ---
-<section class="section-tight cta-wrap">
-  <div class="container">
-    <div class="cta on-grad reveal">
-      <div class="stack-sm">
-        <span class="eyebrow">Next step</span>
-        <h2>{title}</h2>
-        <p class="lede">{text}</p>
-      </div>
-      <div class="btn-row">
-        <a class="btn btn-light" href="/book/">Book a strategy call <Arrow /></a>
-        <a class="btn btn-secondary" href={secondaryHref}>{secondaryLabel}</a>
-      </div>
+<section class="cta-sec dark" aria-labelledby="cta-h">
+  <div class="container cta">
+    <div class="stack-sm">
+      <span class="eyebrow">Next step</span>
+      <h2 id="cta-h">{title}</h2>
+      <p class="lede">{text}</p>
+    </div>
+    <div class="btn-row">
+      <a class="btn btn-primary" href="/book/">Book a strategy call <Arrow /></a>
+      <a class="btn btn-secondary" href={secondaryHref}>{secondaryLabel}</a>
     </div>
   </div>
 </section>
 <style>
-  .cta-wrap { background: linear-gradient(180deg, transparent 50%, var(--ink) 50%); }
+  .cta-sec { padding-block: clamp(56px, 7vw, 88px) clamp(8px, 2vw, 16px); }
 </style>

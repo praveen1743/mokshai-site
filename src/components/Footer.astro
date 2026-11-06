@@ -1,5 +1,5 @@
 ---
-import { site, nav, services } from '../site.config';
+import { site, services } from '../site.config';
 import { topics } from '../lib/topics';
 const year = new Date().getFullYear();
 ---
@@ -10,16 +10,17 @@ const year = new Date().getFullYear();
     <div class="top">
       <div class="intro">
         <img src="/logo-wordmark.svg" alt="Moksh AI" width="151" height="58" class="logo" />
-        <p>AI agents and automation for MSPs and operations teams. The agent prepares the work. Your people make the decisions.</p>
+        <p>AI agents and automation for MSPs and operations teams, built to work inside the systems you already run.</p>
         <p class="mail">Email <a href={`mailto:${site.email}`}>{site.email}</a></p>
       </div>
-      <nav aria-label="Footer: site">
-        <h2 class="fh">Site</h2>
+      <nav aria-label="Footer: company">
+        <h2 class="fh">Company</h2>
         <ul>
-          {nav.map((n) => <li><a href={n.href}>{n.label}</a></li>)}
+          <li><a href="/about/">About</a></li>
           <li><a href="/how-we-work/">How we work</a></li>
           <li><a href="/pricing/">Pricing</a></li>
           <li><a href="/security/">Security</a></li>
+          <li><a href="/tools/">Calculators</a></li>
           <li><a href="/book/">Book a call</a></li>
         </ul>
       </nav>
@@ -70,15 +71,18 @@ const year = new Date().getFullYear();
 </footer>
 
 <style>
-  .site-footer { position: relative; isolation: isolate; overflow: clip; padding-block: 72px calc(32px + env(safe-area-inset-bottom, 0px)); font-size: var(--t-sm); background: var(--ink); }
+  .site-footer { position: relative; isolation: isolate; overflow: clip; padding-block: clamp(32px, 4vw, 48px) calc(32px + env(safe-area-inset-bottom, 0px)); font-size: var(--t-sm); background: var(--ink); }
 
   /* Glass needs something behind it to bend, or it reads as a flat tinted box.
      Static pools of the logo colours sit behind the panel; nothing animates. */
   .lights { position: absolute; inset: 0; z-index: -1; pointer-events: none;
     background:
-      radial-gradient(38% 55% at 6% 10%, rgba(37, 131, 219, .32), transparent 70%),
-      radial-gradient(32% 50% at 58% 4%, rgba(22, 163, 176, .30), transparent 70%),
-      radial-gradient(36% 60% at 96% 62%, rgba(31, 169, 47, .32), transparent 70%); }
+      radial-gradient(38% 50% at 4% 34%, rgba(37, 131, 219, .30), transparent 70%),
+      radial-gradient(32% 46% at 56% 26%, rgba(22, 163, 176, .26), transparent 70%),
+      radial-gradient(36% 56% at 96% 66%, rgba(31, 169, 47, .32), transparent 70%);
+    /* Fade in from the top edge so the ink CTA above joins without a seam. */
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 22%);
+    mask-image: linear-gradient(to bottom, transparent 0, #000 22%); }
 
   /* One glass surface. Frosted fill, light top edge, faint lower edge and a
      specular rim drawn with a masked gradient border. */

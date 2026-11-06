@@ -11,14 +11,15 @@ import CtaBand from '../components/CtaBand.astro';
 import { services } from '../site.config';
 import { faq } from '../lib/schema';
 import { tools } from '../lib/tools';
-import { allPosts, featuredPost } from '../lib/insights';
+import { allPosts, featuredPost, audienceLabel, readingMinutes } from '../lib/insights';
+import { topicBySlug } from '../lib/topics';
 
 const posts = await allPosts();
 const featured = featuredPost(posts);
 const morePosts = posts.filter((p) => p.id !== featured?.id).slice(0, 4);
 const otherTools = tools.filter((t) => t.slug !== 'msp-ticket-roi');
-const capabilities = ['Ticket triage', 'Password resets', 'Alert correlation', 'Access requests', 'New-starter provisioning', 'Documentation drafts', 'Quote preparation', 'Document intake', 'Order status updates', 'Weekly reporting', 'Technician copilots', 'White-label AI services'];
-const fmt = (d: Date) => d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+// Systems named here must be ones Moksh AI can build on today. Confirm before launch.
+const systems = ['ConnectWise', 'Autotask', 'HaloPSA', 'NinjaOne', 'Microsoft 365', 'Your ERP'];
 
 const faqs = [
   { q: 'What does Moksh AI do?', a: 'We design, build and run AI agents and automation for managed service providers and operations-heavy businesses. The agents work inside the tools you already use, take on repetitive work such as ticket triage, alert filtering and document preparation, and hand anything outside their limits to a person with the context attached.' },
@@ -27,12 +28,6 @@ const faqs = [
   { q: 'Are AI agents secure?', a: 'They can be, when they are configured properly. We scope each agent to the minimum access it needs, log every action it takes, keep client data separated, and route security-sensitive actions to an engineer for approval. See our security page for the questions we answer before any build.' },
   { q: 'How does an engagement start?', a: 'With a short discovery on one workflow. We map how the work runs today, agree the baseline and the metric a pilot will be judged on, and give you a ranked list of what is worth automating. You decide whether to pilot.' },
   { q: 'Where is the Moksh AI team?', a: 'Moksh AI is the AI practice of Moksh Infotech Pvt Ltd. We contract from our US office in Lake Hiawatha, New Jersey, and our delivery team works from Ahmedabad, India.' },
-];
-const reasons = [
-  { h: 'Agents run inside the tools you already pay for', p: 'Your PSA, RMM, Microsoft 365 and business systems stay as they are. Nothing new for your team to learn and nothing to rip out.' },
-  { h: 'Every agent starts with a person approving its actions', p: 'Approvals are loosened only where the pilot data shows the agent gets that task right. Security-sensitive actions always stay with a person.' },
-  { h: 'You sign with a US entity; the build team is in Ahmedabad', p: 'You contract with our New Jersey office. Delivery from Ahmedabad keeps engagements affordable for mid-sized firms.' },
-  { h: 'Running cost is reviewed every month', p: 'We use open-source models and low-code tools where they do the job, and check each month that the agent still pays for itself.' },
 ];
 ---
 <Base
@@ -51,11 +46,10 @@ const reasons = [
           <a class="btn btn-primary" href="/book/">Book a strategy call <Arrow /></a>
           <a class="btn btn-secondary" href="#estimate">Estimate your ticket savings</a>
         </div>
-        <ul class="hero-facts" role="list">
-          <li><strong>US contracts</strong>New Jersey office</li>
-          <li><strong>Delivery team</strong>Ahmedabad, India</li>
-          <li><strong>Your stack</strong>No rip-and-replace</li>
-        </ul>
+        <div class="hero-systems">
+          <p class="hs-label">Built on the APIs you already run</p>
+          <ul role="list">{systems.map((x) => <li>{x}</li>)}</ul>
+        </div>
       </div>
       <div class="hero-visual">
         <HexField class="hero-hex" />
@@ -84,44 +78,21 @@ const reasons = [
     </div>
   </section>
 
-  <section class="marquee" aria-label="Work our agents take on">
-    <div class="track">
-      {[0, 1].map((k) => (
-        <ul class="row" aria-hidden={k === 1 ? 'true' : undefined} role="list">
-          {capabilities.map((c) => (<li>{c}</li>))}
-        </ul>
-      ))}
-    </div>
-  </section>
-
-  <!-- WHO IT'S FOR -->
+  <!-- WHO IT'S FOR: two plain routes, no cards -->
   <section class="section">
     <div class="container">
-      <div class="head reveal">
-        <span class="eyebrow">Who it is for</span>
-        <h2>Built for MSPs and operations-heavy teams</h2>
-      </div>
-      <div class="grid g-2 paths">
-        <a class="card path reveal" href="/msp/">
-          <div class="path-top"><span class="hexi"><Icon name="ticket" /></span><span class="tag">Managed service providers</span></div>
-          <h3>Take tier-1 tickets and alert noise off your technicians</h3>
-          <ul class="notes">
-            <li>Ticket triage, routing and routine resolutions</li>
-            <li>NOC alert correlation into single incidents</li>
-            <li>Documentation drafted for engineer approval</li>
-            <li>White-label AI services for your own clients</li>
-          </ul>
+      <h2 class="paths-h reveal">Built for MSPs and operations-heavy teams</h2>
+      <div class="paths">
+        <a class="path reveal" href="/msp/">
+          <span class="path-top"><span class="hexi"><Icon name="ticket" /></span><span class="tag">Managed service providers</span></span>
+          <span class="path-h">Take tier-1 tickets and alert noise off your technicians</span>
+          <span class="path-p">Triage, routine resolutions, alert correlation and documentation, inside your PSA and RMM.</span>
           <span class="link-arrow">AI for MSPs</span>
         </a>
-        <a class="card path reveal" href="/operations/">
-          <div class="path-top"><span class="hexi"><Icon name="inbox" /></span><span class="tag">Operations-heavy businesses</span></div>
-          <h3>Get hours back from quoting, intake and back-office handoffs</h3>
-          <ul class="notes">
-            <li>Quote and estimate preparation from incoming requests</li>
-            <li>Document intake: drawings, POs, invoices, forms</li>
-            <li>Status updates and reporting across systems</li>
-            <li>Cost review of the AI tools you already pay for</li>
-          </ul>
+        <a class="path reveal" href="/operations/">
+          <span class="path-top"><span class="hexi"><Icon name="inbox" /></span><span class="tag">Operations-heavy businesses</span></span>
+          <span class="path-h">Get hours back from quoting, intake and back-office handoffs</span>
+          <span class="path-p">Quotes from RFQs and drawings, document intake, order status and reporting across your systems.</span>
           <span class="link-arrow">AI for operations</span>
         </a>
       </div>
@@ -129,19 +100,14 @@ const reasons = [
   </section>
 
   <!-- STATEMENT + OPERATING MODEL -->
-  <section class="section wash statement-sec">
-    <div class="container">
-      <figure class="statement reveal">
-        <blockquote><p>Every real decision belongs to a person.</p></blockquote>
-        <figcaption>The rule behind every agent we build. From <a href="/ai-agents-for-msps-what-they-are-how-they-reduce-workload/">our guide to AI agents for MSPs</a>.</figcaption>
-      </figure>
-      <div class="model reveal">
-        <div class="stack-sm">
-          <h2 class="h-md">What the agent handles, and what stays with your engineers</h2>
-          <p class="muted">The agent takes the repetitive layer. Anything that needs judgement, carries security risk or touches a client relationship goes to a person.</p>
-        </div>
-        <SplitTable />
+  <section class="section wash">
+    <div class="container model">
+      <div class="model-copy reveal">
+        <h2 class="statement">Every real decision belongs to a person</h2>
+        <p class="muted">The agent takes the repetitive layer. Anything that needs judgement, carries security risk or touches a client relationship goes to an engineer, with the context already attached.</p>
+        <p class="small-link">The rule behind every agent we build. Read <a href="/human-in-the-loop-ai-approval-design/">how we design approval steps</a>.</p>
       </div>
+      <div class="reveal"><SplitTable /></div>
     </div>
   </section>
 
@@ -194,7 +160,10 @@ const reasons = [
           <dl><dt>You get</dt><dd>Agents your team owns and trusts</dd><dt>You decide</dt><dd>What comes next, on evidence</dd></dl>
         </li>
       </ol>
-      <p class="after-steps"><a class="link-arrow" href="/how-we-work/">How we work in detail</a></p>
+      <div class="after-steps">
+        <p>You contract with our New Jersey office; the build team works from Ahmedabad. Running cost and accuracy are reviewed with you every month.</p>
+        <a class="link-arrow" href="/how-we-work/">How we work in detail</a>
+      </div>
     </div>
   </section>
 
@@ -214,18 +183,6 @@ const reasons = [
     </div>
   </section>
 
-  <!-- WHY: statements, no boxes -->
-  <section class="section mint">
-    <div class="container">
-      <h2 class="why-title reveal">What working with Moksh AI looks like</h2>
-      <div class="reasons">
-        {reasons.map((r) => (
-          <div class="reason reveal"><h3>{r.h}</h3><p>{r.p}</p></div>
-        ))}
-      </div>
-    </div>
-  </section>
-
   <!-- INSIGHTS: one featured row -->
   <section class="section">
     <div class="container">
@@ -235,14 +192,22 @@ const reasons = [
       </div>
       {featured && (
         <a class="feature reveal" href={`/${featured.id}/`}>
-          <span class="tag">{featured.data.audience === 'msp' ? 'For MSPs' : featured.data.audience === 'operations' ? 'For operations' : 'For any team'} · {fmt(featured.data.published)}</span>
-          <span class="feature-title">{featured.data.title}</span>
-          <span class="feature-text">{featured.data.summary}</span>
-          <span class="link-arrow">Read the guide</span>
+          <span class="feature-main">
+            <span class="tag">{audienceLabel(featured.data.audience)} · {readingMinutes(featured.body)} min read</span>
+            <span class="feature-title">{featured.data.title}</span>
+            <span class="feature-text">{featured.data.summary}</span>
+            <span class="link-arrow">Read the guide</span>
+          </span>
+          {featured.data.takeaways.length > 0 && (
+            <span class="feature-side">
+              <span class="tag">In this guide</span>
+              <span class="feature-points">{featured.data.takeaways.slice(0, 3).map((t) => <span>{t}</span>)}</span>
+            </span>
+          )}
         </a>
       )}
       <ul class="post-links" role="list">
-        {morePosts.map((p) => (<li><a href={`/${p.id}/`}>{p.data.title}</a><span class="tag">{fmt(p.data.published)}</span></li>))}
+        {morePosts.map((p) => (<li><a href={`/${p.id}/`}>{p.data.title}</a><span class="tag">{topicBySlug(p.data.topic).name}</span></li>))}
       </ul>
     </div>
   </section>
@@ -271,33 +236,26 @@ const reasons = [
   .hero h1 { color: #fff; max-width: 15ch; }
   .hero-visual { position: relative; isolation: isolate; }
   .hero-visual :global(.hero-hex) { width: 130%; left: -15%; top: -12%; opacity: .55; }
-  .hero-facts { list-style: none; margin: 8px 0 0; padding: 22px 0 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; border-top: 1px solid rgba(255, 255, 255, .12); }
-  .hero-facts li { font-size: var(--t-sm); color: var(--on-dark-muted); line-height: 1.4; }
-  .hero-facts strong { display: block; color: #fff; font-weight: 600; }
-  @media (max-width: 520px) { .hero-facts { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
+  .hero-systems { margin-top: 8px; padding-top: 22px; border-top: 1px solid rgba(255, 255, 255, .12); display: grid; gap: 12px; }
+  .hs-label { font: 500 var(--t-xs)/1.2 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--on-dark-muted); }
+  .hero-systems ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .hero-systems li { font-size: var(--t-sm); font-weight: 500; color: var(--on-dark); padding: 6px 12px; border: 1px solid rgba(255, 255, 255, .16); border-radius: 999px; background: rgba(255, 255, 255, .04); }
 
-  .marquee { background: var(--ink-2); overflow: hidden; border-block: 1px solid rgba(255, 255, 255, .06); padding-block: 16px; }
-  .track { display: flex; width: max-content; }
-  .row { display: flex; gap: 0; margin: 0; padding: 0; list-style: none; }
-  .row li { font: 500 var(--t-sm)/1 var(--f-mono); letter-spacing: .03em; white-space: nowrap; color: var(--on-dark-muted); padding-inline: 22px; border-right: 1px solid rgba(255, 255, 255, .12); }
-  @media (prefers-reduced-motion: no-preference) {
-    .track { animation: marquee 52s linear infinite; }
-    .marquee:hover .track { animation-play-state: paused; }
-  }
-  @keyframes marquee { to { transform: translateX(-50%); } }
-
-  .path { padding: clamp(28px, 3vw, 44px); gap: 16px; }
+  .paths-h { max-width: 20ch; margin-bottom: clamp(28px, 4vw, 44px); }
+  .paths { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(28px, 5vw, 72px); }
+  @media (max-width: 760px) { .paths { grid-template-columns: minmax(0, 1fr); } }
+  .path { display: grid; gap: 14px; align-content: start; padding-top: 24px; border-top: 3px solid; border-image: var(--grad) 1; color: inherit; text-decoration: none; }
   .path-top { display: flex; align-items: center; gap: 14px; }
-  .path h3 { font-size: var(--t-xl); max-width: 22ch; }
+  .path-h { font: 700 var(--t-xl)/1.15 var(--f-display); font-stretch: 88%; letter-spacing: -0.01em; max-width: 24ch; transition: color .2s var(--ease); }
+  .path:hover .path-h { color: var(--blue-700); }
+  .path-p { color: var(--muted); max-width: 52ch; }
 
-  .statement { margin: 0 0 clamp(48px, 7vw, 96px); max-width: 1000px; }
-  .statement blockquote { margin: 0; }
-  .statement p { font: 780 clamp(2.4rem, 1.2rem + 5.2vw, 5.4rem)/1.0 var(--f-display); font-stretch: 80%; letter-spacing: -0.035em; color: var(--ink); text-wrap: balance; }
-  .statement figcaption { margin-top: 20px; color: var(--muted); font-size: var(--t-sm); max-width: 60ch; }
-  .model { display: grid; grid-template-columns: minmax(0, .75fr) minmax(0, 1.25fr); gap: clamp(28px, 5vw, 64px); align-items: start; }
+  .model { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: clamp(28px, 5vw, 72px); align-items: center; }
   @media (max-width: 980px) { .model { grid-template-columns: minmax(0, 1fr); } }
-  .h-md { font-size: var(--t-xl); }
+  .model-copy { display: grid; gap: 16px; }
+  .statement { max-width: 16ch; }
   .muted { color: var(--muted); }
+  .small-link { font-size: var(--t-sm); color: var(--muted); }
 
   .row-head { display: flex; justify-content: space-between; align-items: end; gap: 16px; flex-wrap: wrap; margin-bottom: clamp(28px, 4vw, 44px); }
   .svc-list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--ink); }
@@ -311,7 +269,8 @@ const reasons = [
   .svc-list a:hover .svc-go :global(svg) { transform: translateX(4px); }
   @media (max-width: 860px) { .svc-list a { grid-template-columns: 44px minmax(0, 1fr); gap: 6px 14px; } .svc-text { grid-column: 2; } .svc-go { display: none; } }
 
-  .after-steps { margin-top: 32px; }
+  .after-steps { margin-top: 32px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 12px 32px; }
+  .after-steps p { color: var(--muted); max-width: 64ch; }
 
   .calc-sec { display: grid; grid-template-columns: minmax(0, .7fr) minmax(0, 1.3fr); gap: clamp(32px, 5vw, 72px); align-items: center; }
   @media (max-width: 980px) { .calc-sec { grid-template-columns: minmax(0, 1fr); } }
@@ -323,18 +282,17 @@ const reasons = [
   .more-tools a::after { content: "→"; color: var(--teal-on-dark); transition: transform .2s var(--ease); }
   .more-tools a:hover::after { transform: translateX(4px); }
 
-  .why-title { max-width: 22ch; margin-bottom: clamp(32px, 5vw, 56px); }
-  .reasons { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: clamp(32px, 5vw, 72px); }
-  @media (max-width: 760px) { .reasons { grid-template-columns: minmax(0, 1fr); } }
-  .reason { padding-block: 26px; border-top: 1px solid rgba(6, 24, 39, .18); display: grid; gap: 10px; }
-  .reason h3 { font-size: var(--t-xl); line-height: 1.15; max-width: 24ch; }
-  .reason p { color: var(--muted); max-width: 52ch; }
-
-  .feature { display: grid; gap: 12px; padding: clamp(24px, 4vw, 48px); background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); text-decoration: none; color: inherit; transition: box-shadow .25s var(--ease), transform .25s var(--ease); }
+  .feature { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: clamp(24px, 4vw, 56px); align-items: start; padding: clamp(24px, 4vw, 48px); background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); text-decoration: none; color: inherit; transition: box-shadow .25s var(--ease), transform .25s var(--ease); }
   .feature:hover { box-shadow: var(--shadow-2); transform: translateY(-2px); color: inherit; }
+  @media (max-width: 860px) { .feature { grid-template-columns: minmax(0, 1fr); } }
+  .feature-main { display: grid; gap: 12px; }
+  .feature-side { display: grid; gap: 14px; padding-left: clamp(0px, 3vw, 32px); border-left: 1px solid var(--line); }
+  @media (max-width: 860px) { .feature-side { padding-left: 0; border-left: 0; padding-top: 18px; border-top: 1px solid var(--line); } }
+  .feature-points { display: grid; gap: 12px; }
+  .feature-points span { padding-left: 16px; border-left: 2px solid var(--teal); color: var(--ink); line-height: 1.5; }
   .feature-title { font: 750 var(--t-2xl)/1.08 var(--f-display); font-stretch: 86%; letter-spacing: -0.02em; max-width: 24ch; }
   .feature-text { color: var(--muted); max-width: 68ch; font-size: var(--t-lg); }
-  .post-links { list-style: none; margin: 16px 0 0; padding: 0; }
+  .post-links { list-style: none; margin: 28px 0 0; padding: 0; border-top: 1px solid var(--line); }
   .post-links li { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding-block: 16px; border-bottom: 1px solid var(--line); }
   .post-links a { font-weight: 600; text-decoration: none; }
 

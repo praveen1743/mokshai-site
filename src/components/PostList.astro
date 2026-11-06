@@ -1,7 +1,7 @@
 ---
 // Editorial list of articles. Used on Insights, topic hubs, service, audience
 // and calculator pages, and under each article as related reading.
-import { audienceLabel, fmtDate, readingMinutes, type Post } from '../lib/insights';
+import { audienceLabel, readingMinutes, type Post } from '../lib/insights';
 import { topicBySlug } from '../lib/topics';
 interface Props { posts: Post[]; showSummary?: boolean; compact?: boolean }
 const { posts, showSummary = true, compact = false } = Astro.props;
@@ -10,7 +10,7 @@ const { posts, showSummary = true, compact = false } = Astro.props;
   {posts.map((p) => (
     <li>
       <a href={`/${p.id}/`}>
-        <span class="meta"><span class="tag">{topicBySlug(p.data.topic).name}</span><span class="tag">{audienceLabel(p.data.audience)} · {readingMinutes(p.body)} min read</span><time class="tag" datetime={p.data.published.toISOString()}>{fmtDate(p.data.published)}</time></span>
+        <span class="meta"><span class="tag">{topicBySlug(p.data.topic).name}</span><span class="tag">{audienceLabel(p.data.audience)} · {readingMinutes(p.body)} min read</span></span>
         <span class="title">{p.data.title}</span>
         {showSummary && <span class="text">{p.data.summary}</span>}
       </a>

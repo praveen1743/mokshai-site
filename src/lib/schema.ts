@@ -92,7 +92,7 @@ export function service(s: { name: string; path: string; description: string; se
   };
 }
 
-export function article(a: { title: string; description: string; path: string; published: Date; updated: Date }) {
+export function article(a: { title: string; description: string; path: string; published: Date; updated: Date; author?: { name: string; role: string; url?: string } }) {
   return {
     '@type': 'BlogPosting',
     headline: a.title,
@@ -101,7 +101,7 @@ export function article(a: { title: string; description: string; path: string; p
     mainEntityOfPage: abs(a.path),
     datePublished: a.published.toISOString(),
     dateModified: a.updated.toISOString(),
-    author: { '@id': orgId },
+    author: a.author ? { '@type': 'Person', name: a.author.name, jobTitle: a.author.role, ...(a.author.url ? { url: a.author.url, sameAs: [a.author.url] } : {}), worksFor: { '@id': orgId } } : { '@id': orgId },
     publisher: { '@id': orgId },
     image: abs('/og/default.jpg'),
     inLanguage: 'en-US',

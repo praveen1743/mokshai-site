@@ -27,14 +27,14 @@ Vercel, from `main`. Settings live in `vercel.json`; keep `public/.htaccess` and
 ## Design rules
 - Use the tokens at the top of `src/styles/global.css`. No new hex values in components.
 - Palette comes from the logo: `--blue` #2583DB and `--green` #1FA92F, bridged by `--teal`. On light backgrounds use the `-700` text variants; the raw logo colours are for decoration and dark backgrounds only.
-- Gradient text (`.grad-text`) appears once on the whole site: the homepage H1. All other headings are solid ink. `--grad-deep` is for primary buttons and the CTA band; `--grad` for small decorative accents.
+- Gradient text (`.grad-text`) appears once on the whole site: the homepage H1. All other headings are solid ink. `--grad-deep` is for primary buttons; `--grad` for small decorative accents. The closing CTA (`CtaBand`) is flat ink and runs straight into the footer; do not put it back in a gradient card.
 - Ambient lighting (`.glow`) is used only in the homepage hero. Every other section is a flat tint or flat ink. One exception: the static logo-colour light behind the footer glass panel.
 - Glass (frosted `backdrop-filter` panel with a specular rim) is used once: the footer panel in `Footer.astro`. Never stack glass on glass, never put it on content, never set `opacity` below 1 on it or its parents, and keep the `prefers-reduced-transparency` fallback.
 - Hexagons do three jobs only: icon badges (`.hexi`, hub node icons), step numbers (`.step-n`) and the hub core. `HexField` appears only in the homepage hero. Bullets, eyebrow markers, FAQ toggles and slider handles are plain. No grid-line backgrounds.
 - Sections alternate surfaces: paper, `.sky`, `.mint`, `.wash`, `.dark`. Avoid two of the same tint in a row.
 - Vary section layouts. No more than two card grids per page; prefer editorial lists, statements and live components. Not every section needs an eyebrow label.
 - Fonts: Archivo (display, `font-stretch` ~86%), IBM Plex Sans (body), IBM Plex Mono (labels, numbers). Self-hosted in `public/fonts/`.
-- Content is fully readable at rest: `.reveal` animates movement only, never opacity. No animation may move layout (CLS must stay 0).
+- Content is fully readable at rest: `.reveal` animates movement only, never opacity. Never put `.reveal` on the last block before the footer: the page can end before its scroll animation completes, leaving it offset under the footer. No animation may move layout (CLS must stay 0).
 - Never give a decorative element a class named `dark`: `.dark` paints the ink background.
 - Grid columns that collapse on mobile use `minmax(0, 1fr)`, never bare `1fr`.
 - `[hidden]` must stay `display: none !important`; toggle visibility with `el.hidden`.

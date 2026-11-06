@@ -79,7 +79,7 @@ mokshai-site/
 
 | URL | Source | Purpose |
 | --- | --- | --- |
-| `/` | `pages/index.astro` | Home: integration-map hero, buyer paths, operating model, services, process, calculators, FAQ |
+| `/` | `pages/index.astro` | Home: integration-map hero with the systems agents build on, buyer paths, operating model, services, process, calculator, insights, FAQ |
 | `/msp/` | `pages/msp.astro` | AI agents for managed service providers |
 | `/operations/` | `pages/operations.astro` | Back-office automation for operations-heavy businesses |
 | `/services/` | `pages/services/index.astro` | Services overview |

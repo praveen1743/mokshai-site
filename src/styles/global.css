@@ -99,8 +99,8 @@ p + p { margin-top: 1em; }
 .skip:focus { left: 12px; }
 
 .container { max-width: var(--container); margin-inline: auto; padding-left: var(--gutter); padding-right: max(20px, env(safe-area-inset-right, 0px)); position: relative; }
-.section { padding-block: clamp(64px, 9vw, 128px); position: relative; }
-.section-tight { padding-block: clamp(44px, 6vw, 80px); position: relative; }
+.section { padding-block: clamp(56px, 7vw, 96px); position: relative; }
+.section-tight { padding-block: clamp(40px, 5vw, 72px); position: relative; }
 
 /* surfaces */
 .dark { background: var(--ink); color: var(--on-dark); }
@@ -219,10 +219,9 @@ a.card .link-arrow { margin-top: auto; padding-top: 10px; }
 .faq .answer { padding: 0 22px 22px; color: var(--muted); max-width: 70ch; }
 
 /* CTA band */
-.cta { position: relative; overflow: hidden; isolation: isolate; background: var(--grad-deep); color: #fff; border-radius: 24px; padding: clamp(36px, 6vw, 72px); display: grid; grid-template-columns: minmax(0, 1.4fr) auto; gap: 32px; align-items: end; }
-.cta .lede { color: rgba(255, 255, 255, .88); }
-.cta .eyebrow { color: #e3f6ea; }
-.cta .eyebrow::before { background: currentColor; }
+.cta { display: grid; grid-template-columns: minmax(0, 1.4fr) auto; gap: 32px; align-items: end; }
+.cta h2 { color: #fff; max-width: 20ch; }
+.cta .lede { max-width: 58ch; }
 @media (max-width: 820px) { .cta { grid-template-columns: minmax(0, 1fr); align-items: start; } }
 
 /* interior page hero */

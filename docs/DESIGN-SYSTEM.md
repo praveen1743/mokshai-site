@@ -85,7 +85,7 @@ Hard rule: **CLS stays 0.** No animation may change layout.
 
 ### Footer glass
 
-The footer is the only glass surface on the site. Static pools of logo blue, teal and green (`.lights`) sit behind one frosted panel (`.glass`): translucent white fill, `backdrop-filter: blur(22px) saturate(165%)`, a bright top edge and a specular rim drawn with a masked gradient border.
+The footer is the only glass surface on the site. The closing CTA sits on flat ink directly above it, and the light pools fade in from the top edge (`mask-image`) so the two join without a seam. Static pools of logo blue, teal and green (`.lights`) sit behind one frosted panel (`.glass`): translucent white fill, `backdrop-filter: blur(22px) saturate(165%)`, a bright top edge and a specular rim drawn with a masked gradient border.
 
 - Glass needs something behind it to bend; over flat ink it would look like a grey box. That is why the light pools exist.
 - One panel only. Glass is never stacked or applied to body content.

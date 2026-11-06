@@ -29,7 +29,7 @@ const relServices = services.filter((s) => d.services.includes(s.slug));
 const relTools = tools.filter((t) => d.tools.includes(t.slug));
 const primaryTool = relTools[0] ?? (d.audience === 'operations' ? tools.find((t) => t.slug === 'back-office-hours')! : tools.find((t) => t.slug === 'msp-ticket-roi')!);
 const schema = [
-  article({ title: d.title, description: d.description, path, published: d.published, updated: d.updated }),
+  article({ title: d.title, description: d.description, path, published: d.published, updated: d.updated, author: d.author }),
   breadcrumbs([{ name: 'Insights', path: '/insights/' }, { name: topic.name, path: `/insights/${topic.slug}/` }, { name: d.title, path }]),
   ...(d.faqs.length ? [faq(d.faqs)] : []),
 ];
@@ -37,16 +37,17 @@ const schema = [
 <Base title={d.title} description={d.description} ogType="article" published={d.published} updated={d.updated} schema={schema}>
   <article>
     <header class="a-head">
-      <div class="container narrow stack">
+      <div class="container a-grid">
+        <div class="a-head-in stack">
         <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/insights/">Insights</a><span aria-hidden="true">/</span><a href={`/insights/${topic.slug}/`}>{topic.name}</a></nav>
         <span class="eyebrow">{audienceLabel(d.audience)}</span>
         <h1>{d.title}</h1>
-        <p class="byline">By the Moksh AI team · {readingMinutes(post.body)} min read · Published <time datetime={d.published.toISOString()}>{fmt(d.published)}</time>{+d.updated !== +d.published && <> · Updated <time datetime={d.updated.toISOString()}>{fmt(d.updated)}</time></>}</p>
-        <div class="summary"><span class="tag">The short answer</span><p>{d.summary}</p></div>
+        <p class="byline">{d.author ? (<span class="by">{d.author.photo && <img class="avatar" src={d.author.photo} alt="" width="36" height="36" loading="lazy" />}By {d.author.url ? <a href={d.author.url} rel="author noopener">{d.author.name}</a> : d.author.name}, {d.author.role}</span>) : 'By the Moksh AI team'} · {readingMinutes(post.body)} min read · Published <time datetime={d.published.toISOString()}>{fmt(d.published)}</time>{+d.updated !== +d.published && <> · Updated <time datetime={d.updated.toISOString()}>{fmt(d.updated)}</time></>}</p>
+        </div>
       </div>
     </header>
 
-    <div class="container a-body">
+    <div class="container a-grid a-body">
       <aside class="toc" aria-label="On this page">
         <p class="tag">On this page</p>
         <ol>{toc.map((h) => <li><a href={`#${h.slug}`}>{h.text}</a></li>)}{d.faqs.length > 0 && <li><a href="#questions">Questions</a></li>}</ol>
@@ -96,13 +97,16 @@ const schema = [
   <CtaBand />
 </Base>
 <style>
-  .a-head { background: linear-gradient(160deg, #e7f1fc 0%, #eef7f6 50%, #eaf6ee 100%); padding-block: clamp(48px, 7vw, 88px) 40px; }
-  .narrow { max-width: 920px; }
+  .a-head { background: linear-gradient(160deg, #e7f1fc 0%, #eef7f6 50%, #eaf6ee 100%); padding-block: clamp(40px, 6vw, 72px) clamp(32px, 4vw, 48px); }
+  /* Header and body share one grid, so the title, the body text and the
+     "On this page" list line up on two edges instead of three. */
+  .a-grid { display: grid; grid-template-columns: 250px minmax(0, 1fr); column-gap: clamp(32px, 5vw, 72px); }
+  .a-head-in { grid-column: 2; max-width: 72ch; }
   .a-head h1 { font-size: var(--t-2xl); max-width: 24ch; }
   .byline { color: var(--muted); font-size: var(--t-sm); }
-  .summary { border-left: 3px solid var(--blue-700); padding: 4px 0 4px 18px; display: grid; gap: 6px; max-width: 68ch; }
-  .summary p { font-size: var(--t-lg); line-height: 1.55; }
-  .a-body { display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: clamp(32px, 5vw, 72px); padding-block: 56px 80px; align-items: start; }
+  .by { display: inline-flex; align-items: center; gap: 10px; }
+  .avatar { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; }
+  .a-body { padding-block: 48px 80px; align-items: start; }
   .main { min-width: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 48px; max-width: 72ch; }
   .main > * { min-width: 0; }
   .toc { position: sticky; top: 96px; display: grid; gap: 12px; font-size: var(--t-sm); }
@@ -119,5 +123,5 @@ const schema = [
   .practice-list strong { font-family: var(--f-display); font-stretch: 90%; font-size: var(--t-lg); }
   .practice-list span:last-child { color: var(--muted); font-size: var(--t-sm); }
   .rel-head { display: flex; justify-content: space-between; align-items: end; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; }
-  @media (max-width: 960px) { .a-body { grid-template-columns: minmax(0, 1fr); } .toc { position: static; } }
+  @media (max-width: 960px) { .a-grid { grid-template-columns: minmax(0, 1fr); } .a-head-in { grid-column: auto; } .toc { position: static; } }
 </style>

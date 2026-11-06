@@ -21,6 +21,8 @@ const insights = defineCollection({
     takeaways: z.array(z.string()).default([]),
     faqs: z.array(z.object({ q: z.string(), a: z.string() })).default([]),
     featured: z.boolean().default(false),
+    // Named author. Leave out to show "By the Moksh AI team". photo is a path under public/.
+    author: z.object({ name: z.string(), role: z.string(), url: z.string().url().optional(), photo: z.string().optional() }).optional(),
   }),
 });
 

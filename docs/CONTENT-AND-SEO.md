@@ -127,6 +127,22 @@ After launch:
 2. Request indexing for `/`, `/msp/`, `/operations/` and the four calculators.
 3. Track a fixed set of 30–50 buyer prompts monthly across ChatGPT, Perplexity, Google AI Mode and Gemini, and record whether Moksh AI is mentioned or cited.
 
+## Article page layout and authors
+
+- The article header (breadcrumb, title, byline) sits in the same two-column grid as the body, so the title and the body text share one left edge.
+- The frontmatter `summary` is not shown on the article page; the first paragraph of the body is the answer (answer-first rule), and showing both repeated it. `summary` is still used on listing cards, the featured panels and topic hubs.
+- Optional named author, which also switches the BlogPosting schema author to a `Person`:
+
+```yaml
+author:
+  name: "Full Name"
+  role: "Head of AI delivery"
+  url: "https://www.linkedin.com/in/…"   # optional
+  photo: "/people/full-name.jpg"          # optional, 72×72 or larger, under public/
+```
+
+- Compact article lists no longer show dates. When articles are released, spread their `published` dates to the real release days (for example two a week after review), rather than giving every article the launch date.
+
 ## Keyword map
 
 Target keywords per article, from US search volume and keyword difficulty (OpenSEO / DataForSEO, November 2026). Volumes under 100 are rough. One primary keyword per page; do not write a second article for a keyword already listed here.

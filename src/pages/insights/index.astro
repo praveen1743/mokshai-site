@@ -34,10 +34,18 @@ const counts = Object.fromEntries(topics.map((t) => [t.slug, posts.filter((p) =>
 
       {featured && (
         <a class="feature" href={`/${featured.id}/`}>
-          <span class="tag">Latest · {topicBySlug(featured.data.topic).name} · {audienceLabel(featured.data.audience)} · {readingMinutes(featured.body)} min read</span>
-          <span class="f-title">{featured.data.title}</span>
-          <span class="f-text">{featured.data.summary}</span>
-          <span class="link-arrow">Read the guide</span>
+          <span class="f-main">
+            <span class="tag">Start here · {topicBySlug(featured.data.topic).name} · {audienceLabel(featured.data.audience)} · {readingMinutes(featured.body)} min read</span>
+            <span class="f-title">{featured.data.title}</span>
+            <span class="f-text">{featured.data.summary}</span>
+            <span class="link-arrow">Read the guide</span>
+          </span>
+          {featured.data.takeaways.length > 0 && (
+            <span class="f-side">
+              <span class="tag">In this guide</span>
+              <span class="f-points">{featured.data.takeaways.slice(0, 3).map((t) => <span>{t}</span>)}</span>
+            </span>
+          )}
         </a>
       )}
     </div>
@@ -58,8 +66,14 @@ const counts = Object.fromEntries(topics.map((t) => [t.slug, posts.filter((p) =>
   .topics a { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; padding: 8px 16px; border: 1px solid var(--line-strong); border-radius: 999px; background: var(--surface); color: var(--ink); text-decoration: none; font-weight: 500; font-size: var(--t-sm); transition: border-color .2s var(--ease), color .2s var(--ease); }
   .topics a:hover { border-color: var(--blue-700); color: var(--blue-700); }
   .topics .mono { font-size: var(--t-xs); color: var(--muted); }
-  .feature { display: grid; gap: 14px; padding: clamp(26px, 4vw, 52px); background: var(--ink); border-radius: 18px; color: var(--on-dark); text-decoration: none; transition: transform .25s var(--ease), box-shadow .25s var(--ease); }
+  .feature { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: clamp(24px, 4vw, 56px); align-items: start; padding: clamp(26px, 4vw, 52px); background: var(--ink); border-radius: 18px; color: var(--on-dark); text-decoration: none; transition: transform .25s var(--ease), box-shadow .25s var(--ease); }
   .feature:hover { transform: translateY(-2px); box-shadow: var(--shadow-2); color: var(--on-dark); }
+  @media (max-width: 860px) { .feature { grid-template-columns: minmax(0, 1fr); } }
+  .f-main { display: grid; gap: 14px; }
+  .f-side { display: grid; gap: 14px; padding-left: clamp(0px, 3vw, 32px); border-left: 1px solid rgba(255, 255, 255, .14); }
+  @media (max-width: 860px) { .f-side { padding-left: 0; border-left: 0; padding-top: 18px; border-top: 1px solid rgba(255, 255, 255, .14); } }
+  .f-points { display: grid; gap: 12px; }
+  .f-points span { padding-left: 16px; border-left: 2px solid var(--teal-on-dark); color: var(--on-dark); line-height: 1.5; }
   .feature .tag { color: var(--teal-on-dark); }
   .f-title { font: 780 var(--t-2xl)/1.06 var(--f-display); font-stretch: 84%; letter-spacing: -0.02em; color: #fff; max-width: 26ch; }
   .f-text { color: var(--on-dark-muted); font-size: var(--t-lg); max-width: 68ch; }

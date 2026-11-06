@@ -31,7 +31,7 @@ Shell for calculator pages: page hero, the calculator (named slot `calc`), a met
 | --- | --- | --- |
 | `Header.astro` | Sticky glass header, primary nav, "Book a call" button, mobile menu | Nav items from `site.config.ts`. Mobile menu is a real button with `aria-expanded`; Escape closes it |
 | `Footer.astro` | Brand blurb, site and service links, both offices, Moksh Group links, legal line | All facts from `site.config.ts` |
-| `CtaBand.astro` | Gradient call-to-action card closing most pages | Props: `title`, `text`, `secondaryHref`, `secondaryLabel` |
+| `CtaBand.astro` | Closing call to action on flat ink, directly above the footer so the two read as one dark area | Props: `title`, `text`, `secondaryHref`, `secondaryLabel` |
 | `PageHero.astro` | Interior page header on a flat tinted wash (no lighting or background hexagons) | Props: `eyebrow`, `title`, `accent` (gradient words), `lede`, `crumbs`, `tone`. Default slot for buttons; named slot `visual` for a scene, which switches to a two-column layout |
 
 ## Content blocks
@@ -39,7 +39,7 @@ Shell for calculator pages: page hero, the calculator (named slot `calc`), a met
 | Component | Purpose | Props |
 | --- | --- | --- |
 | `SplitTable.astro` | The operating model: what the agent handles vs. what a person owns. Collapses to labelled rows on mobile | `rows?: { area, agent, human }[]`, `caption?` |
-| `PostList.astro` | Editorial list of articles (topic, audience, reading time, date, title, summary) | `posts`, `showSummary?`, `compact?` |
+| `PostList.astro` | Editorial list of articles (topic, audience, reading time, title, summary; no date) | `posts`, `showSummary?`, `compact?` |
 | `RelatedReading.astro` | "Related reading" band before the CTA; renders nothing when empty | `posts`, `title?`, `moreHref?`, `moreLabel?`, `tone?: 'sky' \| 'mint' \| 'paper'` |
 | `Faq.astro` | Accessible accordion built on `<details>`; first item open | `items: { q, a }[]` (pair with `faq()` from `lib/schema.ts` for FAQPage schema) |
 | `MiniCalc.astro` | Compact live MSP ticket-savings estimate on the homepage (three sliders, fixed 15 min at $42/h) linking to the full calculator | none |
