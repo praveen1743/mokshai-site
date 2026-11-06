@@ -143,6 +143,14 @@ author:
 
 - Compact article lists no longer show dates. When articles are released, spread their `published` dates to the real release days (for example two a week after review), rather than giving every article the launch date.
 
+## CEO video
+
+- Files: `public/media/mick-shah-moksh-ai.mp4` (540×960, trimmed to 1:11, about 3.6 MB), `mick-shah-moksh-ai-poster.jpg`, and the portrait `mick-shah.jpg`.
+- The web copy corrects one burned-in caption at 0:45. The LinkedIn original reads "You don't even need the humans"; what is said, and the point being made, is "you need the humans to supervise". Fix the original for any other use.
+- Transcript and quotes live in `src/lib/introVideo.ts`; keep them in step with the video. The "80%, maybe 90%" remark stays in the video and transcript as the CEO's view; do not lift it onto pages as a statistic.
+- "15 years" is spoken in the video. Confirm it refers to Moksh Group's experience before it is repeated anywhere else.
+- Schema: `VideoObject` (with transcript) on `/` and `/about/`; `Person` for Mick Shah on `/about/`.
+
 ## Keyword map
 
 Target keywords per article, from US search volume and keyword difficulty (OpenSEO / DataForSEO, November 2026). Volumes under 100 are rough. One primary keyword per page; do not write a second article for a keyword already listed here.

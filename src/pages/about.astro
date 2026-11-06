@@ -2,11 +2,13 @@
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
 import CtaBand from '../components/CtaBand.astro';
+import FounderVideo from '../components/FounderVideo.astro';
+import { introVideo } from '../lib/introVideo';
 import { site } from '../site.config';
-import { breadcrumbs } from '../lib/schema';
+import { breadcrumbs, person, videoObject } from '../lib/schema';
 import Hub from '../components/scenes/Hub.astro';
 ---
-<Base title="About Moksh AI" description="Moksh AI is the AI practice of Moksh Infotech Pvt Ltd and part of Moksh Group, with a US office in New Jersey and a delivery team in Ahmedabad, India." schema={[{ '@type': 'AboutPage', name: 'About Moksh AI', url: `${site.url}/about/`, about: { '@id': `${site.url}/#organization` } }, breadcrumbs([{ name: 'About', path: '/about/' }])]}>
+<Base title="About Moksh AI" description="Moksh AI is the AI practice of Moksh Infotech Pvt Ltd and part of Moksh Group, with a US office in New Jersey and a delivery team in Ahmedabad, India." schema={[{ '@type': 'AboutPage', name: 'About Moksh AI', url: `${site.url}/about/`, about: { '@id': `${site.url}/#organization` } }, breadcrumbs([{ name: 'About', path: '/about/' }]), person(site.leadership[0], { name: 'Moksh Group', url: site.group.find((g) => g.name === 'Moksh Group')!.url }), videoObject(introVideo)]}>
   <PageHero eyebrow="About" title="Practical AI, built by a services group" lede="Moksh AI is the AI practice of Moksh Group. We build agents and automation for businesses whose people are stretched by repetitive work, and we judge every project by whether it pays back.">
     <Hub slot="visual" tone="light"
       core={{ title: 'Moksh AI', sub: 'AI practice' }}
@@ -33,6 +35,10 @@ import Hub from '../components/scenes/Hub.astro';
         <p>We prefer small, measured pilots over large programmes, open-source models where they are good enough, and handing you everything you need to run the result without us.</p>
       </div>
     </div>
+  </section>
+
+  <section class="section sky">
+    <div class="container"><FounderVideo heading="Leadership" id="leadership" transcriptOpen /></div>
   </section>
 
   <section class="section-tight mint">

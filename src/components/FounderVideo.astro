@@ -1,0 +1,57 @@
+---
+// CEO introduction: a vertical video beside the speaker's name, two quotes
+// and a transcript. Nothing loads until the visitor presses play.
+import { site } from '../site.config';
+import { introVideo as v } from '../lib/introVideo';
+interface Props { heading?: string; id?: string; transcriptOpen?: boolean }
+const { heading = 'Why Moksh Group started Moksh AI', id = 'ceo-video', transcriptOpen = false } = Astro.props;
+const ceo = site.leadership[0];
+---
+<div class="fv" id={id}>
+  <div class="fv-media">
+    <video class="fv-video" controls playsinline preload="none" poster={v.poster} width={v.width} height={v.height} aria-describedby={`${id}-t`}>
+      <source src={v.src} type="video/mp4" />
+      <a href={v.src}>Download the video</a>
+    </video>
+    <p class="fv-meta mono">{v.durationLabel} · captions on screen</p>
+  </div>
+  <div class="fv-copy">
+    <span class="eyebrow">A minute with our CEO</span>
+    <h2>{heading}</h2>
+    {v.quotes.map((q) => <blockquote class="fv-quote"><p>“{q}”</p></blockquote>)}
+    <div class="fv-person">
+      <img src={ceo.photo} alt="" width="56" height="56" loading="lazy" decoding="async" />
+      <div>
+        <p class="fv-name">{ceo.name}</p>
+        <p class="fv-role">{ceo.role} · <a href={ceo.linkedin} rel="noopener" aria-label={`${ceo.name} on LinkedIn`}>LinkedIn</a></p>
+      </div>
+    </div>
+    <details class="fv-transcript" id={`${id}-t`} open={transcriptOpen}>
+      <summary>Read the transcript</summary>
+      <div class="fv-tbody">
+        {v.transcript.map((p) => <p>{p}</p>)}
+        <p class="fv-note">Lightly edited for reading. Also posted on <a href={v.linkedinPost} rel="noopener">LinkedIn</a>.</p>
+      </div>
+    </details>
+  </div>
+</div>
+<style>
+  .fv { display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 1fr); gap: clamp(28px, 5vw, 72px); align-items: center; }
+  @media (max-width: 820px) { .fv { grid-template-columns: minmax(0, 1fr); } .fv-media { max-width: 300px; margin-inline: auto; width: 100%; } }
+  .fv-media { display: grid; gap: 10px; }
+  .fv-video { display: block; width: 100%; height: auto; aspect-ratio: 9 / 16; border-radius: 22px; background: var(--ink); box-shadow: var(--shadow-2); object-fit: cover; }
+  .fv-meta { font-size: var(--t-xs); color: var(--muted); text-align: center; }
+  .fv-copy { display: grid; gap: 18px; align-content: start; }
+  .fv-copy h2 { max-width: 18ch; }
+  .fv-quote { margin: 0; padding-left: 18px; border-left: 3px solid; border-image: var(--grad) 1; }
+  .fv-quote p { font: 600 var(--t-lg)/1.45 var(--f-display); font-stretch: 92%; color: var(--ink); max-width: 46ch; }
+  .fv-person { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; padding-top: 8px; }
+  .fv-person img { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; }
+  .fv-name { font-weight: 700; }
+  .fv-role { color: var(--muted); font-size: var(--t-sm); }
+  .fv-role a { font-weight: 600; display: inline-block; padding-block: 12px; margin-block: -12px; }
+  .fv-transcript { border-top: 1px solid var(--line-strong); padding-top: 12px; }
+  .fv-transcript summary { cursor: pointer; font-weight: 600; min-height: 44px; display: flex; align-items: center; color: var(--blue-700); }
+  .fv-tbody { display: grid; gap: 12px; padding-top: 6px; color: var(--muted); max-width: 68ch; }
+  .fv-note { font-size: var(--t-xs); }
+</style>

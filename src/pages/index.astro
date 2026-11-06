@@ -8,8 +8,10 @@ import SplitTable from '../components/SplitTable.astro';
 import MiniCalc from '../components/MiniCalc.astro';
 import Faq from '../components/Faq.astro';
 import CtaBand from '../components/CtaBand.astro';
+import FounderVideo from '../components/FounderVideo.astro';
+import { introVideo } from '../lib/introVideo';
 import { services } from '../site.config';
-import { faq } from '../lib/schema';
+import { faq, videoObject } from '../lib/schema';
 import { tools } from '../lib/tools';
 import { allPosts, featuredPost, audienceLabel, readingMinutes } from '../lib/insights';
 import { topicBySlug } from '../lib/topics';
@@ -33,7 +35,7 @@ const faqs = [
 <Base
   title="AI Agents for MSPs & Operations Teams | Moksh AI"
   description="Moksh AI builds AI agents that triage tickets, filter alerts and prepare routine work inside your PSA, RMM and Microsoft 365, while your engineers keep every decision."
-  schema={[faq(faqs)]}
+  schema={[faq(faqs), videoObject(introVideo)]}
 >
   <!-- HERO: the only section with ambient lighting -->
   <section class="hero dark glow">
@@ -76,6 +78,11 @@ const faqs = [
         />
       </div>
     </div>
+  </section>
+
+  <!-- CEO VIDEO: the first real person on the site -->
+  <section class="section mint">
+    <div class="container"><FounderVideo /></div>
   </section>
 
   <!-- WHO IT'S FOR: two plain routes, no cards -->

@@ -121,3 +121,29 @@ export function webApp(a: { name: string; path: string; description: string }) {
     provider: { '@id': orgId },
   };
 }
+
+export function videoObject(v: { title: string; description: string; src: string; poster: string; duration: string; uploadDate: string; transcript: string[] }) {
+  return {
+    '@type': 'VideoObject',
+    name: v.title,
+    description: v.description,
+    thumbnailUrl: abs(v.poster),
+    contentUrl: abs(v.src),
+    uploadDate: v.uploadDate,
+    duration: v.duration,
+    transcript: v.transcript.join(' '),
+    inLanguage: 'en',
+    publisher: { '@id': orgId },
+  };
+}
+
+export function person(p: { name: string; role: string; linkedin: string; photo: string }, worksFor: { name: string; url: string }) {
+  return {
+    '@type': 'Person',
+    name: p.name,
+    jobTitle: p.role.split(',')[0].trim(),
+    image: abs(p.photo),
+    sameAs: [p.linkedin],
+    worksFor: { '@type': 'Organization', name: worksFor.name, url: worksFor.url },
+  };
+}

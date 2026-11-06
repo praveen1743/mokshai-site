@@ -31,6 +31,7 @@ Shell for calculator pages: page hero, the calculator (named slot `calc`), a met
 | --- | --- | --- |
 | `Header.astro` | Sticky glass header, primary nav, "Book a call" button, mobile menu | Nav items from `site.config.ts`. Mobile menu is a real button with `aria-expanded`; Escape closes it |
 | `Footer.astro` | Brand blurb, site and service links, both offices, Moksh Group links, legal line | All facts from `site.config.ts` |
+| `FounderVideo.astro` | CEO introduction: vertical video (no preload, poster only), name, role, LinkedIn, two quotes and a transcript. Data in `lib/introVideo.ts` and `site.leadership` | `heading?`, `id?`, `transcriptOpen?`. Used on the homepage (after the hero) and `/about/#leadership` |
 | `CtaBand.astro` | Closing call to action on flat ink, directly above the footer so the two read as one dark area | Props: `title`, `text`, `secondaryHref`, `secondaryLabel` |
 | `PageHero.astro` | Interior page header on a flat tinted wash (no lighting or background hexagons) | Props: `eyebrow`, `title`, `accent` (gradient words), `lede`, `crumbs`, `tone`. Default slot for buttons; named slot `visual` for a scene, which switches to a two-column layout |
 
