@@ -49,7 +49,7 @@ export const site = {
   ],
   // People shown on the site. Name, role and LinkedIn confirmed by the company.
   leadership: [
-    { name: 'Mick Shah', role: 'CEO, Moksh Group', linkedin: 'https://www.linkedin.com/in/mick-shah-22a9a76/', photo: '/media/mick-shah.jpg', portrait: '/media/mick-shah-portrait.jpg' },
+    { name: 'Mick Shah', role: 'CEO, Moksh Group', linkedin: 'https://www.linkedin.com/in/mick-shah-22a9a76/', photo: '/media/mick-shah.v1.jpg', portrait: '/media/mick-shah-portrait.v1.jpg' },
   ],
   // Google tag IDs carried over from the old site (Site Kit + Google Ads).
   googleTagIds: ['GT-PLWBBHHT', 'AW-17581749958'],

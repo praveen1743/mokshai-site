@@ -7,8 +7,8 @@
 export const introVideo = {
   title: 'Mick Shah, CEO of Moksh Group, on why Moksh AI exists',
   description: 'Mick Shah explains why Moksh Group launched Moksh AI: agents built around a business’s own processes, with people supervising the work AI cannot be trusted to finish alone.',
-  src: '/media/mick-shah-moksh-ai.mp4',
-  poster: '/media/mick-shah-moksh-ai-poster.jpg',
+  src: '/media/mick-shah-moksh-ai.v1.mp4',
+  poster: '/media/mick-shah-moksh-ai-poster.v1.jpg',
   width: 540,
   height: 960,
   duration: 'PT1M11S',

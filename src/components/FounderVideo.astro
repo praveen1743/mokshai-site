@@ -56,3 +56,27 @@ const ceo = site.leadership[0];
   .fv-tbody { display: grid; gap: 12px; padding-top: 6px; color: var(--muted); max-width: 68ch; }
   .fv-note { font-size: var(--t-xs); }
 </style>
+
+<script>
+  // Start buffering before the click, without costing data for everyone:
+  // - on a fast connection, when the video is about to scroll into view;
+  // - on any connection, as soon as someone hovers, touches or focuses it.
+  type Conn = { saveData?: boolean; effectiveType?: string };
+  const conn = (navigator as Navigator & { connection?: Conn }).connection;
+  const fast = !!conn && !conn.saveData && conn.effectiveType === '4g';
+  document.querySelectorAll<HTMLVideoElement>('.fv-video').forEach((v) => {
+    const warm = () => { if (v.preload !== 'auto') { v.preload = 'auto'; v.load(); } };
+    ['pointerenter', 'touchstart', 'focus'].forEach((e) => v.addEventListener(e, warm, { once: true, passive: true }));
+    if (fast && 'IntersectionObserver' in window) {
+      // Only after the page has finished loading, and only once a third of the
+      // player is on screen, so it never competes with the page itself.
+      const watch = () => {
+        const io = new IntersectionObserver((entries) => {
+          if (entries.some((x) => x.isIntersecting)) { warm(); io.disconnect(); }
+        }, { threshold: 0.33 });
+        io.observe(v);
+      };
+      if (document.readyState === 'complete') watch(); else window.addEventListener('load', watch, { once: true });
+    }
+  });
+</script>
