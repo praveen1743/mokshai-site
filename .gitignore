@@ -8,3 +8,6 @@ release/
 public/fonts/
 .DS_Store
 .vercel
+
+# /brag video output (local only)
+brag-output*/
