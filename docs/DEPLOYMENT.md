@@ -53,7 +53,7 @@ Test by submitting the form on the preview URL and confirming the lead arrives.
 6. Wait for DNS to propagate and for Vercel to issue the TLS certificate.
 7. Verify:
    - `https://mokshai.net/` loads the new site over HTTPS
-   - `/about-us/`, `/contact-us/` and `/blog/` return **301** to `/about/`, `/book/`, `/insights/`
+   - `/about-us/`, `/contact-us/` and `/blog/` return a permanent redirect (Vercel sends **308**, which search engines treat like 301) to `/about/`, `/book/`, `/insights/`
    - both original article URLs load
    - a booking-form submission arrives
    - Google tag fires (Tag Assistant) and `generate_lead` is recorded

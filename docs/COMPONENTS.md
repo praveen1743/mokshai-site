@@ -94,4 +94,4 @@ Motion: `.reveal` (scroll-driven, movement only); `[data-loop]` on any element w
 | --- | --- | --- |
 | `/case-studies/` | `pages/case-studies/[...index].astro` | Built only when at least one case study is published |
 | `/case-studies/<slug>/` | `pages/case-studies/[slug].astro` | Facts row, before/after, cover, body, optional quote, related services and calculators, `BlogPosting` + breadcrumbs schema |
-| `/keystatic`, `/api/keystatic` | injected by `@keystatic/astro` | On-demand (Vercel function), noindex; config in `keystatic.config.ts` |
+| `/keystatic`, `/api/keystatic` | injected by `@keystatic/astro`; the admin page is swapped for `cms/KeystaticPage.astro` → `cms/KeystaticApp.tsx` (`keystaticCms()` in `astro.config.mjs`) | On-demand (Vercel function), noindex; config in `keystatic.config.ts`. The wrapper strips the trailing slash Vercel adds, which Keystatic's router doesn't match |

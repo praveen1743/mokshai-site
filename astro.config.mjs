@@ -5,6 +5,7 @@ import vercel from '@astrojs/vercel';
 import react from '@astrojs/react';
 import keystatic from '@keystatic/astro';
 import { loadEnv } from 'vite';
+import { fileURLToPath } from 'node:url';
 
 const isDev = process.argv.includes('dev');
 // The booking form POSTs to PUBLIC_FORM_ENDPOINT. Its origin is added to the
@@ -24,6 +25,22 @@ const google = {
 };
 // Keystatic admin (/keystatic) talks to GitHub from the browser.
 const github = { connect: ['https://api.github.com'], img: ['https://avatars.githubusercontent.com', 'https://raw.githubusercontent.com'] };
+
+// Keystatic's integration, with its admin page swapped for src/cms/KeystaticPage.astro,
+// which copes with the trailing slash Vercel adds to every URL.
+function keystaticCms() {
+  const base = keystatic();
+  const page = fileURLToPath(new URL('./src/cms/KeystaticPage.astro', import.meta.url));
+  return {
+    name: 'keystatic',
+    hooks: {
+      'astro:config:setup': (opts) => base.hooks['astro:config:setup']({
+        ...opts,
+        injectRoute: (route) => opts.injectRoute(route.entrypoint.endsWith('.astro') ? { ...route, entrypoint: page } : route),
+      }),
+    },
+  };
+}
 
 // Wrap Markdown tables in a focusable, labelled scroll region so wide tables
 // stay keyboard-accessible on small screens.
@@ -68,7 +85,7 @@ export default defineConfig({
       filter: (page) => !/\/(about-us|contact-us|blog)\/$/.test(page) && !page.endsWith('/404/') && !page.includes('/keystatic'),
     }),
     react(),
-    keystatic(),
+    keystaticCms(),
   ],
   // Content Security Policy. Astro hashes every script it emits, so no inline
   // script is allowed unless Astro generated it. Styles allow 'unsafe-inline'

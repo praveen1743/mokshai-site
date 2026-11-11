@@ -1,0 +1,6 @@
+---
+// Replaces @keystatic/astro's own admin page (see astro.config.mjs).
+import KeystaticApp from './KeystaticApp';
+export const prerender = false;
+---
+<KeystaticApp client:only="react" />
