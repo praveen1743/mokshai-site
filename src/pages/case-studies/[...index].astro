@@ -1,0 +1,43 @@
+---
+// Case study index at /case-studies/. A rest-parameter route so the page is
+// only generated once at least one case study is published: no empty
+// "coming soon" page goes live before there is real work to show.
+import { publishedCaseStudies, type CaseStudy } from '../../lib/caseStudies';
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { breadcrumbs } from '../../lib/schema';
+
+export async function getStaticPaths() {
+  const items = await publishedCaseStudies();
+  return items.length ? [{ params: { index: undefined }, props: { items } }] : [];
+}
+const { items } = Astro.props as { items: CaseStudy[] };
+---
+<Base title="Case studies" description="Workflows Moksh AI has automated, with the starting point, the result and how long it took." schema={[breadcrumbs([{ name: 'Case studies', path: '/case-studies/' }])]}>
+  <PageHero eyebrow="Case studies" title="Work we have shipped" lede="Each one shows where the team started, what changed and how long it took." />
+  <section class="section-tight">
+    <div class="container">
+      <ul class="cs-list" role="list">
+        {items.map((c) => (
+          <li>
+            <a href={`/case-studies/${c.id}/`}>
+              <span class="tag">{c.data.industry} · {c.data.timeframe}</span>
+              <span class="cs-t">{c.data.title}</span>
+              <span class="cs-r">{c.data.result}</span>
+              <span class="link-arrow">Read the case study</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+  <CtaBand />
+</Base>
+<style>
+  .cs-list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--ink); }
+  .cs-list a { display: grid; gap: 8px; padding-block: 26px; border-bottom: 1px solid var(--line-strong); color: inherit; text-decoration: none; }
+  .cs-t { font: 700 var(--t-xl)/1.18 var(--f-display); font-stretch: 88%; }
+  .cs-r { color: var(--muted); max-width: 70ch; }
+  .cs-list a:hover .cs-t { color: var(--blue-700); }
+</style>

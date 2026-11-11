@@ -47,7 +47,7 @@ Shell for calculator pages: page hero, the calculator (named slot `calc`), a met
 | `Range.astro` | Labelled slider with live output and gradient fill | `id`, `label`, `min`, `max`, `step`, `value`, `hint?`, `display?` (server-rendered output text) |
 | `Icon.astro` | 24 px line-icon set, always `aria-hidden` | `name` (ticket, alert, doc, copilot, layers, quote, inbox, status, chart, compass, code, people, coins, shield, clock, stack, handshake, target, wallet, lock, eye, power, database, route) |
 | `Arrow.astro` | Arrow glyph used in buttons | none |
-| `HexField.astro` | Decorative cluster of outlined hexagons from the logo, slowly rotating and floating | `variant: 'dark' \| 'light'`, `class` |
+| `HexField.astro` | Decorative cluster of outlined hexagons from the logo, slowly rotating and floating. Carries `data-loop` | `variant: 'dark' \| 'light'`, `class` |
 
 ## Hero scenes (`components/scenes/`)
 
@@ -76,7 +76,8 @@ Product-style illustrations that show each page's subject. All are HTML/SVG, lab
 | `serviceDetails.ts` | Copy, FAQs and outcomes for each service page |
 | `tools.ts` | Calculator names, audiences, questions and descriptions |
 | `topics.ts` | Insights topics (slug, name, description, intro) used for hubs, breadcrumbs and the footer |
-| `insights.ts` | `allPosts`, `relatedPosts`, `postsForService`, `postsForTool`, `postsForAudience`, `featuredPost`, `readingMinutes`, `audienceLabel`, `fmtDate` |
+| `caseStudies.ts` | `publishedCaseStudies()` (newest first, drafts hidden in production; returns `[]` while the folder is empty), `CaseStudy` type |
+| `insights.ts` | `isPublished`, `allPosts`, `relatedPosts`, `postsForService`, `postsForTool`, `postsForAudience`, `featuredPost`, `readingMinutes`, `audienceLabel`, `fmtDate` |
 
 ## Global style utilities (`styles/global.css`)
 
@@ -85,4 +86,12 @@ Surfaces: `.dark`, `.sky`, `.mint`, `.wash`, `.surface`, `.glow`
 Type: `.eyebrow`, `.lede`, `.grad-text`, `.mono`, `.tag`, `.prose`
 Controls: `.btn`, `.btn-primary`, `.btn-secondary`, `.btn-light`, `.link-arrow`, `.input`, `.choice`, `.field`
 Blocks: `.card`, `.card.featured`, `.hexi`, `.steps/.step`, `.faq`, `.cta`, `.facts`, `.checks`, `.notes`, `.split`, `.scene*`, `.pill-*`, `.calc*`
-Motion: `.reveal` (scroll-driven, movement only)
+Motion: `.reveal` (scroll-driven, movement only); `[data-loop]` on any element with a looping animation pauses it off screen (`.anim-paused`, toggled by `Base.astro`)
+
+## Pages added by the CMS
+
+| Route | File | Notes |
+| --- | --- | --- |
+| `/case-studies/` | `pages/case-studies/[...index].astro` | Built only when at least one case study is published |
+| `/case-studies/<slug>/` | `pages/case-studies/[slug].astro` | Facts row, before/after, cover, body, optional quote, related services and calculators, `BlogPosting` + breadcrumbs schema |
+| `/keystatic`, `/api/keystatic` | injected by `@keystatic/astro` | On-demand (Vercel function), noindex; config in `keystatic.config.ts` |

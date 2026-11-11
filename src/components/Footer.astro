@@ -1,7 +1,10 @@
 ---
 import { site, services } from '../site.config';
 import { topics } from '../lib/topics';
+import { publishedCaseStudies } from '../lib/caseStudies';
 const year = new Date().getFullYear();
+// Shown only once a case study is published (see /case-studies/).
+const hasCaseStudies = (await publishedCaseStudies()).length > 0;
 ---
 <footer class="site-footer dark">
   <div class="lights" aria-hidden="true"></div>
@@ -20,6 +23,7 @@ const year = new Date().getFullYear();
           <li><a href="/how-we-work/">How we work</a></li>
           <li><a href="/pricing/">Pricing</a></li>
           <li><a href="/security/">Security</a></li>
+          {hasCaseStudies && <li><a href="/case-studies/">Case studies</a></li>}
           <li><a href="/tools/">Calculators</a></li>
           <li><a href="/book/">Book a call</a></li>
         </ul>

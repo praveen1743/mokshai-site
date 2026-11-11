@@ -90,3 +90,6 @@ export const services = [
     short: 'Cut overlapping AI subscriptions with open-source models, low-code tools and targeted automation.',
   },
 ] as const;
+export type ServiceSlug = (typeof services)[number]['slug'];
+/** Tuple of service slugs for z.enum() in content.config.ts and the Keystatic config. */
+export const serviceSlugs = services.map((s) => s.slug) as [ServiceSlug, ...ServiceSlug[]];

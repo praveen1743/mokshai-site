@@ -1,11 +1,11 @@
 # CLAUDE.md
 
-Marketing site for Moksh AI (mokshai.net). Astro 5, fully static output, no UI framework. Vanilla TypeScript in `<script>` tags for interactivity.
+Marketing site for Moksh AI (mokshai.net). Astro 7 with the Vercel adapter: every public page is prerendered static HTML; only the Keystatic CMS (`/keystatic`, `/api/keystatic`, React) runs on demand. No UI framework on public pages. Vanilla TypeScript in `<script>` tags for interactivity.
 
 ## Commands
 - `npm run dev`: dev server on :4321
 - `npm run test`: Vitest, calculator formulas (`tests/calc.test.ts`)
-- `npm run build`: static build to `dist/`. Needs `PUBLIC_FORM_ENDPOINT` for a working booking form; optional `PUBLIC_BOOKING_URL`
+- `npm run build`: build to `.vercel/output/` (then `scripts/vercel-csp-routes.mjs` fixes the CSP routes). Node 22.23.4+. Needs `PUBLIC_FORM_ENDPOINT` for a working booking form; optional `PUBLIC_BOOKING_URL`
 - `dev` and `build` first run `scripts/copy-fonts.mjs`, which copies fonts from `node_modules` into `public/fonts/` (git-ignored)
 
 ## Docs
@@ -22,6 +22,8 @@ Vercel, from `main`. Settings live in `vercel.json`; keep `public/.htaccess` and
 - `src/content/insights/*.md`: articles, served at the site root (`/[slug]/`) so old WordPress URLs keep working. Frontmatter (`topic`, `services`, `tools`, `takeaways`, `faqs`) drives internal links and schema; see `docs/CONTENT-AND-SEO.md`.
 - `src/lib/topics.ts`, `src/lib/insights.ts`: Insights topics and helpers (related posts, posts per service/tool/audience).
 - `src/layouts/ToolPage.astro`: shared calculator page shell (method + FAQ + related tools).
+- `keystatic.config.ts`: CMS fields. A new frontmatter field must be added here and in `src/content.config.ts`.
+- `src/content/case-studies/*.md`: case studies, created by the team in the CMS; `draft: true` until reviewed.
 - `src/components/scenes/`: hero illustrations, one per page topic. Pass them to `PageHero` via `slot="visual"`.
 
 ## Design rules
@@ -38,6 +40,8 @@ Vercel, from `main`. Settings live in `vercel.json`; keep `public/.htaccess` and
 - Never give a decorative element a class named `dark`: `.dark` paints the ink background.
 - Grid columns that collapse on mobile use `minmax(0, 1fr)`, never bare `1fr`.
 - `[hidden]` must stay `display: none !important`; toggle visibility with `el.hidden`.
+- Looping animations get `data-loop` so they pause off screen.
+- CSP (`astro.config.mjs`): no `<script is:inline>` or `define:vars`; pass data via `data-`/`<meta>` to a bundled script. Add any new third-party host to the lists at the top of `astro.config.mjs`. CSP is off in dev, so test such changes on a build.
 - One `<h1>` per page. Interior pages use `PageHero`.
 
 ## Content rules

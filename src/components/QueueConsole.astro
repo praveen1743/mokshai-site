@@ -101,8 +101,11 @@ const extra = [
     };
     const start = () => { if (!timer) timer = window.setInterval(tick, 3200); };
     const stop = () => { if (timer) { clearInterval(timer); timer = undefined; } };
-    const io = new IntersectionObserver((entries) => entries.forEach((e) => (e.isIntersecting ? start() : stop())));
+    // Run only while the queue is on screen and the tab is visible.
+    let onScreen = false;
+    const sync = () => (onScreen && !document.hidden ? start() : stop());
+    const io = new IntersectionObserver((entries) => { onScreen = entries.some((e) => e.isIntersecting); sync(); });
     io.observe(list);
-    document.addEventListener('visibilitychange', () => (document.hidden ? stop() : start()));
+    document.addEventListener('visibilitychange', sync);
   }
 </script>

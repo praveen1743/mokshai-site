@@ -1,0 +1,89 @@
+---
+// One case study. Created and edited by the Moksh team in the Keystatic CMS
+// (/keystatic). Drafts are never built in production.
+import { render } from 'astro:content';
+import { publishedCaseStudies, type CaseStudy } from '../../lib/caseStudies';
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { article, breadcrumbs } from '../../lib/schema';
+import { services } from '../../site.config';
+import { tools } from '../../lib/tools';
+
+export async function getStaticPaths() {
+  const items = await publishedCaseStudies();
+  return items.map((item) => ({ params: { slug: item.id }, props: { item } }));
+}
+const { item } = Astro.props as { item: CaseStudy };
+const { Content } = await render(item);
+const d = item.data;
+const path = `/case-studies/${item.id}/`;
+const relServices = services.filter((s) => d.services.includes(s.slug));
+const relTools = tools.filter((t) => d.tools.includes(t.slug));
+const quote = d.quote?.text ? d.quote : undefined;
+---
+<Base
+  title={d.title}
+  description={d.description}
+  ogType="article"
+  published={d.published}
+  updated={d.updated ?? d.published}
+  schema={[
+    article({ title: d.title, description: d.description, path, published: d.published, updated: d.updated ?? d.published }),
+    breadcrumbs([{ name: 'Case studies', path: '/case-studies/' }, { name: d.title, path }]),
+  ]}
+>
+  <PageHero eyebrow={`Case study · ${d.industry}`} title={d.title} lede={d.description} crumbs={[{ name: 'Case studies', href: '/case-studies/' }]} />
+
+  <section class="section-tight">
+    <div class="container cs">
+      <dl class="cs-facts">
+        <div><dt>Client</dt><dd>{d.client}</dd></div>
+        <div><dt>Industry</dt><dd>{d.industry}</dd></div>
+        <div><dt>Timeframe</dt><dd>{d.timeframe}</dd></div>
+      </dl>
+      <div class="cs-change">
+        <div class="cs-before"><p class="tag">Before</p><p>{d.baseline}</p></div>
+        <div class="cs-after"><p class="tag">After</p><p>{d.result}</p></div>
+      </div>
+      {d.cover && <img class="cs-cover" src={d.cover} alt={d.coverAlt || ''} loading="lazy" decoding="async" />}
+      <div class="prose"><Content /></div>
+      {quote && (
+        <figure class="cs-quote">
+          <blockquote><p>“{quote.text}”</p></blockquote>
+          {quote.name && <figcaption>{quote.name}{quote.role && `, ${quote.role}`}</figcaption>}
+        </figure>
+      )}
+      {(relServices.length > 0 || relTools.length > 0) && (
+        <nav class="cs-links" aria-label="Related services and calculators">
+          <p class="tag">Related</p>
+          <ul role="list">
+            {relServices.map((s) => <li><a href={`/services/${s.slug}/`}>{s.name}</a></li>)}
+            {relTools.map((t) => <li><a href={`/tools/${t.slug}/`}>{t.name}</a></li>)}
+          </ul>
+        </nav>
+      )}
+    </div>
+  </section>
+  <CtaBand title="Want a result like this on one of your workflows?" />
+</Base>
+<style>
+  .cs { display: grid; gap: 40px; max-width: 900px; }
+  .cs-facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin: 0; }
+  @media (max-width: 720px) { .cs-facts { grid-template-columns: minmax(0, 1fr); } }
+  .cs-facts div { border-top: 3px solid; border-image: var(--grad) 1; padding-top: 14px; }
+  .cs-facts dt { font: 500 var(--t-xs)/1.2 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .cs-facts dd { margin: 6px 0 0; font-weight: 600; }
+  .cs-change { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+  @media (max-width: 720px) { .cs-change { grid-template-columns: minmax(0, 1fr); } }
+  .cs-change > div { padding: 24px 26px; border-radius: var(--radius); display: grid; gap: 8px; }
+  .cs-before { background: var(--surface); border: 1px solid var(--line); }
+  .cs-after { background: var(--ink); color: var(--on-dark); }
+  .cs-after .tag { color: var(--teal-on-dark); }
+  .cs-change p:last-child { font-size: var(--t-lg); line-height: 1.45; }
+  .cs-cover { width: 100%; height: auto; border-radius: var(--radius); border: 1px solid var(--line); }
+  .cs-quote { margin: 0; padding-left: 22px; border-left: 3px solid; border-image: var(--grad) 1; }
+  .cs-quote p { font: 600 var(--t-xl)/1.35 var(--f-display); font-stretch: 92%; }
+  .cs-quote figcaption { margin-top: 10px; color: var(--muted); }
+  .cs-links ul { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px 20px; }
+</style>

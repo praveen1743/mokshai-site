@@ -5,21 +5,33 @@
   "private": true,
   "scripts": {
     "dev": "node scripts/copy-fonts.mjs && astro dev",
-    "build": "node scripts/copy-fonts.mjs && astro build",
+    "build": "node scripts/copy-fonts.mjs && astro build && node scripts/vercel-csp-routes.mjs",
     "preview": "astro preview --host",
     "test": "vitest run"
   },
   "dependencies": {
-    "astro": "5.18.1",
-    "@astrojs/sitemap": "3.7.4",
+    "@astrojs/markdown-remark": "^7.3.7",
+    "@astrojs/react": "^7.1.7",
+    "@astrojs/sitemap": "^3.7.4",
+    "@astrojs/vercel": "^11.0.21",
     "@fontsource-variable/archivo": "5.3.0",
+    "@fontsource/ibm-plex-mono": "5.3.0",
     "@fontsource/ibm-plex-sans": "5.3.0",
-    "@fontsource/ibm-plex-mono": "5.3.0"
+    "@keystatic/astro": "^6.0.0",
+    "@keystatic/core": "^0.6.9",
+    "astro": "^7.4.10",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
   },
   "devDependencies": {
-    "vitest": "3.2.7"
+    "vitest": "^5.1.0"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=22.23.4"
+  },
+  "overrides": {
+    "path-to-regexp": "^6.3.0",
+    "glob": "^14.0.4",
+    "minimatch": "^11.0.8"
   }
 }

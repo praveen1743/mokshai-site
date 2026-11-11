@@ -7,7 +7,8 @@
 | Company facts, nav, services list, Moksh Group companies | `src/site.config.ts` |
 | Service page copy and FAQs | `src/lib/serviceDetails.ts` |
 | Page copy | the page's `.astro` file in `src/pages/` |
-| Articles | `src/content/insights/<slug>.md` |
+| Articles | `src/content/insights/<slug>.md` (editable in the CMS at `/keystatic`) |
+| Case studies | `src/content/case-studies/<slug>.md` (editable in the CMS) |
 | Privacy policy | `src/content/pages/privacy-policy.md` |
 | Calculator names and descriptions | `src/lib/tools.ts` |
 
@@ -30,10 +31,25 @@ faqs:                               # shown on the page and emitted as FAQPage s
   - q: "..."
     a: "..."
 featured: false                     # true pins it as the featured article
+draft: false                        # true: visible in `npm run dev` only, never built in production
+author:                             # optional byline; omit for the company byline
+  name: "..."
+  role: "..."
 ---
 ```
 
 The file name becomes the URL (`/how-ai-agents-triage-msp-tickets/`). The article is added to `/insights/`, its topic hub, the RSS feed and the sitemap, and gets `BlogPosting`, `BreadcrumbList` and (with `faqs`) `FAQPage` schema automatically.
+
+## Editing in the CMS
+
+Keystatic at `/keystatic` edits the same Markdown files through a form, so nobody on the team needs Git or a code editor. Locally (`npm run dev`, then `http://localhost:4321/keystatic`) it writes straight to the files. In production each save is a commit to `main` by the editor's GitHub account, and Vercel deploys it in about a minute. Setup is in [DEPLOYMENT.md](DEPLOYMENT.md#cms-keystatic-setup).
+
+- **Never change the "Web address" (slug) of a published article.** It is the URL; changing it breaks every link and search result pointing to it. Add a redirect in `vercel.json` first if it must change.
+- **Drafts:** tick "Draft" to save work without publishing. New case studies start as drafts.
+- **First save reformats the file.** Keystatic rewrites the frontmatter in its own YAML style and pads Markdown tables. Content is unchanged; expect one large diff the first time an article is saved.
+- **Case studies** need a client who agreed to be named, a baseline and a result the client can confirm (the content rules in `CLAUDE.md` apply: no invented numbers). The `/case-studies/` index and its footer link appear automatically once the first case study is published.
+- Images uploaded in the editor go to `public/uploads/`.
+- The content rules below still apply; the CMS doesn't check banned phrases or internal links.
 
 ## Internal linking
 

@@ -3,6 +3,9 @@
 
 User-agent: *
 Allow: /
+# The CMS admin is also sent with X-Robots-Tag: noindex (vercel.json).
+Disallow: /keystatic
+Disallow: /api/keystatic
 
 # AI and answer-engine crawlers (explicitly allowed)
 User-agent: GPTBot

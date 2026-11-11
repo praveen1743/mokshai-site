@@ -40,3 +40,7 @@ export const tools = [
     description: 'Answer eight questions about data access, process, governance and systems. Get a readiness score, the weakest area and the three fixes to make before an AI pilot.',
   },
 ] as const;
+
+export type ToolSlug = (typeof tools)[number]['slug'];
+/** Tuple of tool slugs for z.enum() in content.config.ts and the Keystatic config. */
+export const toolSlugs = tools.map((t) => t.slug) as [ToolSlug, ...ToolSlug[]];

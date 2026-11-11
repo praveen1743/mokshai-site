@@ -1,10 +1,11 @@
 import { getCollection } from 'astro:content';
 import { site } from '../site.config';
+import { isPublished } from '../lib/insights';
 
 const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
 export async function GET() {
-  const posts = (await getCollection('insights')).sort((a, b) => +b.data.updated - +a.data.updated);
+  const posts = (await getCollection('insights', isPublished)).sort((a, b) => +b.data.updated - +a.data.updated);
   const items = posts
     .map((p) => {
       const url = `${site.url}/${p.id}/`;

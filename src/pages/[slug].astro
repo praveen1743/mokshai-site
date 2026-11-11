@@ -20,6 +20,8 @@ export async function getStaticPaths() {
 const { post, posts } = Astro.props as { post: Post; posts: Post[] };
 const { Content, headings } = await render(post);
 const d = post.data;
+// The CMS can leave an empty author object; only show a byline when a name is set.
+const author = d.author?.name ? { ...d.author, url: d.author.url || undefined } : undefined;
 const path = `/${post.id}/`;
 const topic = topicBySlug(d.topic);
 const fmt = (x: Date) => x.toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' });
@@ -29,7 +31,7 @@ const relServices = services.filter((s) => d.services.includes(s.slug));
 const relTools = tools.filter((t) => d.tools.includes(t.slug));
 const primaryTool = relTools[0] ?? (d.audience === 'operations' ? tools.find((t) => t.slug === 'back-office-hours')! : tools.find((t) => t.slug === 'msp-ticket-roi')!);
 const schema = [
-  article({ title: d.title, description: d.description, path, published: d.published, updated: d.updated, author: d.author }),
+  article({ title: d.title, description: d.description, path, published: d.published, updated: d.updated, author }),
   breadcrumbs([{ name: 'Insights', path: '/insights/' }, { name: topic.name, path: `/insights/${topic.slug}/` }, { name: d.title, path }]),
   ...(d.faqs.length ? [faq(d.faqs)] : []),
 ];
@@ -42,7 +44,7 @@ const schema = [
         <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/insights/">Insights</a><span aria-hidden="true">/</span><a href={`/insights/${topic.slug}/`}>{topic.name}</a></nav>
         <span class="eyebrow">{audienceLabel(d.audience)}</span>
         <h1>{d.title}</h1>
-        <p class="byline">{d.author ? (<span class="by">{d.author.photo && <img class="avatar" src={d.author.photo} alt="" width="36" height="36" loading="lazy" />}By {d.author.url ? <a href={d.author.url} rel="author noopener">{d.author.name}</a> : d.author.name}, {d.author.role}</span>) : 'By the Moksh AI team'} · {readingMinutes(post.body)} min read · Published <time datetime={d.published.toISOString()}>{fmt(d.published)}</time>{+d.updated !== +d.published && <> · Updated <time datetime={d.updated.toISOString()}>{fmt(d.updated)}</time></>}</p>
+        <p class="byline">{author ? (<span class="by">{author.photo && <img class="avatar" src={author.photo} alt="" width="36" height="36" loading="lazy" />}By {author.url ? <a href={author.url} rel="author noopener">{author.name}</a> : author.name}, {author.role}</span>) : 'By the Moksh AI team'} · {readingMinutes(post.body)} min read · Published <time datetime={d.published.toISOString()}>{fmt(d.published)}</time>{+d.updated !== +d.published && <> · Updated <time datetime={d.updated.toISOString()}>{fmt(d.updated)}</time></>}</p>
         </div>
       </div>
     </header>

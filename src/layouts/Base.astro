@@ -19,6 +19,9 @@ const canonical = new URL(Astro.url.pathname, site.url).toString();
 const fullTitle = title.includes(site.name) ? title : `${title} | ${site.name}`;
 const ogImage = new URL('/og/default.jpg', site.url).toString();
 const graph = { '@context': 'https://schema.org', '@graph': [organization(), website(), ...schema] };
+// Escape "<" so a "</script>" inside any title, FAQ or description can never
+// close the JSON-LD block early. "<" is still valid JSON for "<".
+const jsonLd = JSON.stringify(graph).replace(/</g, '\\u003c');
 const primaryTag = site.googleTagIds[0];
 ---
 <!doctype html>
@@ -49,37 +52,40 @@ const primaryTag = site.googleTagIds[0];
   {updated && <meta property="article:modified_time" content={updated.toISOString()} />}
   <meta name="twitter:card" content="summary_large_image" />
   <link rel="alternate" type="application/rss+xml" title="Moksh AI insights" href="/rss.xml" />
-  <script type="application/ld+json" set:html={JSON.stringify(graph)} />
-  {primaryTag && (
-    <>
-      <script is:inline define:vars={{ ids: site.googleTagIds, primary: primaryTag }}>
-        // The Google tag costs ~370 KB of script and ~0.9 s of main-thread time on
-        // mobile. Queue calls immediately, but load the library only after the
-        // visitor's first interaction or 5 s, whichever comes first. Queued events
-        // (including generate_lead) are sent once it loads.
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        window.gtag = gtag;
-        gtag('js', new Date());
-        ids.forEach(function (id) { gtag('config', id); });
-        (function () {
-          var loaded = false;
-          var events = ['pointerdown', 'keydown', 'scroll', 'touchstart'];
-          function load() {
-            if (loaded) return;
-            loaded = true;
-            events.forEach(function (e) { removeEventListener(e, load, { passive: true }); });
-            var s = document.createElement('script');
-            s.async = true;
-            s.src = 'https://www.googletagmanager.com/gtag/js?id=' + primary;
-            document.head.appendChild(s);
-          }
-          events.forEach(function (e) { addEventListener(e, load, { passive: true, once: true }); });
-          addEventListener('load', function () { setTimeout(load, 5000); });
-        })();
-      </script>
-    </>
-  )}
+  <script type="application/ld+json" set:html={jsonLd} />
+  {primaryTag && <meta name="moksh-gtag" content={site.googleTagIds.join(',')} />}
+  <script>
+    // Google tag loader. A bundled script (not is:inline) so the CSP covers it
+    // with a hash instead of allowing inline scripts. Tag IDs come from the
+    // <meta name="moksh-gtag"> above, i.e. from site.config.ts.
+    // The Google tag costs ~370 KB of script and ~0.9 s of main-thread time on
+    // mobile. Queue calls immediately, but load the library only after the
+    // visitor's first interaction or 5 s, whichever comes first. Queued events
+    // (including generate_lead) are sent once it loads.
+    const ids = (document.querySelector('meta[name="moksh-gtag"]')?.getAttribute('content') || '').split(',').filter(Boolean);
+    if (ids.length) {
+      const w = window as unknown as { dataLayer: unknown[]; gtag: (...args: unknown[]) => void };
+      w.dataLayer = w.dataLayer || [];
+      // gtag.js expects the real `arguments` object, not an array.
+      w.gtag = function gtag() { w.dataLayer.push(arguments); };
+      w.gtag('js', new Date());
+      ids.forEach((id) => w.gtag('config', id));
+      let loaded = false;
+      const events = ['pointerdown', 'keydown', 'scroll', 'touchstart'];
+      const load = () => {
+        if (loaded) return;
+        loaded = true;
+        events.forEach((e) => removeEventListener(e, load));
+        const s = document.createElement('script');
+        s.async = true;
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=' + ids[0];
+        document.head.appendChild(s);
+      };
+      events.forEach((e) => addEventListener(e, load, { passive: true, once: true }));
+      if (document.readyState === 'complete') setTimeout(load, 5000);
+      else addEventListener('load', () => setTimeout(load, 5000));
+    }
+  </script>
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -88,5 +94,21 @@ const primaryTag = site.googleTagIds[0];
     <slot />
   </main>
   <Footer />
+  <script>
+    // Pause looping CSS animations (hub pulses, hexagon field) while they are
+    // off screen or the tab is hidden, so low-end phones are not painting
+    // motion nobody can see. Elements opt in with [data-loop].
+    const loops = Array.from(document.querySelectorAll<HTMLElement>('[data-loop]'));
+    if (loops.length && 'IntersectionObserver' in window) {
+      const visible = new Set<HTMLElement>();
+      const apply = () => loops.forEach((el) => el.classList.toggle('anim-paused', document.hidden || !visible.has(el)));
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => (e.isIntersecting ? visible.add(e.target as HTMLElement) : visible.delete(e.target as HTMLElement)));
+        apply();
+      }, { rootMargin: '100px 0px' });
+      loops.forEach((el) => io.observe(el));
+      document.addEventListener('visibilitychange', apply);
+    }
+  </script>
 </body>
 </html>

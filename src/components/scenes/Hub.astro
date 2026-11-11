@@ -34,7 +34,7 @@ const path = (n: { x: number; y: number; side: string }) => {
   return `M${cx},${cy} C${mx},${cy} ${mx},${n.y} ${ex},${n.y}`;
 };
 ---
-<figure class={`hub hub-${tone}`} aria-label={caption ?? core.title}>
+<figure class={`hub hub-${tone}`} aria-label={caption ?? core.title} data-loop>
   {stages.map((st) => (
     <div class={`stage stage-${st.key}${compact ? ' has-compact' : ''}`} style={`--ar:${ratio(st.rows, false)};--ar-m:${ratio(st.rows, true)}`}>
       <svg class="lines" viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" aria-hidden="true">

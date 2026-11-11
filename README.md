@@ -25,14 +25,14 @@ It is a fully static site built with [Astro](https://astro.build) and deployed o
 
 ## Quick start
 
-Requires Node 20 or newer.
+Requires Node 22.23.4 or newer (Astro 7). On Vercel, set Project → Settings → Node.js Version to 22.x or 24.x.
 
 ```bash
 npm install
 npm run dev        # http://localhost:4321
 npm test           # calculator formula tests
-npm run build      # static build into dist/
-npm run preview    # serve dist/ locally
+npm run build      # build into .vercel/output/ (static pages + the CMS function)
+# open http://localhost:4321/keystatic during `npm run dev` to edit content in the CMS
 ```
 
 `npm run dev` and `npm run build` first copy the font files out of the installed `@fontsource` packages into `public/fonts/` (see `scripts/copy-fonts.mjs`). The copies are git-ignored.
@@ -41,11 +41,13 @@ npm run preview    # serve dist/ locally
 
 ```
 mokshai-site/
-├── astro.config.mjs          Astro config: site URL, redirects, sitemap, Markdown table plugin
+├── astro.config.mjs          Astro config: site URL, redirects, sitemap, Markdown table plugin, CSP, Vercel adapter
+├── keystatic.config.ts       CMS fields for articles and case studies
 ├── vercel.json               Vercel build settings, redirects, security + cache headers, noindex on *.vercel.app
 ├── package.json
 ├── scripts/
 │   ├── copy-fonts.mjs        Copies self-hosted fonts from node_modules before dev/build
+│   ├── vercel-csp-routes.mjs Post-build fix so the CSP header reaches every URL
 │   └── build-templates.py    Regenerates the Word templates in public/templates/ (needs python-docx)
 ├── public/                   Served as-is
 │   ├── favicon.svg, apple-touch-icon.png, logo-wordmark.svg, logo.svg
@@ -55,7 +57,7 @@ mokshai-site/
 │   └── .htaccess, _redirects, _headers   Equivalents of vercel.json for Apache / Netlify / Cloudflare
 ├── src/
 │   ├── site.config.ts        Single source of truth: company facts, nav, services, tag IDs, env-driven URLs
-│   ├── content.config.ts     Content collection schemas (insights, pages)
+│   ├── content.config.ts     Content collection schemas (insights, case studies, pages)
 │   ├── content/
 │   │   ├── insights/*.md     Articles (served at the site root to keep old WordPress URLs)
 │   │   └── pages/privacy-policy.md

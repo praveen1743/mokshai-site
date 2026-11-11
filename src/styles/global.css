@@ -74,6 +74,8 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 [hidden] { display: none !important; }
+/* Set by the [data-loop] observer in Base.astro while an animation is off screen. */
+.anim-paused, .anim-paused * { animation-play-state: paused !important; }
 html { -webkit-text-size-adjust: 100%; scroll-padding-top: 96px; }
 body { margin: 0; background: var(--paper); color: var(--ink); font: 400 var(--t-md)/1.65 var(--f-body); text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; }
 img, svg { max-width: 100%; height: auto; display: block; }

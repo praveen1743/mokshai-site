@@ -3,8 +3,11 @@ import { getCollection, type CollectionEntry } from 'astro:content';
 
 export type Post = CollectionEntry<'insights'>;
 
+/** Drafts show in `npm run dev` (and the CMS) but never in a production build. */
+export const isPublished = (p: { data: { draft: boolean } }) => import.meta.env.DEV || !p.data.draft;
+
 export async function allPosts(): Promise<Post[]> {
-  return (await getCollection('insights')).sort((a, b) => +b.data.published - +a.data.published);
+  return (await getCollection('insights', isPublished)).sort((a, b) => +b.data.published - +a.data.published);
 }
 
 /** Related articles: same topic first, then same audience, then newest. */
