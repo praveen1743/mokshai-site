@@ -4,6 +4,7 @@ import Arrow from '../components/Arrow.astro';
 import Icon from '../components/Icon.astro';
 import HexField from '../components/HexField.astro';
 import Hero3D from '../components/scenes/Hero3D.astro';
+import HeroSpline from '../components/scenes/HeroSpline.astro';
 import Faq from '../components/Faq.astro';
 import CtaBand from '../components/CtaBand.astro';
 import FounderVideo from '../components/FounderVideo.astro';
@@ -31,7 +32,8 @@ const faqs = [
   schema={[faq(faqs), videoObject(introVideo)]}
 >
   <!-- HERO: the only section with ambient lighting -->
-  <section class="hero dark glow">
+  <section class="hero dark glow" data-spotlight>
+    <div class="spot" aria-hidden="true"></div>
     <div class="container hero-grid">
       <div class="hero-copy">
         <h1>AI agents for any business, <span class="grad-text">checked by a human</span></h1>
@@ -44,7 +46,7 @@ const faqs = [
       </div>
       <div class="hero-visual">
         <HexField class="hero-hex" />
-        <Hero3D />
+        {site.heroSpline.scene && site.heroSpline.poster ? <HeroSpline /> : <Hero3D />}
       </div>
     </div>
   </section>
@@ -169,6 +171,11 @@ const faqs = [
   .hero-meta li { white-space: nowrap; }
   .hero-meta li:last-child { color: var(--green-on-dark); }
   .hero-visual { position: relative; isolation: isolate; }
+  /* Cursor spotlight: a soft logo-blue light that follows the pointer across the hero. */
+  .spot { position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: 0; transition: opacity .4s var(--ease);
+    background: radial-gradient(520px circle at var(--mx, 50%) var(--my, 50%), rgba(140, 194, 247, .11), rgba(95, 208, 214, .05) 40%, transparent 70%); }
+  .hero:global(.spot-on) .spot { opacity: 1; }
+  .hero-grid { position: relative; z-index: 1; }
   .hero-visual :global(.hero-hex) { width: 130%; left: -15%; top: -12%; opacity: .3; }
 
   .agent-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: 24px; }
@@ -202,3 +209,18 @@ const faqs = [
   .faq-grid { display: grid; grid-template-columns: minmax(0, .75fr) minmax(0, 1.25fr); gap: clamp(32px, 5vw, 72px); align-items: start; }
   @media (max-width: 900px) { .faq-grid { grid-template-columns: minmax(0, 1fr); } }
 </style>
+
+<script>
+  // Spotlight: only with a fine pointer and motion allowed; one style write per frame.
+  const hero = document.querySelector<HTMLElement>('[data-spotlight]');
+  if (hero && matchMedia('(pointer: fine)').matches && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    let raf = 0, x = 0, y = 0;
+    hero.addEventListener('pointermove', (e) => {
+      const r = hero.getBoundingClientRect();
+      x = e.clientX - r.left; y = e.clientY - r.top;
+      if (!raf) raf = requestAnimationFrame(() => { hero.style.setProperty('--mx', `${x}px`); hero.style.setProperty('--my', `${y}px`); raf = 0; });
+    });
+    hero.addEventListener('pointerenter', () => hero.classList.add('spot-on'));
+    hero.addEventListener('pointerleave', () => hero.classList.remove('spot-on'));
+  }
+</script>

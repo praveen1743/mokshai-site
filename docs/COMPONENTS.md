@@ -66,6 +66,7 @@ Product-style illustrations that show each page's subject. All are HTML/SVG, lab
 | `PermissionScene.astro` | Security | Agent permissions (allowed / approval / never), audit log, pause switch |
 | `CalcPreviewScene.astro` | Calculators hub | Calculator inputs and result |
 | `Hero3D.astro` + `src/scripts/hero3d.ts` | Homepage hero | Real-time three.js scene: documents flow into a glossy logo hexagon; most leave as done, one in five goes to the amber "person approves" node. three.js loads by dynamic import after first paint (its own ~150 KB gzipped chunk), pauses off screen and in background tabs, renders one still frame under reduced motion, and keeps the static SVG fallback when WebGL is unavailable. Labels are HTML pinned to scene points and appear only once placed (CLS 0) |
+| `HeroSpline.astro` | Homepage hero, when `site.heroSpline.scene` and `.poster` are set | The branded Spline robot that follows the cursor. `@splinetool/runtime` (pinned) loads by dynamic import after first paint, desktop with a fine pointer only; WebGL renderer; WebAssembly from `/spline/` (copied by `scripts/copy-spline.mjs`); pauses off screen. Everyone else sees the poster. Carries a "Made with Spline" credit. Needs `'wasm-unsafe-eval'` in the CSP script directive |
 | `CallScene.astro` | AI voice agents | Live call transcript, in-call lookup and the handoff rule |
 | `RagScene.astro` | LLM & AI integration | An in-product AI answer grounded in cited sources |
 | `LaunchScene.astro` | AI prototype to production | Launch blockers from a prototype review and their status |

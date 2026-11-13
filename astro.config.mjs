@@ -98,7 +98,7 @@ export default defineConfig({
         "default-src 'self'",
         `img-src 'self' data: blob: ${[...google.img, ...github.img].join(' ')}`,
         "font-src 'self'",
-        "media-src 'self'",
+        "media-src 'self' data:", // data: for the Spline runtime's video support check on the homepage
         `connect-src 'self' ${[...google.connect, ...github.connect, formOrigin].filter(Boolean).join(' ')}`,
         `frame-src ${google.frame.join(' ')}`,
         "object-src 'none'",
@@ -107,7 +107,9 @@ export default defineConfig({
         "frame-ancestors 'self'",
         'upgrade-insecure-requests',
       ],
-      scriptDirective: { resources: ["'self'", ...google.script] },
+      // 'wasm-unsafe-eval' lets the homepage Spline scene compile its self-hosted
+      // WebAssembly (public/spline/). It does not allow eval() of JavaScript.
+      scriptDirective: { resources: ["'self'", "'wasm-unsafe-eval'", ...google.script] },
       styleDirective: { resources: ["'self'", "'unsafe-inline'"] },
     },
   },

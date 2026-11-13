@@ -58,6 +58,13 @@ export const site = {
   googleTagIds: ['GT-PLWBBHHT', 'AW-17581749958'],
   // Set PUBLIC_FORM_ENDPOINT at build time (Formspree, Web3Forms, HubSpot, your own API).
   formEndpoint: import.meta.env.PUBLIC_FORM_ENDPOINT ?? '',
+  // Homepage hero 3D scene (Spline). Both files are self-hosted in public/3d/.
+  // While either is empty, the homepage keeps the three.js hero (Hero3D).
+  // PUBLIC_HERO_SPLINE_* env vars override these for local testing.
+  heroSpline: {
+    scene: import.meta.env.PUBLIC_HERO_SPLINE_SCENE ?? '',   // e.g. '/3d/moksh-robot.splinecode'
+    poster: import.meta.env.PUBLIC_HERO_SPLINE_POSTER ?? '', // e.g. '/3d/moksh-robot-poster.webp' (1200×1200)
+  },
   // Optional scheduling link (Cal.com, Calendly, HubSpot meetings).
   bookingUrl: import.meta.env.PUBLIC_BOOKING_URL ?? '',
 };

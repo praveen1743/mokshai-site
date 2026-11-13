@@ -4,8 +4,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "node scripts/copy-fonts.mjs && astro dev",
-    "build": "node scripts/copy-fonts.mjs && astro build && node scripts/vercel-csp-routes.mjs",
+    "dev": "node scripts/copy-fonts.mjs && node scripts/copy-spline.mjs && astro dev",
+    "build": "node scripts/copy-fonts.mjs && node scripts/copy-spline.mjs && astro build && node scripts/vercel-csp-routes.mjs",
     "preview": "astro preview --host",
     "test": "vitest run"
   },
@@ -19,6 +19,7 @@
     "@fontsource/ibm-plex-sans": "5.3.0",
     "@keystatic/astro": "^6.0.0",
     "@keystatic/core": "^0.6.9",
+    "@splinetool/runtime": "2.0.121",
     "astro": "^7.4.10",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",

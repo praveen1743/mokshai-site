@@ -4,7 +4,7 @@ Tokens live at the top of `src/styles/global.css`. Components use tokens only, w
 
 ## Principles
 
-1. **Show the work.** Illustrations depict what Moksh AI actually builds (integration maps, queues, permissions), not robots or glowing brains.
+1. **Show the work.** Illustrations depict what Moksh AI actually builds (integration maps, queues, permissions), not robots or glowing brains. One deliberate exception, chosen by the company: the homepage hero may show the branded Moksh robot (see `docs/briefs/hero-robot-spline.md`). It is ours, in the logo colours, and appears nowhere else.
 2. **The logo is the brand device, used sparingly.** Hexagons do three jobs: icon badges, step numbers and the hub core. The `HexField` background appears only in the homepage hero. Bullets, eyebrow markers, FAQ toggles and slider handles are plain shapes. No grid-line backgrounds.
 3. **Colour from the logo, used with intent.** Gradient text appears once on the site (the homepage H1). Gradients otherwise mark primary buttons, the CTA band and small accents. Ambient blue/green lighting appears only in the homepage hero.
 4. **Tinted, never plain white.** Sections alternate paper, sky, mint, wash and deep ink.
@@ -64,6 +64,7 @@ Scale: `--t-xs` 13 路 `--t-sm` 15 路 `--t-md` 17 路 `--t-lg` 20 路 `--t-xl` 24鈥
 | Pattern | Where | Rule |
 | --- | --- | --- |
 | Hover lift + gradient border | Cards | 250 ms, `transform` only |
+| Cursor spotlight | Homepage hero only | Soft radial light that follows a fine pointer; off for reduced motion |
 | 3D document flow (WebGL) | Homepage hero only (`Hero3D`) | Lazy-loaded; pauses off screen and in background tabs; one still frame under `prefers-reduced-motion`; static SVG if WebGL is unavailable |
 | Gradient shift | Primary buttons | `background-position` |
 | Scroll reveal | `.reveal` | CSS scroll-driven animation, movement only, never opacity |
