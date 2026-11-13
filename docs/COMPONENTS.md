@@ -29,7 +29,7 @@ Shell for calculator pages: page hero, the calculator (named slot `calc`), a met
 
 | Component | Purpose | Notes |
 | --- | --- | --- |
-| `Header.astro` | Sticky glass header, primary nav, "Book a call" button, mobile menu | Nav items from `site.config.ts`. Mobile menu is a real button with `aria-expanded`; Escape closes it |
+| `Header.astro` | Sticky glass header, primary nav, "Book a call" button, mobile menu | Nav items from `site.config.ts` (`NavItem`: a link, or a group with `children`). A group renders on desktop as the "We support" disclosure: a `<button aria-expanded aria-controls>` toggling a solid (not glass) panel; click, Enter or Space opens it; Escape returns focus to the button; clicking or tabbing away closes it. The trigger shows the current state when any child page is active. On mobile a group is a labelled sub-list, not a second disclosure. Mobile menu is a real button with `aria-expanded`; Escape closes it. Add a segment to "We support" only when it has its own page |
 | `Footer.astro` | Brand blurb, site and service links, both offices, Moksh Group links, legal line | All facts from `site.config.ts` |
 | `FounderVideo.astro` | CEO introduction: vertical video (no preload, poster only), name, role, LinkedIn, two quotes and a transcript. Data in `lib/introVideo.ts` and `site.leadership` | `heading?`, `id?`, `transcriptOpen?`. Used on the homepage (after the hero) and `/about/#leadership` |
 | `CtaBand.astro` | Closing call to action on flat ink, directly above the footer so the two read as one dark area | Props: `title`, `text`, `secondaryHref`, `secondaryLabel` |

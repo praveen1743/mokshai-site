@@ -8,7 +8,9 @@ export const site = {
   legalName: 'Moksh Infotech Pvt Ltd',
   cin: 'U72501GJ2022PTC131216',
   description:
-    'Moksh AI builds AI agents and automation for managed service providers and operations-heavy businesses, with engineers keeping every decision that matters.',
+    'Moksh AI builds AI agents and automation for businesses worldwide, inside the tools they already use, with a person checking the work before anything goes out.',
+  // Confirmed by the company (13 Nov 2026): support is staffed around the clock.
+  supportHours: '24/7',
   email: 'info@mokshtech.net', // CONFIRM: old schema used info@mokshai.net
   offices: [
     {
@@ -59,9 +61,19 @@ export const site = {
   bookingUrl: import.meta.env.PUBLIC_BOOKING_URL ?? '',
 };
 
-export const nav = [
-  { label: 'For MSPs', href: '/msp/' },
-  { label: 'For operations', href: '/operations/' },
+export type NavLink = { label: string; href: string; note?: string };
+export type NavItem = NavLink | { label: string; children: NavLink[] };
+
+// "We support" lists a segment only when it has its own page behind it.
+export const nav: NavItem[] = [
+  {
+    label: 'We support',
+    children: [
+      { label: 'Managed service providers', href: '/msp/', note: 'Tickets, alerts and help desk' },
+      { label: 'Manufacturing & operations', href: '/operations/', note: 'Quoting, intake and back office' },
+      { label: 'Not sure where AI fits?', href: '/tools/ai-readiness-scorecard/', note: 'Take the readiness scorecard' },
+    ],
+  },
   { label: 'Services', href: '/services/' },
   { label: 'Calculators', href: '/tools/' },
   { label: 'Insights', href: '/insights/' },

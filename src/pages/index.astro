@@ -10,7 +10,7 @@ import Faq from '../components/Faq.astro';
 import CtaBand from '../components/CtaBand.astro';
 import FounderVideo from '../components/FounderVideo.astro';
 import { introVideo } from '../lib/introVideo';
-import { services } from '../site.config';
+import { services, site } from '../site.config';
 import { faq, videoObject } from '../lib/schema';
 import { tools } from '../lib/tools';
 import { allPosts, featuredPost, audienceLabel, readingMinutes } from '../lib/insights';
@@ -20,36 +20,36 @@ const posts = await allPosts();
 const featured = featuredPost(posts);
 const morePosts = posts.filter((p) => p.id !== featured?.id).slice(0, 4);
 const otherTools = tools.filter((t) => t.slug !== 'msp-ticket-roi');
-// Systems named here must be ones Moksh AI can build on today. Confirm before launch.
-const systems = ['ConnectWise', 'Autotask', 'HaloPSA', 'NinjaOne', 'Microsoft 365', 'Your ERP'];
+// Categories of system, not brand names: brand names live on the "We support" pages.
+const systems = ['Email', 'Microsoft 365', 'Google Workspace', 'CRM', 'Accounting', 'Helpdesk & PSA', 'ERP'];
 
 const faqs = [
-  { q: 'What does Moksh AI do?', a: 'We design, build and run AI agents and automation for managed service providers and operations-heavy businesses. The agents work inside the tools you already use, take on repetitive work such as ticket triage, alert filtering and document preparation, and hand anything outside their limits to a person with the context attached.' },
-  { q: 'Will AI agents replace our technicians?', a: 'No. Agents take the repetitive layer of the work. Engineers stay responsible for diagnosis, security-sensitive actions, complex cases and client relationships. What changes is how your team spends its day.' },
-  { q: 'Which tools do your agents work with?', a: 'Agents are built on the APIs of the systems you already run, typically your PSA or ITSM, RMM, Microsoft 365 and line-of-business software. We do not ask you to replace your stack. On the first call we review your tools and tell you plainly whether an agent can work with them.' },
-  { q: 'Are AI agents secure?', a: 'They can be, when they are configured properly. We scope each agent to the minimum access it needs, log every action it takes, keep client data separated, and route security-sensitive actions to an engineer for approval. See our security page for the questions we answer before any build.' },
+  { q: 'What does Moksh AI do?', a: 'We design, build and run AI agents and automation for businesses of any size and industry, anywhere in the world. The agents work inside the tools you already use, take on repetitive work such as answering routine requests, reading documents, updating records and preparing reports, and hand anything outside their limits to a person with the context attached.' },
+  { q: 'Will AI agents replace our staff?', a: 'No. Agents take the repetitive layer of the work. Your people stay responsible for judgement calls, sensitive actions, complex cases and customer relationships. What changes is how your team spends its day.' },
+  { q: 'Which tools do your agents work with?', a: 'Agents are built on the APIs of the systems you already run, such as email, Microsoft 365 or Google Workspace, your CRM, accounting software, helpdesk or ERP. We do not ask you to replace your stack. On the first call we review your tools and tell you plainly whether an agent can work with them.' },
+  { q: 'Are AI agents secure?', a: 'They can be, when they are configured properly. We scope each agent to the minimum access it needs, log every action it takes, keep client data separated, and route sensitive actions to a person for approval. See our security page for the questions we answer before any build.' },
   { q: 'How does an engagement start?', a: 'With a short discovery on one workflow. We map how the work runs today, agree the baseline and the metric a pilot will be judged on, and give you a ranked list of what is worth automating. You decide whether to pilot.' },
-  { q: 'Where is the Moksh AI team?', a: 'Moksh AI is the AI practice of Moksh Infotech Pvt Ltd. We contract from our US office in Lake Hiawatha, New Jersey, and our delivery team works from Ahmedabad, India.' },
+  { q: 'Where is the Moksh AI team, and who do you work with?', a: `We work with clients worldwide. Moksh AI is the AI practice of Moksh Infotech Pvt Ltd: we contract from our US office in Lake Hiawatha, New Jersey, our delivery team works from Ahmedabad, India, and support is available ${site.supportHours}.` },
 ];
 ---
 <Base
-  title="AI Agents for MSPs & Operations Teams | Moksh AI"
-  description="Moksh AI builds AI agents that triage tickets, filter alerts and prepare routine work inside your PSA, RMM and Microsoft 365, while your engineers keep every decision."
+  title="AI Agents & Automation for Any Business | Moksh AI"
+  description={`Moksh AI builds AI agents and automation for businesses worldwide, inside the tools you already use, with a person checking the work. Support available ${site.supportHours}.`}
   schema={[faq(faqs), videoObject(introVideo)]}
 >
   <!-- HERO: the only section with ambient lighting -->
   <section class="hero dark glow">
     <div class="container hero-grid">
       <div class="hero-copy">
-        <span class="eyebrow">AI agents for MSPs and operations teams</span>
-        <h1>AI agents that take the routine work <span class="grad-text">out of your queue</span></h1>
-        <p class="lede">Moksh AI builds agents that work inside your PSA, RMM, Microsoft 365 and business systems. They triage, prepare and close repetitive tickets, alerts and requests within limits you set, and hand everything else to an engineer with the context attached.</p>
+        <span class="eyebrow">AI agents and automation, worldwide</span>
+        <h1>AI agents and automation for any business, built into the tools you already use and <span class="grad-text">checked by a human</span></h1>
+        <p class="lede">Moksh AI builds agents that answer routine requests, read documents, update records and prepare work inside your email, CRM, accounting, helpdesk and business systems. They work within limits you set and hand everything else to a person with the context attached. We work with teams worldwide, with support available {site.supportHours}.</p>
         <div class="btn-row">
           <a class="btn btn-primary" href="/book/">Book a strategy call <Arrow /></a>
-          <a class="btn btn-secondary" href="#estimate">Estimate your ticket savings</a>
+          <a class="btn btn-secondary" href="/tools/ai-readiness-scorecard/">Take the AI readiness scorecard</a>
         </div>
         <div class="hero-systems">
-          <p class="hs-label">Built on the APIs you already run</p>
+          <p class="hs-label">Works with the systems you already run</p>
           <ul role="list">{systems.map((x) => <li>{x}</li>)}</ul>
         </div>
       </div>
@@ -59,19 +59,19 @@ const faqs = [
           core={{ title: 'Moksh agent', sub: 'your rules, your stack' }}
           left={[
             { label: 'Email', sub: 'requests in', icon: 'inbox' },
-            { label: 'PSA / ITSM', sub: 'tickets', icon: 'ticket' },
-            { label: 'RMM', sub: 'alerts', icon: 'alert' },
+            { label: 'Helpdesk', sub: 'tickets', icon: 'ticket' },
+            { label: 'Documents', sub: 'invoices, forms', icon: 'doc' },
             { label: 'Microsoft 365', sub: 'users', icon: 'people' },
           ]}
           right={[
-            { label: 'ERP', sub: 'jobs, orders', icon: 'database' },
-            { label: 'Docs & KB', sub: 'past fixes', icon: 'doc' },
+            { label: 'CRM & ERP', sub: 'records, orders', icon: 'database' },
+            { label: 'Knowledge base', sub: 'past answers', icon: 'stack' },
             { label: 'Teams / Slack', sub: 'updates', icon: 'quote' },
-            { label: 'Engineer', sub: 'approves', icon: 'shield', human: true },
+            { label: 'Your team', sub: 'approves', icon: 'shield', human: true },
           ]}
           compact={{
-            left: [{ label: 'PSA', icon: 'ticket' }, { label: 'RMM', icon: 'alert' }],
-            right: [{ label: 'Docs', icon: 'doc' }, { label: 'Engineer', icon: 'shield', human: true }],
+            left: [{ label: 'Email', icon: 'inbox' }, { label: 'Helpdesk', icon: 'ticket' }],
+            right: [{ label: 'Records', icon: 'database' }, { label: 'Your team', icon: 'shield', human: true }],
           }}
           steps={['Observe', 'Decide', 'Act', 'Hand off']}
           caption="Illustrative: one agent connected to the systems you already run."
@@ -88,7 +88,7 @@ const faqs = [
   <!-- WHO IT'S FOR: two plain routes, no cards -->
   <section class="section">
     <div class="container">
-      <h2 class="paths-h reveal">Built for MSPs and operations-heavy teams</h2>
+      <h2 class="paths-h reveal">Industries we already support</h2>
       <div class="paths">
         <a class="path reveal" href="/msp/">
           <span class="path-top"><span class="hexi"><Icon name="ticket" /></span><span class="tag">Managed service providers</span></span>
@@ -111,7 +111,7 @@ const faqs = [
     <div class="container model">
       <div class="model-copy reveal">
         <h2 class="statement">Every real decision belongs to a person</h2>
-        <p class="muted">The agent takes the repetitive layer. Anything that needs judgement, carries security risk or touches a client relationship goes to an engineer, with the context already attached.</p>
+        <p class="muted">The agent takes the repetitive layer. Anything that needs judgement, carries security risk or touches a customer relationship goes to a person on your team, with the context already attached.</p>
         <p class="small-link">The rule behind every agent we build. Read <a href="/human-in-the-loop-ai-approval-design/">how we design approval steps</a>.</p>
       </div>
       <div class="reveal"><SplitTable /></div>
@@ -240,7 +240,8 @@ const faqs = [
   .hero-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: clamp(36px, 5vw, 80px); align-items: center; }
   @media (max-width: 980px) { .hero-grid { grid-template-columns: minmax(0, 1fr); } }
   .hero-copy { display: grid; gap: 26px; position: relative; z-index: 1; }
-  .hero h1 { color: #fff; max-width: 15ch; }
+  /* The headline is a full sentence, so it steps down one size and widens to keep the lede above the fold. */
+  .hero h1 { color: #fff; max-width: 22ch; font-size: var(--t-2xl); }
   .hero-visual { position: relative; isolation: isolate; }
   .hero-visual :global(.hero-hex) { width: 130%; left: -15%; top: -12%; opacity: .55; }
   .hero-systems { margin-top: 8px; padding-top: 22px; border-top: 1px solid rgba(255, 255, 255, .12); display: grid; gap: 12px; }

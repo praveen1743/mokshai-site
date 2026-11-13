@@ -32,8 +32,9 @@ export function organization() {
       areaServed: o.country,
       availableLanguage: ['en'],
     })),
-    areaServed: [{ '@type': 'Country', name: 'United States' }],
+    areaServed: 'Worldwide',
     knowsAbout: [
+      'AI agents for business',
       'AI agents for managed service providers',
       'IT service management automation',
       'AI strategy consulting',
@@ -88,7 +89,7 @@ export function service(s: { name: string; path: string; description: string; se
     serviceType: s.serviceType,
     description: s.description,
     provider: { '@id': orgId },
-    areaServed: { '@type': 'Country', name: 'United States' },
+    areaServed: 'Worldwide',
   };
 }
 

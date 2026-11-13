@@ -3,6 +3,7 @@ import { nav } from '../site.config';
 import Arrow from './Arrow.astro';
 const path = Astro.url.pathname;
 const isActive = (href: string) => path === href || (href !== '/' && path.startsWith(href));
+const slug = (label: string) => label.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 ---
 <header class="site-header">
   <div class="container bar">
@@ -11,7 +12,29 @@ const isActive = (href: string) => path === href || (href !== '/' && path.starts
     </a>
     <nav class="primary" aria-label="Main">
       <ul>
-        {nav.map((n) => (
+        {nav.map((n) => 'children' in n ? (
+          <li class="has-menu">
+            <button
+              class:list={['menu-trigger', { 'is-current': n.children.some((c) => isActive(c.href)) }]}
+              type="button"
+              aria-expanded="false"
+              aria-controls={`menu-${slug(n.label)}`}
+            >
+              {n.label}
+              <svg class="chev" viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <ul id={`menu-${slug(n.label)}`} class="submenu" hidden>
+              {n.children.map((c) => (
+                <li>
+                  <a href={c.href} aria-current={isActive(c.href) ? 'page' : undefined}>
+                    <span class="sm-label">{c.label}</span>
+                    {c.note && <span class="sm-note">{c.note}</span>}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </li>
+        ) : (
           <li><a href={n.href} aria-current={isActive(n.href) ? 'page' : undefined}>{n.label}</a></li>
         ))}
       </ul>
@@ -27,7 +50,16 @@ const isActive = (href: string) => path === href || (href !== '/' && path.starts
   <div id="mobile-nav" class="mobile-nav" hidden>
     <nav class="container" aria-label="Mobile">
       <ul>
-        {nav.map((n) => (<li><a href={n.href} aria-current={isActive(n.href) ? 'page' : undefined}>{n.label}</a></li>))}
+        {nav.map((n) => 'children' in n ? (
+          <li class="m-group">
+            <span class="tag m-group-label" id={`m-${slug(n.label)}`}>{n.label}</span>
+            <ul aria-labelledby={`m-${slug(n.label)}`}>
+              {n.children.map((c) => (<li><a href={c.href} aria-current={isActive(c.href) ? 'page' : undefined}>{c.label}</a></li>))}
+            </ul>
+          </li>
+        ) : (
+          <li><a href={n.href} aria-current={isActive(n.href) ? 'page' : undefined}>{n.label}</a></li>
+        ))}
       </ul>
       <a class="btn btn-primary" href="/book/">Book a strategy call <Arrow /></a>
     </nav>
@@ -42,9 +74,18 @@ const isActive = (href: string) => path === href || (href !== '/' && path.starts
   .brand img { width: 128px; height: auto; }
   .primary { flex: 1; }
   .primary ul { display: flex; gap: 4px; list-style: none; margin: 0; padding: 0; }
-  .primary a { display: inline-flex; align-items: center; min-height: 40px; padding: 0 14px; font: 500 var(--t-sm)/1 var(--f-body); color: var(--ink); text-decoration: none; border-radius: 999px; position: relative; transition: background-color .2s var(--ease), color .2s var(--ease); }
-  .primary a:hover { color: var(--blue-700); background: var(--sky); }
-  .primary a[aria-current='page'] { background: linear-gradient(90deg, var(--sky), var(--mint)); color: var(--blue-700); }
+  .primary a, .menu-trigger { display: inline-flex; align-items: center; min-height: 40px; padding: 0 14px; font: 500 var(--t-sm)/1 var(--f-body); color: var(--ink); text-decoration: none; border-radius: 999px; position: relative; transition: background-color .2s var(--ease), color .2s var(--ease); }
+  .primary a:hover, .menu-trigger:hover { color: var(--blue-700); background: var(--sky); }
+  .primary a[aria-current='page'], .menu-trigger.is-current { background: linear-gradient(90deg, var(--sky), var(--mint)); color: var(--blue-700); }
+  .menu-trigger { gap: 6px; border: 0; background: transparent; cursor: pointer; }
+  .menu-trigger[aria-expanded='true'] { color: var(--blue-700); background: var(--sky); }
+  .chev { transition: transform .2s var(--ease); }
+  .menu-trigger[aria-expanded='true'] .chev { transform: rotate(180deg); }
+  .has-menu { position: relative; }
+  .primary .submenu { position: absolute; top: calc(100% + 10px); left: 0; z-index: 60; display: grid; gap: 2px; min-width: 300px; padding: 8px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-2); }
+  .primary .submenu a { display: grid; gap: 4px; min-height: 44px; padding: 10px 14px; border-radius: var(--radius-sm); line-height: 1.3; }
+  .sm-label { font-weight: 600; }
+  .sm-note { font-size: var(--t-xs); color: var(--muted); font-weight: 400; }
   .actions { display: flex; align-items: center; gap: 8px; margin-left: auto; }
   .book { min-height: 44px; padding: 10px 18px; }
   .menu-btn { display: none; width: 44px; height: 44px; border: 1px solid var(--line-strong); border-radius: 999px; background: var(--surface); color: var(--ink); cursor: pointer; align-items: center; justify-content: center; }
@@ -56,6 +97,11 @@ const isActive = (href: string) => path === href || (href !== '/' && path.starts
   .mobile-nav ul { list-style: none; margin: 0 0 16px; padding: 0; }
   .mobile-nav li a { display: flex; align-items: center; min-height: 52px; font: 600 var(--t-lg)/1 var(--f-display); font-stretch: 90%; color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--line); }
   .mobile-nav li a[aria-current='page'] { color: var(--blue-700); }
+  .m-group { padding-top: 16px; border-bottom: 1px solid var(--line); }
+  .m-group-label { display: block; padding-bottom: 4px; }
+  .mobile-nav .m-group ul { margin: 0; }
+  .mobile-nav .m-group li a { padding-left: 16px; font-size: var(--t-md); min-height: 48px; }
+  .mobile-nav .m-group li:last-child a { border-bottom: 0; }
   @media (max-width: 1080px) {
     .primary { display: none; }
     .menu-btn { display: inline-flex; }
@@ -72,12 +118,40 @@ const isActive = (href: string) => path === href || (href !== '/' && path.starts
       btn.setAttribute('aria-expanded', String(!open));
       panel.hidden = open;
     });
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && btn.getAttribute('aria-expanded') === 'true') {
-        btn.setAttribute('aria-expanded', 'false');
-        panel.hidden = true;
-        btn.focus();
-      }
-    });
   }
+
+  // Desktop "We support" disclosure: click to open, Escape or click/tab away to close.
+  const triggers = Array.from(document.querySelectorAll<HTMLButtonElement>('.menu-trigger'));
+  const menuOf = (t: HTMLButtonElement) => document.getElementById(t.getAttribute('aria-controls') ?? '');
+  const setOpen = (t: HTMLButtonElement, open: boolean) => {
+    const menu = menuOf(t);
+    if (!menu) return;
+    t.setAttribute('aria-expanded', String(open));
+    menu.hidden = !open;
+  };
+  triggers.forEach((t) => {
+    t.addEventListener('click', () => {
+      const open = t.getAttribute('aria-expanded') !== 'true';
+      triggers.forEach((o) => o !== t && setOpen(o, false));
+      setOpen(t, open);
+    });
+    t.closest('li')?.addEventListener('focusout', (e) => {
+      const next = (e as FocusEvent).relatedTarget as Node | null;
+      if (!next || !t.closest('li')?.contains(next)) setOpen(t, false);
+    });
+  });
+  document.addEventListener('click', (e) => {
+    triggers.forEach((t) => { if (!t.closest('li')?.contains(e.target as Node)) setOpen(t, false); });
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    const openTrigger = triggers.find((t) => t.getAttribute('aria-expanded') === 'true');
+    if (openTrigger) { setOpen(openTrigger, false); openTrigger.focus(); return; }
+    if (btn && panel && btn.getAttribute('aria-expanded') === 'true') {
+      btn.setAttribute('aria-expanded', 'false');
+      panel.hidden = true;
+      btn.focus();
+    }
+  });
 </script>
