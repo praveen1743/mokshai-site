@@ -65,6 +65,7 @@ Product-style illustrations that show each page's subject. All are HTML/SVG, lab
 | `ScorecardScene.astro` | How we work | Pilot scorecard: baseline, target, result, decision, stop rule |
 | `PermissionScene.astro` | Security | Agent permissions (allowed / approval / never), audit log, pause switch |
 | `CalcPreviewScene.astro` | Calculators hub | Calculator inputs and result |
+| `AgentRunScene.astro` | Homepage hero | One demo agent at work per industry (tabs): input, the agent's steps, what it flags, and the person who signs off. WAI-ARIA tabs with arrow keys; first run shown without JavaScript |
 | `CallScene.astro` | AI voice agents | Live call transcript, in-call lookup and the handoff rule |
 | `RagScene.astro` | LLM & AI integration | An in-product AI answer grounded in cited sources |
 | `LaunchScene.astro` | AI prototype to production | Launch blockers from a prototype review and their status |
