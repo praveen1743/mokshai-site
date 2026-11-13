@@ -66,7 +66,7 @@ export const industries: Industry[] = [
     seoTitle: 'AI Agents for Fintech & Insurance: Claims, Research, Compliance',
     description: 'AI agents for fintech and insurance teams: claims intake and validation, financial research and reasoning, document checks, compliance monitoring and customer support, with every decision reviewed by a person.',
     lede: 'Agents that read the documents, check them against your rules and prepare the decision, so analysts, underwriters and claims handlers spend their time deciding.',
-    answer: 'In fintech and insurance the strongest early use of AI is preparing decisions, not making them: extracting data from claims and applications, checking it against policy and compliance rules, gathering market data and news for an analyst, and routing each case to the right person with the evidence attached. Every agent we build here logs what it read and why it flagged something, and a person approves anything that moves money or changes a customer\'s position.',
+    answer: 'In fintech and insurance the strongest early use of AI is preparing the decisions people make: extracting data from claims and applications, checking it against policy and compliance rules, gathering market data and news for an analyst, and routing each case to the right person with the evidence attached. Every agent we build here logs what it read and why it flagged something, and a person approves anything that moves money or changes a customer\'s position.',
     tasks: [
       { t: 'Claims intake and validation', d: 'Extract data from claim documents, check it against policy rules, and route to approval or review.' },
       { t: 'Financial research', d: 'Collect market data, filings and news for a ticker or company and write structured notes for an analyst.' },
@@ -117,7 +117,7 @@ export const industries: Industry[] = [
     seoTitle: 'AI Agents for Real Estate & Property Management',
     description: 'AI agents for brokers, agents and property managers: lead follow-up, viewing scheduling, lease and contract review, tenant maintenance requests and listing descriptions, inside the CRM and tools you already use.',
     lede: 'Answer every enquiry, book viewings, read leases and log tenant requests without adding staff, and keep people on the conversations that close deals.',
-    answer: 'Real estate teams win or lose on response time and lose hours to paperwork. AI agents can reply to new enquiries within minutes, qualify them and book viewings in your calendar, read leases and contracts to pull out dates and obligations, and turn tenant emails and calls into maintenance tickets. Brokers, agents and property managers keep negotiations, pricing and anything that needs judgement.',
+    answer: 'Real estate teams win or lose on response time and lose hours to paperwork. AI agents can reply to new enquiries as they arrive, qualify them and book viewings in your calendar, read leases and contracts to pull out dates and obligations, and turn tenant emails and calls into maintenance tickets. Brokers, agents and property managers keep negotiations, pricing and anything that needs judgement.',
     tasks: [
       { t: 'Lead response and follow-up', d: 'Reply to portal and website enquiries, ask qualifying questions and log them in your CRM.' },
       { t: 'Viewing scheduling', d: 'Offer times, book viewings and send reminders and directions.' },

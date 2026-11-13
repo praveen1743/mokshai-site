@@ -56,7 +56,7 @@ export const agents: Agent[] = [
     name: 'E-commerce personal shopper',
     industry: 'ecommerce',
     summary: 'A shopping assistant that understands plain-language requests, searches the product catalogue and returns ranked recommendations with the reasons for each.',
-    does: ['Understands requests like "a light laptop under $1,000"', 'Searches the catalogue by meaning, not keywords', 'Explains why each product matches'],
+    does: ['Understands requests like "a light laptop under $1,000"', 'Searches the catalogue by what the shopper means', 'Explains why each product matches'],
     stack: ['LangGraph', 'Claude API', 'Vector search', 'Node.js'],
     preview: 'shop',
   },
