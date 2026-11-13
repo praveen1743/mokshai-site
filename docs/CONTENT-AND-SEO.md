@@ -6,6 +6,8 @@
 | --- | --- |
 | Company facts, nav, services list, Moksh Group companies | `src/site.config.ts` |
 | Service page copy and FAQs | `src/lib/serviceDetails.ts` |
+| Demo agents (`/agents/`, homepage, industry pages) | `src/lib/agents.ts`. List only agents the company can demo live; previews are drawings labelled "Illustrative", never screenshots or result figures |
+| Industries ("We support" menu, `/industries/`) | `src/lib/industries.ts`. Add an industry only with its own page copy, tasks and FAQs |
 | Page copy | the page's `.astro` file in `src/pages/` |
 | Articles | `src/content/insights/<slug>.md` (editable in the CMS at `/keystatic`) |
 | Case studies | `src/content/case-studies/<slug>.md` (editable in the CMS) |

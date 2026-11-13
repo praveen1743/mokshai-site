@@ -25,9 +25,12 @@ Vercel, from `main`. Settings live in `vercel.json`; keep `public/.htaccess` and
 - `keystatic.config.ts`: CMS fields. A new frontmatter field must be added here and in `src/content.config.ts`.
 - `src/content/case-studies/*.md`: case studies, created by the team in the CMS; `draft: true` until reviewed.
 - `src/components/scenes/`: hero illustrations, one per page topic. Pass them to `PageHero` via `slot="visual"`.
+- `src/lib/agents.ts`: demo agents shown on `/agents/`, the homepage and industry pages. Only agents the company can demo live; previews (`components/agents/AgentPreview.astro`) are labelled illustrations with no result figures.
+- `src/lib/industries.ts`: the "We support" menu and `/industries/[slug]/` pages. An industry is listed only when it has its own page.
 
 ## Design rules
 - Use the tokens at the top of `src/styles/global.css`. No new hex values in components.
+- The site is dark by default (`:root` holds the dark values). Articles and legal pages pass `theme="light"` to `Base.astro` for the light reading palette. Write components with tokens only so they work in both; `--ink` is text, `--paper` the ground, `--surface` a panel, `--ink-deep` the deepest ground.
 - Palette comes from the logo: `--blue` #2583DB and `--green` #1FA92F, bridged by `--teal`. On light backgrounds use the `-700` text variants; the raw logo colours are for decoration and dark backgrounds only.
 - Gradient text (`.grad-text`) appears once on the whole site: the homepage H1. All other headings are solid ink. `--grad-deep` is for primary buttons; `--grad` for small decorative accents. The closing CTA (`CtaBand`) is flat ink and runs straight into the footer; do not put it back in a gradient card.
 - Ambient lighting (`.glow`) is used only in the homepage hero. Every other section is a flat tint or flat ink. One exception: the static logo-colour light behind the footer glass panel.
@@ -50,6 +53,7 @@ Vercel, from `main`. Settings live in `vercel.json`; keep `public/.htaccess` and
 - Banned phrasing: "unlock the potential", "seamless", "elevate", "empower", "cutting-edge", "in today's competitive market", "game-changer".
 - No two-beat or contrast headlines ("The agent prepares. A person decides.", "X, not Y"). Write plain, specific statements.
 - Show the operating-model table (`SplitTable`) only on the homepage and audience pages, not on every page.
+- Never copy another company's copy, prices, case-study figures or screenshots, even when a person shares them as a reference. Use references for structure only.
 - Answer-first: the first paragraph of a service page or article answers its main question directly.
 - Every article links in its body to at least two other pages (a service, a calculator or another article), and declares `services` and `tools` in frontmatter.
 

@@ -1,0 +1,145 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import AgentCard from '../components/agents/AgentCard.astro';
+import CtaBand from '../components/CtaBand.astro';
+import Arrow from '../components/Arrow.astro';
+import { agents, agentIndustries } from '../lib/agents';
+import { breadcrumbs, faq } from '../lib/schema';
+import Faq from '../components/Faq.astro';
+
+// Only industries that have at least one agent get a filter chip.
+const filters = agentIndustries.filter((i) => agents.some((a) => a.industry === i.key));
+
+// Other agents we build to order. Plain list, no claims of results.
+const useCases = [
+  ['Tier-1 ticket triage and resolution', '/how-to-automate-tier-1-tickets-with-an-ai-agent/'],
+  ['Quote and RFQ preparation', '/automating-quote-preparation-for-fabrication-shops/'],
+  ['Invoice and purchase-order processing', '/ai-document-processing-invoices-purchase-orders/'],
+  ['Internal knowledge-base Q&A', '/services/llm-ai-integration/'],
+  ['Customer support chat and voice', '/services/ai-voice-agents/'],
+  ['Sales enquiry follow-up', '/services/custom-ai-development/'],
+  ['Compliance monitoring and alerts', '/industries/fintech/'],
+  ['Contract and document analysis', '/industries/legal/'],
+] as const;
+
+const stack = [
+  ['Orchestration', 'LangGraph, CrewAI, LlamaIndex, direct tool-calling'],
+  ['Models', 'Claude API, and other hosted or open-source models chosen per project'],
+  ['Retrieval', 'Vector search and embeddings over your documents and data'],
+  ['Data', 'PostgreSQL, your CRM, ERP, helpdesk or store platform'],
+  ['Interfaces', 'Web apps (React, Node.js), email, calendar, chat and phone'],
+  ['Controls', 'Scoped access, audit logs and human approval steps'],
+] as const;
+
+const faqs = [
+  { q: 'Are these real agents or concepts?', a: 'They are working agents we demo live on a call, using sample data. The previews on this page are drawings of each interface, not screenshots of client systems.' },
+  { q: 'Can you adapt one of these to our business?', a: 'Yes. Most projects start from a demo agent like these and are then connected to your own systems, data and approval rules.' },
+  { q: 'How do we see a demo?', a: 'Choose "Book a demo" on the agent you want to see. We set up a short call, show it working and talk through what it would need to connect to in your business.' },
+];
+---
+<Base
+  title="AI Agent Demos: Healthcare, Finance, Legal, E-commerce & Operations"
+  description="See the AI agents Moksh AI builds working before you commit: medical report insights, claims automation, financial reasoning, e-commerce shopping, email and meeting assistant, and legal document review."
+  schema={[breadcrumbs([{ name: 'AI agents', path: '/agents/' }]), faq(faqs)]}
+>
+  <PageHero
+    eyebrow="Demo agents"
+    title="AI agents you can see working before you commit"
+    lede="Each of these agents runs today and we show it live on a call. Pick the one closest to your work, see it handle real-looking cases, then talk through what it would take to connect it to your systems."
+    crumbs={[{ name: 'AI agents', href: '/agents/' }]}
+  />
+
+  <section class="section" aria-labelledby="agents-h">
+    <div class="container">
+      <h2 id="agents-h" class="sr-only">Demo agents</h2>
+      <div class="filters" role="group" aria-label="Filter agents by industry" data-agent-filter>
+        <button type="button" class="chip" aria-pressed="true" data-filter="all">All</button>
+        {filters.map((f) => (<button type="button" class="chip" aria-pressed="false" data-filter={f.key}>{f.label}</button>))}
+      </div>
+      <p class="count mono" aria-live="polite" data-agent-count>Showing all {agents.length} agents</p>
+      <div class="agent-grid">
+        {agents.map((a) => <AgentCard agent={a} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section sky" aria-labelledby="more-h">
+    <div class="container more">
+      <div class="stack-sm">
+        <span class="eyebrow">Built to order</span>
+        <h2 id="more-h">Agents we build for your workflow</h2>
+        <p class="lede">The demos show the pattern. Most projects connect a similar agent to your own systems, data and approval rules. These are the requests we see most.</p>
+        <a class="btn btn-secondary" href="/services/custom-ai-development/">Custom AI agent development <Arrow /></a>
+      </div>
+      <ul class="uses" role="list">
+        {useCases.map(([t, href]) => (<li><a href={href}>{t}</a></li>))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="stack-h">
+    <div class="container">
+      <div class="head">
+        <span class="eyebrow">What they are built with</span>
+        <h2 id="stack-h">The tools behind the demos</h2>
+      </div>
+      <dl class="stack-grid">
+        {stack.map(([k, v]) => (<div><dt>{k}</dt><dd>{v}</dd></div>))}
+      </dl>
+    </div>
+  </section>
+
+  <section class="section mint">
+    <div class="container faq-grid">
+      <div class="stack-sm">
+        <h2>About the demos</h2>
+        <p class="lede">Anything else, ask on the call.</p>
+      </div>
+      <Faq items={faqs} />
+    </div>
+  </section>
+
+  <CtaBand title="Pick an agent and see it working" text="Tell us which demo you want to see and what your team does today. We show the agent live and tell you plainly what it would take to run it on your systems." secondaryHref="/services/" secondaryLabel="See all services" />
+</Base>
+
+<style>
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .filters { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip { min-height: 44px; padding: 10px 18px; border-radius: 999px; border: 1px solid var(--line-strong); background: var(--surface); color: var(--ink); font: 500 var(--t-sm)/1 var(--f-body); cursor: pointer; transition: background-color .2s var(--ease), border-color .2s var(--ease); }
+  .chip:hover { border-color: var(--blue-700); }
+  .chip[aria-pressed='true'] { background: var(--grad-deep); border-color: transparent; color: #fff; }
+  .count { margin: 18px 0 24px; font-size: var(--t-xs); color: var(--muted); letter-spacing: .04em; }
+  .agent-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: 24px; }
+  .more { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: clamp(32px, 5vw, 72px); align-items: start; }
+  @media (max-width: 900px) { .more { grid-template-columns: minmax(0, 1fr); } }
+  .uses { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 28px; }
+  @media (max-width: 560px) { .uses { grid-template-columns: minmax(0, 1fr); } }
+  .uses a { display: flex; align-items: center; min-height: 56px; padding-block: 12px; border-bottom: 1px solid var(--line-strong); color: var(--ink); text-decoration: none; font-weight: 500; }
+  .uses a::after { content: "→"; margin-left: auto; padding-left: 12px; color: var(--teal-700); transition: transform .2s var(--ease); }
+  .uses a:hover { color: var(--blue-700); }
+  .uses a:hover::after { transform: translateX(4px); }
+  .stack-grid { margin: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid var(--line-strong); border-radius: var(--radius); overflow: hidden; }
+  @media (max-width: 820px) { .stack-grid { grid-template-columns: minmax(0, 1fr); } }
+  .stack-grid div { padding: 22px 24px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .stack-grid dt { font: 500 var(--t-xs)/1.2 var(--f-mono); letter-spacing: .09em; text-transform: uppercase; color: var(--teal-700); }
+  .stack-grid dd { margin: 10px 0 0; }
+  .faq-grid { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: clamp(28px, 5vw, 72px); align-items: start; }
+  @media (max-width: 900px) { .faq-grid { grid-template-columns: minmax(0, 1fr); } }
+</style>
+
+<script>
+  // Industry filter: every card is visible without JavaScript; this only narrows the grid.
+  const group = document.querySelector<HTMLElement>('[data-agent-filter]');
+  const count = document.querySelector<HTMLElement>('[data-agent-count]');
+  const cards = Array.from(document.querySelectorAll<HTMLElement>('.agent[data-industry]'));
+  group?.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('button[data-filter]');
+    if (!btn) return;
+    const f = btn.dataset.filter;
+    group.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+    let shown = 0;
+    cards.forEach((c) => { const on = f === 'all' || c.dataset.industry === f; c.hidden = !on; if (on) shown++; });
+    if (count) count.textContent = f === 'all' ? `Showing all ${cards.length} agents` : `Showing ${shown} of ${cards.length} agents: ${btn.textContent}`;
+  });
+</script>

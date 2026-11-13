@@ -11,6 +11,12 @@ Tokens live at the top of `src/styles/global.css`. Components use tokens only, w
 5. **Readable at rest.** Nothing is hidden waiting for scroll or JavaScript.
 6. **Vary the rhythm.** No more than two card grids per page. Use editorial lists, large statements and live components instead of yet another grid of identical cards.
 
+## Theme
+
+The site is **dark by default**: the values in `:root` are the dark palette, so `--ink` is the main text colour, `--paper` the page ground, `--surface` a raised panel and `--ink-deep` the deepest ground (`.dark` sections, calculator output, footer). Long-form reading pages (articles, privacy policy) pass `theme="light"` to `Base.astro`, which puts `.light` on `<body>`; `.light` restores the light palette below, header included. Components keep using the same token names and work in both.
+
+The contrast figures in the table below are for the light palette. On dark, `--blue-700`, `--green-700` and `--teal-700` resolve to the on-dark tints (`#8CC2F7`, `#7FDC8C`, `#5FD0D6`) and `--muted` to `#A3B6C7`, all above 7:1 on `--paper`.
+
 ## Colour
 
 | Token | Value | Use | Contrast |

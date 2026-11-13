@@ -65,6 +65,16 @@ Product-style illustrations that show each page's subject. All are HTML/SVG, lab
 | `ScorecardScene.astro` | How we work | Pilot scorecard: baseline, target, result, decision, stop rule |
 | `PermissionScene.astro` | Security | Agent permissions (allowed / approval / never), audit log, pause switch |
 | `CalcPreviewScene.astro` | Calculators hub | Calculator inputs and result |
+| `CallScene.astro` | AI voice agents | Live call transcript, in-call lookup and the handoff rule |
+| `RagScene.astro` | LLM & AI integration | An in-product AI answer grounded in cited sources |
+| `LaunchScene.astro` | AI prototype to production | Launch blockers from a prototype review and their status |
+
+## Demo agents (`components/agents/`)
+
+| Component | What it does | Notes |
+| --- | --- | --- |
+| `AgentCard.astro` | One demo agent: preview, name, industry, summary, what it does, stack chips, "Book a demo" | Props: `agent` (from `lib/agents.ts`), `headingLevel`. The card carries `data-industry` for the `/agents/` filter. "Book a demo" links to `/book/?demo=<slug>`, which prefills the request |
+| `AgentPreview.astro` | Drawn interface preview for an agent (`report`, `pipeline`, `ticker`, `shop`, `inbox`, `contract`) | Always tagged "Illustrative"; status pills only, no result figures |
 
 ## Library modules (`src/lib/`)
 

@@ -36,7 +36,7 @@ const after = rows.reduce((s, r) => s + r.after, 0);
   .legend { display: flex; gap: 16px; font-size: 11.5px; color: var(--muted); }
   .legend span { display: inline-flex; align-items: center; gap: 6px; }
   .legend i { width: 14px; height: 8px; border-radius: 4px; display: inline-block; }
-  i.now, .b.now { background: #c9d6df; } i.aft, .b.aft { background: var(--grad); }
+  i.now, .b.now { background: var(--line-strong); } i.aft, .b.aft { background: var(--grad); }
   .rows { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
   .rows li { display: grid; grid-template-columns: 120px 1fr auto; gap: 12px; align-items: center; }
   .rt { font-size: 13px; font-weight: 500; }

@@ -1,0 +1,130 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import AgentCard from '../../components/agents/AgentCard.astro';
+import Faq from '../../components/Faq.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import Arrow from '../../components/Arrow.astro';
+import Icon from '../../components/Icon.astro';
+import { industryPages, industries, type Industry } from '../../lib/industries';
+import { agentBySlug, type Agent } from '../../lib/agents';
+import { services } from '../../site.config';
+import { breadcrumbs, faq } from '../../lib/schema';
+
+export function getStaticPaths() {
+  return industryPages.map((i) => ({ params: { slug: i.slug }, props: { ind: i } }));
+}
+const { ind } = Astro.props as { ind: Industry };
+const path = ind.href;
+const demoAgents = (ind.agents ?? []).map(agentBySlug).filter(Boolean) as Agent[];
+const relServices = (ind.services ?? []).map((s) => services.find((x) => x.slug === s)).filter(Boolean) as (typeof services)[number][];
+const others = industries.filter((i) => i.slug !== ind.slug);
+const faqs = ind.faqs ?? [];
+---
+<Base
+  title={ind.seoTitle ?? ind.name}
+  description={ind.description ?? ind.note}
+  schema={[breadcrumbs([{ name: 'We support', path: '/industries/' }, { name: ind.name, path }]), ...(faqs.length ? [faq(faqs)] : [])]}
+>
+  <PageHero eyebrow={ind.name} title={ind.title ?? ind.name} lede={ind.lede} crumbs={[{ name: 'We support', href: '/industries/' }]}>
+    <div class="btn-row">
+      <a class="btn btn-primary" href="/book/">Book a strategy call <Arrow /></a>
+      {demoAgents.length > 0 && <a class="btn btn-secondary" href="#demos">See the demo agents</a>}
+    </div>
+  </PageHero>
+
+  <section class="section">
+    <div class="container answer-grid">
+      <div class="stack-sm">
+        <span class="eyebrow">In short</span>
+        <p class="answer">{ind.answer}</p>
+      </div>
+      <div>
+        <h2 class="h-sm">Where agents help first</h2>
+        <ol class="tasks" role="list">
+          {(ind.tasks ?? []).map((t, n) => (
+            <li>
+              <span class="tn mono">{String(n + 1).padStart(2, '0')}</span>
+              <span class="tt">{t.t}</span>
+              <span class="td">{t.d}</span>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  {demoAgents.length > 0 && (
+    <section class="section sky" id="demos" aria-labelledby="demos-h">
+      <div class="container">
+        <div class="row-head">
+          <div class="stack-sm">
+            <span class="eyebrow">See it working</span>
+            <h2 id="demos-h">Demo agents for {ind.name.toLowerCase()}</h2>
+          </div>
+          <a class="link-arrow" href="/agents/">All demo agents</a>
+        </div>
+        <div class="agent-grid">{demoAgents.map((a) => <AgentCard agent={a} />)}</div>
+      </div>
+    </section>
+  )}
+
+  {relServices.length > 0 && (
+    <section class="section">
+      <div class="container">
+        <h2>How we work with {ind.name.toLowerCase()} teams</h2>
+        <ul class="svc" role="list">
+          {relServices.map((s) => (
+            <li><a href={`/services/${s.slug}/`}><span class="sn">{s.name}</span><span class="sd">{s.short}</span><span class="sg" aria-hidden="true"><Arrow /></span></a></li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )}
+
+  {faqs.length > 0 && (
+    <section class="section mint">
+      <div class="container faq-grid">
+        <div class="stack-sm"><h2>Questions {ind.name.toLowerCase()} teams ask</h2><p class="lede">If yours is not here, ask it on the call.</p></div>
+        <Faq items={faqs} />
+      </div>
+    </section>
+  )}
+
+  <section class="section-tight">
+    <div class="container">
+      <p class="tag">Other industries we support</p>
+      <ul class="others" role="list">
+        {others.map((o) => (<li><a href={o.href}><span class="hexi sm soft"><Icon name={o.icon} /></span>{o.name}</a></li>))}
+      </ul>
+    </div>
+  </section>
+
+  <CtaBand title={`Start with one ${ind.nav.toLowerCase()} workflow`} />
+</Base>
+
+<style>
+  .answer-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: clamp(32px, 5vw, 80px); align-items: start; }
+  @media (max-width: 900px) { .answer-grid { grid-template-columns: minmax(0, 1fr); } }
+  .answer { font-size: var(--t-lg); line-height: 1.6; }
+  .h-sm { font-size: var(--t-xl); margin-bottom: 8px; }
+  .tasks { list-style: none; margin: 0; padding: 0; }
+  .tasks li { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 4px 12px; padding-block: 18px; border-bottom: 1px solid var(--line-strong); }
+  .tn { grid-row: span 2; color: var(--teal-700); font-size: var(--t-sm); padding-top: 2px; }
+  .tt { font-weight: 600; }
+  .td { color: var(--muted); font-size: var(--t-sm); }
+  .row-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; flex-wrap: wrap; margin-bottom: 32px; }
+  .agent-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: 24px; }
+  .svc { list-style: none; margin: 28px 0 0; padding: 0; }
+  .svc a { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.4fr) 32px; gap: 20px; align-items: baseline; padding-block: 24px; border-bottom: 1px solid var(--line-strong); color: inherit; text-decoration: none; }
+  .svc a:hover .sn { color: var(--blue-700); }
+  .sn { font: 700 var(--t-lg)/1.25 var(--f-display); font-stretch: 92%; }
+  .sd { color: var(--muted); }
+  @media (max-width: 720px) { .svc a { grid-template-columns: minmax(0, 1fr) 24px; } .sd { grid-column: 1; } }
+  .faq-grid { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: clamp(28px, 5vw, 72px); align-items: start; }
+  @media (max-width: 900px) { .faq-grid { grid-template-columns: minmax(0, 1fr); } }
+  .others { list-style: none; margin: 16px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; }
+  .others a { display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 6px 16px 6px 8px; border: 1px solid var(--line-strong); border-radius: 999px; color: var(--ink); text-decoration: none; font-weight: 500; font-size: var(--t-sm); }
+  .others a:hover { border-color: var(--blue-700); color: var(--blue-700); }
+  .others .hexi.sm { width: 30px; height: 34px; } .others .hexi.sm :global(svg) { width: 15px; height: 15px; }
+</style>

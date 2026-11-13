@@ -66,7 +66,7 @@ const counts = Object.fromEntries(topics.map((t) => [t.slug, posts.filter((p) =>
   .topics a { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; padding: 8px 16px; border: 1px solid var(--line-strong); border-radius: 999px; background: var(--surface); color: var(--ink); text-decoration: none; font-weight: 500; font-size: var(--t-sm); transition: border-color .2s var(--ease), color .2s var(--ease); }
   .topics a:hover { border-color: var(--blue-700); color: var(--blue-700); }
   .topics .mono { font-size: var(--t-xs); color: var(--muted); }
-  .feature { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: clamp(24px, 4vw, 56px); align-items: start; padding: clamp(26px, 4vw, 52px); background: var(--ink); border-radius: 18px; color: var(--on-dark); text-decoration: none; transition: transform .25s var(--ease), box-shadow .25s var(--ease); }
+  .feature { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: clamp(24px, 4vw, 56px); align-items: start; padding: clamp(26px, 4vw, 52px); background: var(--ink-deep); border: 1px solid var(--line); border-radius: 18px; color: var(--on-dark); text-decoration: none; transition: transform .25s var(--ease), box-shadow .25s var(--ease); }
   .feature:hover { transform: translateY(-2px); box-shadow: var(--shadow-2); color: var(--on-dark); }
   @media (max-width: 860px) { .feature { grid-template-columns: minmax(0, 1fr); } }
   .f-main { display: grid; gap: 14px; }

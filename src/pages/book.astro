@@ -2,6 +2,9 @@
 import Base from '../layouts/Base.astro';
 import { site } from '../site.config';
 import { breadcrumbs } from '../lib/schema';
+import { agents } from '../lib/agents';
+const teams = ['MSP / IT services', 'Small or mid-sized business', 'Manufacturing & operations', 'Fintech & insurance', 'Healthcare', 'Real estate', 'Legal & professional', 'E-commerce & retail', 'Something else'];
+const agentNames = JSON.stringify(Object.fromEntries(agents.map((a) => [a.slug, a.name])));
 const endpoint = site.formEndpoint;
 ---
 <Base title="Book a Strategy Call" description="Book a 30-minute strategy call with Moksh AI. Tell us about one workflow and get a straight answer on whether an AI agent fits, what it would touch and how a pilot would be measured." schema={[{ '@type': 'ContactPage', name: 'Book a strategy call', url: `${site.url}/book/` }, breadcrumbs([{ name: 'Book a call', path: '/book/' }])]}>
@@ -24,7 +27,7 @@ const endpoint = site.formEndpoint;
       </div>
 
       <div class="panel">
-        <form id="book-form" class="form" novalidate data-endpoint={endpoint} data-booking={site.bookingUrl} data-email={site.email}>
+        <form id="book-form" class="form" novalidate data-agents={agentNames} data-endpoint={endpoint} data-booking={site.bookingUrl} data-email={site.email}>
           <div class="pair">
             <div class="field"><label for="name">Your name</label><input class="input" id="name" name="name" autocomplete="name" required /></div>
             <div class="field"><label for="email">Work email</label><input class="input" id="email" name="email" type="email" autocomplete="email" required /></div>
@@ -36,9 +39,7 @@ const endpoint = site.formEndpoint;
           <fieldset class="field">
             <legend>What kind of team are you?</legend>
             <div class="choices">
-              <label class="choice"><input type="radio" name="team" value="MSP" required /><span>MSP / IT services</span></label>
-              <label class="choice"><input type="radio" name="team" value="Operations" /><span>Manufacturing, fabrication or trades</span></label>
-              <label class="choice"><input type="radio" name="team" value="Other" /><span>Something else</span></label>
+              {teams.map((t, i) => (<label class="choice"><input type="radio" name="team" value={t} required={i === 0} /><span>{t}</span></label>))}
             </div>
           </fieldset>
           <fieldset class="field">
@@ -73,7 +74,7 @@ const endpoint = site.formEndpoint;
 </Base>
 
 <style>
-  .book { padding-block: clamp(48px, 7vw, 96px); background: linear-gradient(160deg, #e7f1fc 0%, #eef7f6 50%, #eaf6ee 100%); }
+  .book { padding-block: clamp(48px, 7vw, 96px); background: var(--wash); }
   .grid-book { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(32px, 5vw, 80px); align-items: start; }
   @media (max-width: 960px) { .grid-book { grid-template-columns: minmax(0, 1fr); } }
   .intro h1 { font-size: var(--t-2xl); max-width: 16ch; }
@@ -114,6 +115,11 @@ const endpoint = site.formEndpoint;
       dl.append(dt, dd);
     }
   }
+  // /book/?demo=<agent-slug> from the agents page: prefill the request with that agent.
+  const demo = new URLSearchParams(location.search).get('demo');
+  const names = JSON.parse(form.dataset.agents || '{}') as Record<string, string>;
+  const wf = form.elements.namedItem('workflow') as HTMLTextAreaElement;
+  if (demo && names[demo] && !wf.value) wf.value = `I'd like a demo of the ${names[demo]}.`;
   let started = false;
   form.addEventListener('input', () => { if (!started) { started = true; track('form_start', { form: 'book' }); } }, { once: true });
 

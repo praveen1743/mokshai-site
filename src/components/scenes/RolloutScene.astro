@@ -35,7 +35,7 @@ const sessions = [
   .bars, .sess { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
   .bars li { display: grid; grid-template-columns: 130px 1fr 44px; align-items: center; gap: 12px; }
   .bt { display: grid; font-weight: 500; font-size: 13px; } .bt small { font-weight: 400; font-size: 11.5px; color: var(--muted); }
-  .track { height: 10px; border-radius: 99px; background: #e4edf2; overflow: hidden; }
+  .track { height: 10px; border-radius: 99px; background: var(--track); overflow: hidden; }
   .fill { display: block; height: 100%; border-radius: inherit; background: var(--grad); transform-origin: left; }
   @media (prefers-reduced-motion: no-preference) { .fill { animation: grow 1.4s var(--ease) both; } }
   @keyframes grow { from { transform: scaleX(0); } }

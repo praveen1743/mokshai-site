@@ -1,0 +1,101 @@
+---
+// Drawn interface preview for a demo agent. An illustration, not a screenshot:
+// no result figures, and the tag says so.
+import type { AgentPreview } from '../../lib/agents';
+interface Props { kind: AgentPreview; name: string }
+const { kind, name } = Astro.props;
+---
+<figure class="ap" aria-label={`Illustrative preview of the ${name}`}>
+  <div class="ap-bar" aria-hidden="true"><span class="d"></span><span class="d"></span><span class="d"></span><span class="ap-tag">Illustrative</span></div>
+  <div class="ap-body" aria-hidden="true">
+    {kind === 'report' && (
+      <>
+        <p class="ttl">Lab report · plain-language summary</p>
+        <ul class="rows">
+          <li><span>Vitamin D</span><span class="pill pill-wait">Low</span></li>
+          <li><span>LDL cholesterol</span><span class="pill pill-wait">High</span></li>
+          <li><span>Fasting glucose</span><span class="pill pill-ok">In range</span></li>
+        </ul>
+        <div class="spark"><i style="--h:40%"></i><i style="--h:55%"></i><i style="--h:48%"></i><i style="--h:70%"></i><i style="--h:62%"></i></div>
+      </>
+    )}
+    {kind === 'pipeline' && (
+      <>
+        <p class="ttl">Claim pipeline</p>
+        <ol class="flow">
+          <li>Ingest</li><li>Extract</li><li>Validate</li><li>Decide</li><li>Route</li>
+        </ol>
+        <ul class="rows">
+          <li><span>Claim · hospital stay</span><span class="pill pill-ok">Auto-approve</span></li>
+          <li><span>Claim · outpatient</span><span class="pill pill-wait">Human review</span></li>
+        </ul>
+      </>
+    )}
+    {kind === 'ticker' && (
+      <>
+        <p class="ttl">Ticker reasoning · analyst view</p>
+        <div class="chart"><svg viewBox="0 0 200 60" preserveAspectRatio="none"><polyline points="0,48 25,42 50,44 75,30 100,34 125,22 150,26 175,14 200,18" fill="none" stroke="currentColor" stroke-width="2" /></svg></div>
+        <ul class="rows">
+          <li><span>News sentiment</span><span class="pill pill-info">Mixed</span></li>
+          <li><span>Risk notes</span><span class="pill pill-wait">For review</span></li>
+        </ul>
+      </>
+    )}
+    {kind === 'shop' && (
+      <>
+        <p class="msg">"A light laptop for programming, good battery, under budget"</p>
+        <div class="tiles"><span></span><span></span><span></span></div>
+        <ul class="rows">
+          <li><span>Top match · why it fits</span><span class="pill pill-ok">Ranked</span></li>
+        </ul>
+      </>
+    )}
+    {kind === 'inbox' && (
+      <>
+        <p class="ttl">Inbox assistant</p>
+        <ul class="rows">
+          <li><span>Re: project timeline</span><span class="pill pill-info">Draft ready</span></li>
+          <li><span>Meeting request</span><span class="pill pill-ok">Booked</span></li>
+          <li><span>Agenda for Thursday</span><span class="pill pill-info">Generated</span></li>
+        </ul>
+        <div class="lines"><i></i><i></i><i class="s"></i></div>
+      </>
+    )}
+    {kind === 'contract' && (
+      <>
+        <p class="ttl">Contract review · findings</p>
+        <ul class="rows">
+          <li><span>Limitation of liability</span><span class="pill pill-no">High</span></li>
+          <li><span>Auto-renewal</span><span class="pill pill-wait">Medium</span></li>
+          <li><span>Governing law</span><span class="pill pill-ok">Low</span></li>
+        </ul>
+        <p class="cite mono">Cited: clause 11.2, page 7</p>
+      </>
+    )}
+  </div>
+</figure>
+<style>
+  .ap { margin: 0; border-radius: var(--radius) var(--radius) 0 0; background: var(--paper); border-bottom: 1px solid var(--line); overflow: hidden; }
+  .ap-bar { display: flex; align-items: center; gap: 6px; padding: 10px 14px; border-bottom: 1px solid var(--line); }
+  .d { width: 8px; height: 8px; border-radius: 50%; background: var(--line-strong); }
+  .ap-tag { margin-left: auto; font: 500 10px/1 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .ap-body { padding: 16px; display: grid; gap: 12px; min-height: 196px; align-content: start; font-size: 12.5px; }
+  .ttl { font: 500 11px/1.2 var(--f-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--teal-700); }
+  .rows { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+  .rows li { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 7px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+  .rows .pill { font-size: 10px; padding: 4px 7px; }
+  .spark { display: flex; align-items: flex-end; gap: 6px; height: 34px; }
+  .spark i { flex: 1; height: var(--h); border-radius: 4px 4px 0 0; background: var(--grad); opacity: .8; }
+  .flow { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; }
+  .flow li { text-align: center; padding: 8px 2px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); font-size: 10.5px; color: var(--muted); }
+  .flow li:nth-child(-n+3) { border-color: var(--teal); color: var(--ink); }
+  .chart { height: 56px; color: var(--green); padding: 4px 0; }
+  .chart svg { width: 100%; height: 100%; }
+  .msg { justify-self: end; max-width: 92%; padding: 8px 10px; border-radius: 10px; background: var(--sky); border: 1px solid var(--line); font-style: italic; }
+  .tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .tiles span { height: 46px; border-radius: 8px; border: 1px solid var(--line); background: var(--hexi-soft); }
+  .lines { display: grid; gap: 6px; }
+  .lines i { height: 6px; border-radius: 99px; background: var(--track); }
+  .lines i.s { width: 60%; }
+  .cite { font-size: 11px; color: var(--muted); }
+</style>

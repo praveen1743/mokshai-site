@@ -27,7 +27,9 @@
 File-based routing under `src/pages/`:
 
 - Static pages map one-to-one to files (`msp.astro` → `/msp/`).
-- `services/[slug].astro` generates four pages from `lib/serviceDetails.ts` via `getStaticPaths`.
+- `services/[slug].astro` generates one page per service in `lib/serviceDetails.ts` (seven) via `getStaticPaths`.
+- `agents.astro` (`/agents/`) lists the demo agents in `lib/agents.ts`, with a client-side industry filter that only narrows a grid that is complete without JavaScript.
+- `industries/index.astro` (`/industries/`) is the "We support" hub; `industries/[slug].astro` generates one page per entry in `lib/industries.ts` whose `href` starts with `/industries/`. MSPs (`/msp/`) and manufacturing & operations (`/operations/`) keep their hand-built pages.
 - `[slug].astro` at the root generates one page per article in `content/insights/`. Articles live at the root so URLs from the old WordPress site keep working without redirects.
 - `insights/[topic].astro` generates one hub page per topic in `lib/topics.ts` (`/insights/msp-automation/` etc.).
 - Internal links between articles, services, calculators and audience pages are generated from article frontmatter; see [CONTENT-AND-SEO.md](CONTENT-AND-SEO.md#internal-linking).

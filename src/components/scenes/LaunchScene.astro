@@ -1,0 +1,25 @@
+---
+// Prototype to production: the launch-blocker list from a review.
+const items = [
+  { t: 'Real login, password reset and roles', s: 'ok', l: 'Fixed' },
+  { t: 'Database rules: users see only their own data', s: 'ok', l: 'Fixed' },
+  { t: 'Payments working in live mode', s: 'wait', l: 'In progress' },
+  { t: 'Hosting on your account, your domain', s: 'info', l: 'Next' },
+  { t: 'Backups and error alerts', s: 'info', l: 'Next' },
+];
+---
+<figure class="scene launch" aria-label="Illustration: launch blockers found in a prototype review and their status">
+  <div class="scene-bar"><span class="scene-title">Prototype review · launch blockers</span><span class="scene-tag">Illustrative</span></div>
+  <div class="scene-body">
+    <ul class="bl" role="list">
+      {items.map((i) => (<li><span>{i.t}</span><span class={`pill pill-${i.s}`}>{i.l}</span></li>))}
+    </ul>
+    <p class="verdict"><span class="mono">Review verdict</span><strong>Fix, not rebuild</strong></p>
+  </div>
+</figure>
+<style>
+  .bl { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .bl li { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; font-size: 13px; }
+  .verdict { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px; border-radius: 10px; background: var(--sky); font-size: 13px; }
+  .verdict .mono { font-size: 11px; letter-spacing: .07em; text-transform: uppercase; color: var(--teal-700); }
+</style>

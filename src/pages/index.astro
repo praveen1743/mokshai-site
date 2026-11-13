@@ -11,11 +11,16 @@ import CtaBand from '../components/CtaBand.astro';
 import FounderVideo from '../components/FounderVideo.astro';
 import { introVideo } from '../lib/introVideo';
 import { services, site } from '../site.config';
+import AgentCard from '../components/agents/AgentCard.astro';
+import { agents } from '../lib/agents';
+import { industries } from '../lib/industries';
 import { faq, videoObject } from '../lib/schema';
 import { tools } from '../lib/tools';
 import { allPosts, featuredPost, audienceLabel, readingMinutes } from '../lib/insights';
 import { topicBySlug } from '../lib/topics';
 
+// One agent each from healthcare, finance and legal on the homepage; the rest live on /agents/.
+const homeAgents = ['medical-report-insights', 'financial-reasoning', 'legal-document-review'].map((slug) => agents.find((a) => a.slug === slug)!);
 const posts = await allPosts();
 const featured = featuredPost(posts);
 const morePosts = posts.filter((p) => p.id !== featured?.id).slice(0, 4);
@@ -80,30 +85,41 @@ const faqs = [
     </div>
   </section>
 
+  <!-- DEMO AGENTS: three of the agents we show on calls -->
+  <section class="section" aria-labelledby="demo-h">
+    <div class="container">
+      <div class="row-head">
+        <div class="stack-sm">
+          <span class="eyebrow">Demo agents</span>
+          <h2 id="demo-h">Agents we can show you working today</h2>
+        </div>
+        <a class="link-arrow" href="/agents/">All {agents.length} demo agents</a>
+      </div>
+      <div class="agent-grid">{homeAgents.map((a) => <AgentCard agent={a} />)}</div>
+    </div>
+  </section>
+
+  <!-- WE SUPPORT: every industry with a page behind it -->
+  <section class="section sky" aria-labelledby="ind-h">
+    <div class="container">
+      <div class="row-head">
+        <div class="stack-sm">
+          <span class="eyebrow">We support</span>
+          <h2 id="ind-h">Built for teams in these industries, and any business with repeatable work</h2>
+        </div>
+        <a class="link-arrow" href="/industries/">All industries</a>
+      </div>
+      <ul class="ind-list" role="list">
+        {industries.map((i) => (
+          <li><a href={i.href}><span class="hexi sm"><Icon name={i.icon} /></span><span class="ind-t"><strong>{i.name}</strong><small>{i.note}</small></span></a></li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
   <!-- CEO VIDEO: the first real person on the site -->
   <section class="section mint">
     <div class="container"><FounderVideo /></div>
-  </section>
-
-  <!-- WHO IT'S FOR: two plain routes, no cards -->
-  <section class="section">
-    <div class="container">
-      <h2 class="paths-h reveal">Industries we already support</h2>
-      <div class="paths">
-        <a class="path reveal" href="/msp/">
-          <span class="path-top"><span class="hexi"><Icon name="ticket" /></span><span class="tag">Managed service providers</span></span>
-          <span class="path-h">Take tier-1 tickets and alert noise off your technicians</span>
-          <span class="path-p">Triage, routine resolutions, alert correlation and documentation, inside your PSA and RMM.</span>
-          <span class="link-arrow">AI for MSPs</span>
-        </a>
-        <a class="path reveal" href="/operations/">
-          <span class="path-top"><span class="hexi"><Icon name="inbox" /></span><span class="tag">Operations-heavy businesses</span></span>
-          <span class="path-h">Get hours back from quoting, intake and back-office handoffs</span>
-          <span class="path-p">Quotes from RFQs and drawings, document intake, order status and reporting across your systems.</span>
-          <span class="link-arrow">AI for operations</span>
-        </a>
-      </div>
-    </div>
   </section>
 
   <!-- STATEMENT + OPERATING MODEL -->
@@ -122,7 +138,7 @@ const faqs = [
   <section class="section">
     <div class="container">
       <div class="row-head reveal">
-        <h2>Strategy, build, rollout and cost control</h2>
+        <h2>What we build, and how we help you run it</h2>
         <a class="link-arrow" href="/services/">All services</a>
       </div>
       <ol class="svc-list" role="list">
@@ -249,14 +265,15 @@ const faqs = [
   .hero-systems ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
   .hero-systems li { font-size: var(--t-sm); font-weight: 500; color: var(--on-dark); padding: 6px 12px; border: 1px solid rgba(255, 255, 255, .16); border-radius: 999px; background: rgba(255, 255, 255, .04); }
 
-  .paths-h { max-width: 20ch; margin-bottom: clamp(28px, 4vw, 44px); }
-  .paths { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(28px, 5vw, 72px); }
-  @media (max-width: 760px) { .paths { grid-template-columns: minmax(0, 1fr); } }
-  .path { display: grid; gap: 14px; align-content: start; padding-top: 24px; border-top: 3px solid; border-image: var(--grad) 1; color: inherit; text-decoration: none; }
-  .path-top { display: flex; align-items: center; gap: 14px; }
-  .path-h { font: 700 var(--t-xl)/1.15 var(--f-display); font-stretch: 88%; letter-spacing: -0.01em; max-width: 24ch; transition: color .2s var(--ease); }
-  .path:hover .path-h { color: var(--blue-700); }
-  .path-p { color: var(--muted); max-width: 52ch; }
+  .agent-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: 24px; }
+  .ind-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0 28px; }
+  @media (max-width: 1080px) { .ind-list { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 560px) { .ind-list { grid-template-columns: minmax(0, 1fr); } }
+  .ind-list a { display: flex; align-items: center; gap: 14px; min-height: 76px; padding-block: 14px; border-bottom: 1px solid var(--line-strong); color: inherit; text-decoration: none; }
+  .ind-t { display: grid; gap: 2px; }
+  .ind-t strong { font-weight: 600; transition: color .2s var(--ease); }
+  .ind-t small { font-size: var(--t-xs); color: var(--muted); }
+  .ind-list a:hover strong { color: var(--blue-700); }
 
   .model { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: clamp(28px, 5vw, 72px); align-items: center; }
   @media (max-width: 980px) { .model { grid-template-columns: minmax(0, 1fr); } }

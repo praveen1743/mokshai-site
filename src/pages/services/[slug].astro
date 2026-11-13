@@ -8,6 +8,9 @@ import MatrixScene from '../../components/scenes/MatrixScene.astro';
 import AgentConfigScene from '../../components/scenes/AgentConfigScene.astro';
 import RolloutScene from '../../components/scenes/RolloutScene.astro';
 import SpendScene from '../../components/scenes/SpendScene.astro';
+import CallScene from '../../components/scenes/CallScene.astro';
+import LaunchScene from '../../components/scenes/LaunchScene.astro';
+import RagScene from '../../components/scenes/RagScene.astro';
 import { serviceDetails, type ServiceSlug } from '../../lib/serviceDetails';
 import { services } from '../../site.config';
 import { breadcrumbs, faq, service } from '../../lib/schema';
@@ -35,6 +38,9 @@ const reading = postsForService(await allPosts(), slug).slice(0, 4);
     {slug === 'custom-ai-development' && <AgentConfigScene slot="visual" />}
     {slug === 'ai-implementation-training' && <RolloutScene slot="visual" />}
     {slug === 'ai-cost-optimization' && <SpendScene slot="visual" />}
+    {slug === 'ai-voice-agents' && <CallScene slot="visual" />}
+    {slug === 'llm-ai-integration' && <RagScene slot="visual" />}
+    {slug === 'ai-prototype-to-production' && <LaunchScene slot="visual" />}
   </PageHero>
 
   <section class="section">

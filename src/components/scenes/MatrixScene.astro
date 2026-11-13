@@ -34,10 +34,10 @@ const items = [
   .plot { position: relative; aspect-ratio: 16 / 10; border-radius: 12px; overflow: hidden; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; border: 1px solid var(--line); }
   .q { position: relative; }
   .q span { position: absolute; font: 500 10.5px/1 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); padding: 8px; }
-  .q-start { background: linear-gradient(140deg, #dcf1e2, #e3f1fb); } .q-start span { color: var(--green-700); }
-  .q-plan { background: #f3f8fc; } .q-plan span { right: 0; }
-  .q-later { background: #f7f9f8; } .q-later span { bottom: 0; }
-  .q-skip { background: #fbfbfa; } .q-skip span { right: 0; bottom: 0; }
+  .q-start { background: var(--hexi-soft); } .q-start span { color: var(--green-700); }
+  .q-plan { background: var(--sky); } .q-plan span { right: 0; }
+  .q-later { background: var(--surface); } .q-later span { bottom: 0; }
+  .q-skip { background: var(--paper); } .q-skip span { right: 0; bottom: 0; }
   .pt { position: absolute; translate: -8px -8px; display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; white-space: nowrap; }
   .pt i { width: 15px; height: 17px; clip-path: var(--hex); background: var(--line-strong); flex: none; }
   .pt.hot i { background: var(--grad); }

@@ -1,0 +1,49 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import Icon from '../../components/Icon.astro';
+import { industries } from '../../lib/industries';
+import { breadcrumbs } from '../../lib/schema';
+---
+<Base
+  title="Industries We Support: AI Agents by Industry"
+  description="Moksh AI builds AI agents and automation for MSPs and their clients, manufacturing and operations, fintech and insurance, healthcare, real estate, legal and e-commerce teams worldwide."
+  schema={[breadcrumbs([{ name: 'We support', path: '/industries/' }])]}
+>
+  <PageHero
+    eyebrow="We support"
+    title="AI agents for the industries we know"
+    lede="We build for any business with repeatable work, and these are the industries where we already have agents, guides or demos to show. Pick yours to see where agents help first."
+    crumbs={[{ name: 'We support', href: '/industries/' }]}
+  />
+  <section class="section">
+    <div class="container">
+      <ul class="ind" role="list">
+        {industries.map((i) => (
+          <li>
+            <a href={i.href}>
+              <span class="hexi"><Icon name={i.icon} /></span>
+              <span class="in">{i.name}</span>
+              <span class="id">{i.note}</span>
+              <span class="ia" aria-hidden="true">→</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <p class="not-listed">Not listed? We work with any business that has repeatable, rules-based work. <a href="/tools/ai-readiness-scorecard/">Take the AI readiness scorecard</a> or <a href="/book/">book a call</a>.</p>
+    </div>
+  </section>
+  <CtaBand />
+</Base>
+<style>
+  .ind { list-style: none; margin: 0; padding: 0; }
+  .ind a { display: grid; grid-template-columns: 52px minmax(0, 1fr) minmax(0, 1fr) 24px; align-items: center; gap: 24px; padding-block: 20px; border-bottom: 1px solid var(--line-strong); color: inherit; text-decoration: none; }
+  .ind a:hover .in { color: var(--blue-700); }
+  .ind a:hover .ia { transform: translateX(4px); }
+  .in { font: 700 var(--t-xl)/1.2 var(--f-display); font-stretch: 90%; }
+  .id { color: var(--muted); }
+  .ia { color: var(--teal-700); transition: transform .2s var(--ease); }
+  @media (max-width: 720px) { .ind a { grid-template-columns: 52px minmax(0, 1fr) 20px; } .id { grid-column: 2; grid-row: 2; } .ia { grid-row: 1 / span 2; grid-column: 3; } }
+  .not-listed { margin-top: 32px; color: var(--muted); }
+</style>

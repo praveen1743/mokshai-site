@@ -36,7 +36,7 @@ const schema = [
   ...(d.faqs.length ? [faq(d.faqs)] : []),
 ];
 ---
-<Base title={d.title} description={d.description} ogType="article" published={d.published} updated={d.updated} schema={schema}>
+<Base title={d.title} description={d.description} ogType="article" theme="light" published={d.published} updated={d.updated} schema={schema}>
   <article>
     <header class="a-head">
       <div class="container a-grid">
@@ -99,7 +99,7 @@ const schema = [
   <CtaBand />
 </Base>
 <style>
-  .a-head { background: linear-gradient(160deg, #e7f1fc 0%, #eef7f6 50%, #eaf6ee 100%); padding-block: clamp(40px, 6vw, 72px) clamp(32px, 4vw, 48px); }
+  .a-head { background: var(--wash); padding-block: clamp(40px, 6vw, 72px) clamp(32px, 4vw, 48px); }
   /* Header and body share one grid, so the title, the body text and the
      "On this page" list line up on two edges instead of three. */
   .a-grid { display: grid; grid-template-columns: 250px minmax(0, 1fr); column-gap: clamp(32px, 5vw, 72px); }

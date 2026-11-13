@@ -1,0 +1,37 @@
+---
+import AgentPreview from './AgentPreview.astro';
+import Arrow from '../Arrow.astro';
+import { agentIndustryLabel, type Agent } from '../../lib/agents';
+interface Props { agent: Agent; headingLevel?: 'h2' | 'h3' }
+const { agent: a, headingLevel = 'h3' } = Astro.props;
+const H = headingLevel;
+---
+<article class="agent" data-industry={a.industry}>
+  <AgentPreview kind={a.preview} name={a.name} />
+  <div class="agent-body">
+    <div class="agent-top">
+      <H class="agent-name">{a.name}</H>
+      <span class="ind">{agentIndustryLabel(a.industry)}</span>
+    </div>
+    <p class="agent-sum">{a.summary}</p>
+    <ul class="does" role="list">{a.does.map((d) => <li>{d}</li>)}</ul>
+    <ul class="tech" role="list" aria-label="Built with">{a.stack.map((s) => <li>{s}</li>)}</ul>
+    <a class="btn btn-primary agent-cta" href={`/book/?demo=${a.slug}`}>Book a demo<span class="sr-only"> of the {a.name}</span> <Arrow /></a>
+  </div>
+</article>
+<style>
+  .agent { display: flex; flex-direction: column; min-width: 0; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-1); transition: border-color .2s var(--ease), transform .25s var(--ease); }
+  .agent:hover { border-color: var(--line-strong); transform: translateY(-3px); }
+  .agent-body { display: flex; flex-direction: column; gap: 14px; padding: 22px; flex: 1; }
+  .agent-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+  .agent-name { font-size: var(--t-lg); }
+  .ind { flex: none; font: 500 var(--t-xs)/1 var(--f-mono); letter-spacing: .04em; padding: 6px 10px; border-radius: 999px; border: 1px solid var(--line-strong); color: var(--teal-700); white-space: nowrap; }
+  .agent-sum { color: var(--muted); }
+  .does { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; font-size: var(--t-sm); }
+  .does li { padding-left: 18px; position: relative; }
+  .does li::before { content: ""; position: absolute; left: 0; top: .7em; width: 8px; height: 2px; background: var(--teal); }
+  .tech { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+  .tech li { font: 500 var(--t-xs)/1 var(--f-mono); padding: 7px 10px; border-radius: 999px; background: var(--sky); color: var(--muted); }
+  .agent-cta { margin-top: auto; justify-content: center; }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+</style>

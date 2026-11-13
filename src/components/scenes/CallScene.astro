@@ -1,0 +1,30 @@
+---
+// Voice agent: a live call transcript with an in-call lookup and a warm handoff.
+const lines = [
+  { who: 'Caller', t: 'Hi, I need to move my Thursday appointment.' },
+  { who: 'Agent', t: 'I can help with that. Can you confirm your date of birth?' },
+  { who: 'Caller', t: 'Twelfth of March.' },
+  { who: 'Agent', t: 'Thanks. Friday at 10:30 or Monday at 9:00 are free. Which suits you?' },
+];
+---
+<figure class="scene call" aria-label="Illustration: voice agent call transcript with a calendar lookup and a handoff rule">
+  <div class="scene-bar"><span class="scene-title">Inbound line · live call</span><span class="scene-tag">Illustrative</span></div>
+  <div class="scene-body">
+    <ol class="tx" role="list">
+      {lines.map((l) => (<li class={l.who === 'Agent' ? 'ag' : 'cl'}><span class="who mono">{l.who}</span><span>{l.t}</span></li>))}
+    </ol>
+    <div class="acts">
+      <span class="pill pill-info">Calendar · 2 slots found</span>
+      <span class="pill pill-ok">Identity checked</span>
+    </div>
+    <p class="hand"><span class="pill pill-wait">Handoff rule</span>Complaint, billing dispute or "speak to someone" → transfer with summary</p>
+  </div>
+</figure>
+<style>
+  .tx { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .tx li { display: grid; gap: 4px; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--line); font-size: 13px; max-width: 88%; }
+  .tx li.ag { justify-self: end; background: var(--sky); }
+  .who { font-size: 10.5px; letter-spacing: .07em; text-transform: uppercase; color: var(--teal-700); }
+  .acts { display: flex; flex-wrap: wrap; gap: 8px; }
+  .hand { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font-size: 12.5px; color: var(--muted); border-top: 1px dashed var(--line-strong); padding-top: 12px; }
+</style>

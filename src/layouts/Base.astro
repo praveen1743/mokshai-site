@@ -13,8 +13,10 @@ interface Props {
   noindex?: boolean;
   published?: Date;
   updated?: Date;
+  /** 'light' gives long-form reading pages (articles, legal) the light palette. */
+  theme?: 'dark' | 'light';
 }
-const { title, description, schema = [], ogType = 'website', noindex = false, published, updated } = Astro.props;
+const { title, description, schema = [], ogType = 'website', noindex = false, published, updated, theme = 'dark' } = Astro.props;
 const canonical = new URL(Astro.url.pathname, site.url).toString();
 const fullTitle = title.includes(site.name) ? title : `${title} | ${site.name}`;
 const ogImage = new URL('/og/default.jpg', site.url).toString();
@@ -87,7 +89,7 @@ const primaryTag = site.googleTagIds[0];
     }
   </script>
 </head>
-<body>
+<body class={theme === 'light' ? 'light' : undefined}>
   <a class="skip" href="#main">Skip to content</a>
   <Header />
   <main id="main">

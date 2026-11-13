@@ -1,3 +1,4 @@
+import { industries } from './lib/industries';
 // Single source of truth for company facts. Every page, the footer and the
 // JSON-LD read from here, so the entity stays consistent everywhere.
 // Values marked CONFIRM came from conflicting sources on the old site.
@@ -64,22 +65,6 @@ export const site = {
 export type NavLink = { label: string; href: string; note?: string };
 export type NavItem = NavLink | { label: string; children: NavLink[] };
 
-// "We support" lists a segment only when it has its own page behind it.
-export const nav: NavItem[] = [
-  {
-    label: 'We support',
-    children: [
-      { label: 'Managed service providers', href: '/msp/', note: 'Tickets, alerts and help desk' },
-      { label: 'Manufacturing & operations', href: '/operations/', note: 'Quoting, intake and back office' },
-      { label: 'Not sure where AI fits?', href: '/tools/ai-readiness-scorecard/', note: 'Take the readiness scorecard' },
-    ],
-  },
-  { label: 'Services', href: '/services/' },
-  { label: 'Calculators', href: '/tools/' },
-  { label: 'Insights', href: '/insights/' },
-  { label: 'About', href: '/about/' },
-];
-
 export const services = [
   {
     slug: 'ai-consulting',
@@ -89,7 +74,22 @@ export const services = [
   {
     slug: 'custom-ai-development',
     name: 'Custom AI agents & development',
-    short: 'Agents built around the tools you already run (PSA, RMM, M365, ERP), with escalation rules you set.',
+    short: 'Agents built around the tools you already run (email, CRM, helpdesk, ERP, PSA), with escalation rules you set.',
+  },
+  {
+    slug: 'ai-voice-agents',
+    name: 'AI voice agents & assistants',
+    short: 'Phone and voice assistants that answer routine calls, look things up in your systems and hand the caller to a person with a summary.',
+  },
+  {
+    slug: 'llm-ai-integration',
+    name: 'LLM & AI integration',
+    short: 'Add AI features such as summaries, document Q&A, search and chat to the product or tools you already have, without a rewrite.',
+  },
+  {
+    slug: 'ai-prototype-to-production',
+    name: 'AI prototype to production',
+    short: 'Take an AI demo or app-builder prototype and make it ready for real users: login, data security, payments, hosting and monitoring.',
   },
   {
     slug: 'ai-implementation-training',
@@ -103,5 +103,28 @@ export const services = [
   },
 ] as const;
 export type ServiceSlug = (typeof services)[number]['slug'];
+
+// "We support" lists an industry only when it has its own page behind it (src/lib/industries.ts).
+export const nav: NavItem[] = [
+  {
+    label: 'We support',
+    children: [
+      ...industries.map((i) => ({ label: i.name, href: i.href, note: i.note })),
+      { label: 'All industries', href: '/industries/', note: 'Every industry we support' },
+      { label: 'Not sure where AI fits?', href: '/tools/ai-readiness-scorecard/', note: 'Take the readiness scorecard' },
+    ],
+  },
+  {
+    label: 'Services',
+    children: [
+      ...services.map((s) => ({ label: s.name, href: `/services/${s.slug}/` })),
+      { label: 'All services and how we work', href: '/services/' },
+    ],
+  },
+  { label: 'AI agents', href: '/agents/' },
+  { label: 'Calculators', href: '/tools/' },
+  { label: 'Insights', href: '/insights/' },
+  { label: 'About', href: '/about/' },
+];
 /** Tuple of service slugs for z.enum() in content.config.ts and the Keystatic config. */
 export const serviceSlugs = services.map((s) => s.slug) as [ServiceSlug, ...ServiceSlug[]];
