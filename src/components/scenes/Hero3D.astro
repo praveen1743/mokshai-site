@@ -1,0 +1,57 @@
+---
+// Homepage hero visual: a real-time 3D scene (src/scripts/hero3d.ts).
+// Documents from several industries flow into the Moksh agent; most leave as
+// finished work, flagged ones go to a person. The static SVG below is what
+// shows before the scene loads, and stays if WebGL is unavailable.
+---
+<figure class="hero3d" data-hero3d data-loop aria-label="Illustration: documents such as claims, contracts and emails flow into a Moksh AI agent. Most leave as finished work; flagged ones go to a person who approves.">
+  <div class="h3-stage">
+    <svg class="h3-fallback" viewBox="0 0 600 600" aria-hidden="true">
+      <defs>
+        <linearGradient id="h3g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2583DB" /><stop offset=".5" stop-color="#16A3B0" /><stop offset="1" stop-color="#1FA92F" /></linearGradient>
+      </defs>
+      <g fill="none" stroke-width="2">
+        <path d="M30 170 C 160 190, 220 260, 300 300" stroke="#2583DB" opacity=".45" />
+        <path d="M30 300 C 150 300, 220 300, 300 300" stroke="#2583DB" opacity=".45" />
+        <path d="M30 430 C 160 410, 220 340, 300 300" stroke="#2583DB" opacity=".45" />
+        <path d="M300 300 C 380 260, 460 200, 570 170" stroke="#1FA92F" opacity=".5" />
+        <path d="M300 300 C 360 340, 400 400, 450 430" stroke="#F2B45C" opacity=".6" />
+      </g>
+      <polygon points="300,212 376,256 376,344 300,388 224,344 224,256" fill="url(#h3g)" />
+      <polygon points="450,404 473,417 473,443 450,456 427,443 427,417" fill="#F2B45C" />
+    </svg>
+    <span class="h3-label" data-anchor="in"><span class="long">Claims · contracts · emails · orders</span><span class="short">Claims · emails</span></span>
+    <span class="h3-label core" data-anchor="core">Moksh agent</span>
+    <span class="h3-label ok" data-anchor="done">Done</span>
+    <span class="h3-label amber" data-anchor="person">A person approves</span>
+  </div>
+</figure>
+
+<style>
+  .hero3d { margin: 0; position: relative; }
+  .h3-stage { position: relative; aspect-ratio: 1 / 1; width: 100%; overflow: hidden; }
+  @media (max-width: 760px) { .h3-stage { aspect-ratio: 4 / 3; } }
+  .h3-stage :global(.h3-canvas) { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  .h3-fallback { position: absolute; inset: 8%; width: 84%; height: 84%; }
+  .hero3d:global(.is-live) .h3-fallback { display: none; }
+  .h3-label { display: none; position: absolute; translate: -50% -50%; white-space: nowrap; pointer-events: none;
+    font: 500 11px/1 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--on-dark-muted);
+    padding: 7px 10px; border-radius: 999px; background: rgba(3, 11, 20, .55); border: 1px solid rgba(255, 255, 255, .12); }
+  .hero3d:global(.is-live) .h3-label { display: block; visibility: hidden; }
+  .hero3d:global(.labels-ready) .h3-label { visibility: visible; }
+  .h3-label.core { color: var(--on-dark); }
+  .h3-label.ok { color: var(--green-on-dark); }
+  .h3-label.amber { color: var(--amber-on-dark); }
+  .h3-label .short { display: none; }
+  @media (max-width: 760px) { .h3-label { font-size: 10px; padding: 6px 8px; } .h3-label .long { display: none; } .h3-label .short { display: inline; } }
+</style>
+
+<script>
+  // Load three.js only after the page has painted and only if WebGL exists.
+  const root = document.querySelector<HTMLElement>('[data-hero3d]');
+  const hasGL = (() => { try { const c = document.createElement('canvas'); return !!(c.getContext('webgl2') || c.getContext('webgl')); } catch { return false; } })();
+  if (root && hasGL) {
+    const go = () => import('../../scripts/hero3d').then((m) => m.mount(root)).catch(() => {});
+    if ('requestIdleCallback' in window) requestIdleCallback(go, { timeout: 1500 }); else setTimeout(go, 400);
+  }
+</script>

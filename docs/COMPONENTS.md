@@ -65,7 +65,7 @@ Product-style illustrations that show each page's subject. All are HTML/SVG, lab
 | `ScorecardScene.astro` | How we work | Pilot scorecard: baseline, target, result, decision, stop rule |
 | `PermissionScene.astro` | Security | Agent permissions (allowed / approval / never), audit log, pause switch |
 | `CalcPreviewScene.astro` | Calculators hub | Calculator inputs and result |
-| `AgentRunScene.astro` | Homepage hero | One demo agent at work per industry (tabs): input, the agent's steps, what it flags, and the person who signs off. WAI-ARIA tabs with arrow keys; first run shown without JavaScript |
+| `Hero3D.astro` + `src/scripts/hero3d.ts` | Homepage hero | Real-time three.js scene: documents flow into a glossy logo hexagon; most leave as done, one in five goes to the amber "person approves" node. three.js loads by dynamic import after first paint (its own ~150 KB gzipped chunk), pauses off screen and in background tabs, renders one still frame under reduced motion, and keeps the static SVG fallback when WebGL is unavailable. Labels are HTML pinned to scene points and appear only once placed (CLS 0) |
 | `CallScene.astro` | AI voice agents | Live call transcript, in-call lookup and the handoff rule |
 | `RagScene.astro` | LLM & AI integration | An in-product AI answer grounded in cited sources |
 | `LaunchScene.astro` | AI prototype to production | Launch blockers from a prototype review and their status |

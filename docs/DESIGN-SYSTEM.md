@@ -64,6 +64,7 @@ Scale: `--t-xs` 13 路 `--t-sm` 15 路 `--t-md` 17 路 `--t-lg` 20 路 `--t-xl` 24鈥
 | Pattern | Where | Rule |
 | --- | --- | --- |
 | Hover lift + gradient border | Cards | 250 ms, `transform` only |
+| 3D document flow (WebGL) | Homepage hero only (`Hero3D`) | Lazy-loaded; pauses off screen and in background tabs; one still frame under `prefers-reduced-motion`; static SVG if WebGL is unavailable |
 | Gradient shift | Primary buttons | `background-position` |
 | Scroll reveal | `.reveal` | CSS scroll-driven animation, movement only, never opacity |
 | Ambient | HexField (home hero only), hub pulses, marquee, queue panel | Slow, looping, paused or static with reduced motion |

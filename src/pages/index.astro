@@ -3,7 +3,7 @@ import Base from '../layouts/Base.astro';
 import Arrow from '../components/Arrow.astro';
 import Icon from '../components/Icon.astro';
 import HexField from '../components/HexField.astro';
-import AgentRunScene from '../components/scenes/AgentRunScene.astro';
+import Hero3D from '../components/scenes/Hero3D.astro';
 import Faq from '../components/Faq.astro';
 import CtaBand from '../components/CtaBand.astro';
 import FounderVideo from '../components/FounderVideo.astro';
@@ -34,17 +34,17 @@ const faqs = [
   <section class="hero dark glow">
     <div class="container hero-grid">
       <div class="hero-copy">
-        <span class="eyebrow">AI agents and automation, worldwide</span>
-        <h1>AI agents and automation for any business, built into the tools you already use and <span class="grad-text">checked by a human</span></h1>
-        <p class="lede">We build AI agents for healthcare, finance, legal, real estate, e-commerce, MSPs and operations teams worldwide. They do the reading, checking and drafting, and a person approves every decision that matters. Support is available {site.supportHours}.</p>
+        <h1>AI agents for any business, <span class="grad-text">checked by a human</span></h1>
+        <p class="lede">Agents that read, check and draft inside the tools you already use. A person approves every decision that matters.</p>
         <div class="btn-row">
           <a class="btn btn-primary" href="/book/">Book a strategy call <Arrow /></a>
           <a class="btn btn-secondary" href="/agents/">See the demo agents</a>
         </div>
+        <ul class="hero-meta mono" role="list" aria-label="Industries we support">{['Healthcare', 'Finance', 'Legal', 'Real estate', 'E-commerce', 'MSPs', 'Operations', '24/7 support'].map((x) => <li>{x}</li>)}</ul>
       </div>
       <div class="hero-visual">
         <HexField class="hero-hex" />
-        <AgentRunScene />
+        <Hero3D />
       </div>
     </div>
   </section>
@@ -163,10 +163,13 @@ const faqs = [
   .hero-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: clamp(36px, 5vw, 80px); align-items: center; }
   @media (max-width: 980px) { .hero-grid { grid-template-columns: minmax(0, 1fr); } }
   .hero-copy { display: grid; gap: 26px; position: relative; z-index: 1; }
-  /* The headline is a full sentence, so it steps down one size and widens to keep the lede above the fold. */
-  .hero h1 { color: #fff; max-width: 22ch; font-size: var(--t-2xl); }
+  .hero h1 { color: #fff; max-width: 15ch; font-size: clamp(2.4rem, 1.5rem + 3vw, 3.9rem); }
+  .hero .lede { max-width: 44ch; }
+  .hero-meta { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px 18px; max-width: 56ch; font-size: var(--t-xs); letter-spacing: .06em; text-transform: uppercase; color: var(--on-dark-muted); }
+  .hero-meta li { white-space: nowrap; }
+  .hero-meta li:last-child { color: var(--green-on-dark); }
   .hero-visual { position: relative; isolation: isolate; }
-  .hero-visual :global(.hero-hex) { width: 130%; left: -15%; top: -12%; opacity: .55; }
+  .hero-visual :global(.hero-hex) { width: 130%; left: -15%; top: -12%; opacity: .3; }
 
   .agent-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: 24px; }
   .ind-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0 28px; }
