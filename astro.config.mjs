@@ -98,8 +98,9 @@ export default defineConfig({
         "default-src 'self'",
         `img-src 'self' data: blob: ${[...google.img, ...github.img].join(' ')}`,
         "font-src 'self'",
-        "media-src 'self' data:", // data: for the Spline runtime's video support check on the homepage
-        `connect-src 'self' ${[...google.connect, ...github.connect, formOrigin].filter(Boolean).join(' ')}`,
+        "media-src 'self'",
+        // blob: lets three.js's GLTFLoader decode the homepage robot's embedded textures (same-page memory, no host).
+        `connect-src 'self' blob: ${[...google.connect, ...github.connect, formOrigin].filter(Boolean).join(' ')}`,
         `frame-src ${google.frame.join(' ')}`,
         "object-src 'none'",
         "base-uri 'self'",
@@ -107,8 +108,8 @@ export default defineConfig({
         "frame-ancestors 'self'",
         'upgrade-insecure-requests',
       ],
-      // 'wasm-unsafe-eval' lets the homepage Spline scene compile its self-hosted
-      // WebAssembly (public/spline/). It does not allow eval() of JavaScript.
+      // 'wasm-unsafe-eval' lets the homepage robot's meshopt decoder (bundled with
+      // three.js, no network) compile its WebAssembly. It does not allow eval() of JavaScript.
       scriptDirective: { resources: ["'self'", "'wasm-unsafe-eval'", ...google.script] },
       styleDirective: { resources: ["'self'", "'unsafe-inline'"] },
     },

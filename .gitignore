@@ -6,7 +6,6 @@ dist/
 !.env.example
 release/
 public/fonts/
-public/spline/
 .DS_Store
 .vercel
 

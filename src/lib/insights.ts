@@ -28,7 +28,7 @@ export const postsForAudience = (posts: Post[], audience: 'msp' | 'operations') 
   posts.filter((p) => p.data.audience === audience || p.data.audience === 'general');
 
 export function readingMinutes(body = ''): number {
-  const words = body.replace(/[#*_>`|\-\[\]()]/g, ' ').split(/\s+/).filter(Boolean).length;
+  const words = body.replace(/[#*_>`|\-[\]()]/g, ' ').split(/\s+/).filter(Boolean).length;
   return Math.max(1, Math.round(words / 220));
 }
 

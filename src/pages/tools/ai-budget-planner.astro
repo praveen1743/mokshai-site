@@ -2,7 +2,7 @@
 import ToolPage from '../../layouts/ToolPage.astro';
 import Range from '../../components/Range.astro';
 import Arrow from '../../components/Arrow.astro';
-import { budgetPlan, usd, num } from '../../lib/calc';
+import { budgetPlan, usd } from '../../lib/calc';
 
 const d = { monthlyBenefit: 4000, runCostPerMonth: 700, targetPaybackMonths: 12, contingencyShare: 0.15, split: { discovery: 10, pilot: 35, scale: 55 } };
 const r0 = budgetPlan(d);

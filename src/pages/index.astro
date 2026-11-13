@@ -2,9 +2,7 @@
 import Base from '../layouts/Base.astro';
 import Arrow from '../components/Arrow.astro';
 import Icon from '../components/Icon.astro';
-import HexField from '../components/HexField.astro';
-import Hero3D from '../components/scenes/Hero3D.astro';
-import HeroSpline from '../components/scenes/HeroSpline.astro';
+import RobotHero from '../components/robot/RobotHero.astro';
 import Faq from '../components/Faq.astro';
 import CtaBand from '../components/CtaBand.astro';
 import FounderVideo from '../components/FounderVideo.astro';
@@ -39,14 +37,13 @@ const faqs = [
         <h1>AI agents for any business, <span class="grad-text">checked by a human</span></h1>
         <p class="lede">Agents that read, check and draft inside the tools you already use. A person approves every decision that matters.</p>
         <div class="btn-row">
-          <a class="btn btn-primary" href="/book/">Book a strategy call <Arrow /></a>
-          <a class="btn btn-secondary" href="/agents/">See the demo agents</a>
+          <a class="btn btn-primary" href="/book/" data-robot="Approve">Book a strategy call <Arrow /></a>
+          <a class="btn btn-secondary" href="/agents/" data-robot="Present">See the demo agents</a>
         </div>
         <ul class="hero-meta mono" role="list" aria-label="Industries we support">{['Healthcare', 'Finance', 'Legal', 'Real estate', 'E-commerce', 'MSPs', 'Operations', '24/7 support'].map((x) => <li>{x}</li>)}</ul>
       </div>
       <div class="hero-visual">
-        <HexField class="hero-hex" />
-        {site.heroSpline.scene && site.heroSpline.poster ? <HeroSpline /> : <Hero3D />}
+        <RobotHero />
       </div>
     </div>
   </section>
@@ -176,7 +173,6 @@ const faqs = [
     background: radial-gradient(520px circle at var(--mx, 50%) var(--my, 50%), rgba(140, 194, 247, .11), rgba(95, 208, 214, .05) 40%, transparent 70%); }
   .hero:global(.spot-on) .spot { opacity: 1; }
   .hero-grid { position: relative; z-index: 1; }
-  .hero-visual :global(.hero-hex) { width: 130%; left: -15%; top: -12%; opacity: .3; }
 
   .agent-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: 24px; }
   .ind-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0 28px; }

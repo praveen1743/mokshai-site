@@ -4,10 +4,13 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "node scripts/copy-fonts.mjs && node scripts/copy-spline.mjs && astro dev",
-    "build": "node scripts/copy-fonts.mjs && node scripts/copy-spline.mjs && astro build && node scripts/vercel-csp-routes.mjs",
+    "dev": "node scripts/copy-fonts.mjs && astro dev",
+    "build": "node scripts/copy-fonts.mjs && astro build && node scripts/vercel-csp-routes.mjs",
     "preview": "astro preview --host",
-    "test": "vitest run"
+    "test": "vitest run",
+    "check": "astro check",
+    "lint": "eslint .",
+    "robot:build": "scripts/robot/build.sh"
   },
   "dependencies": {
     "@astrojs/markdown-remark": "^7.3.7",
@@ -19,14 +22,23 @@
     "@fontsource/ibm-plex-sans": "5.3.0",
     "@keystatic/astro": "^6.0.0",
     "@keystatic/core": "^0.6.9",
-    "@splinetool/runtime": "2.0.121",
+    "@react-three/drei": "10.7.9",
+    "@react-three/fiber": "9.8.2",
     "astro": "^7.4.10",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "three": "0.186.1"
   },
   "devDependencies": {
+    "@astrojs/check": "0.9.12",
+    "@eslint/js": "9.39.5",
+    "@gltf-transform/cli": "4.5.1",
     "@types/three": "0.186.0",
+    "eslint": "9.39.5",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "globals": "17.13.0",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.72.1",
     "vitest": "^5.1.0"
   },
   "engines": {

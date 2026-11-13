@@ -1,0 +1,25 @@
+---
+// Homepage hero visual: the Moksh AI robot (React Three Fiber island).
+// The poster is a still of the same model and pose, rendered in Blender; it is
+// what shows before the 3D loads, without WebGL, and for reduced-motion users
+// until the still 3D frame is ready.
+import RobotIsland from './RobotIsland';
+---
+<figure class="robot-hero" data-robot-hero aria-label="Illustration: the Moksh AI robot, a white humanoid with a black faceplate and cyan eyes, standing beside the headline.">
+  <div class="robot-stage">
+    <img class="robot-poster" src="/models/moksh-robot-poster.webp" alt="" width="1000" height="1000" decoding="async" fetchpriority="low" />
+    <RobotIsland client:idle />
+  </div>
+</figure>
+
+<style>
+  .robot-hero { margin: 0; position: relative; }
+  /* The figure is framed head to knees; fade the cut into the hero background. */
+  .robot-stage { position: relative; width: 100%; aspect-ratio: 1 / 1;
+    -webkit-mask-image: linear-gradient(to bottom, black 74%, transparent 97%); mask-image: linear-gradient(to bottom, black 74%, transparent 97%); }
+  @media (max-width: 760px) { .robot-stage { aspect-ratio: 5 / 4; } }
+  .robot-poster, .robot-stage :global(.robot-canvas) { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .robot-poster { object-fit: contain; }
+  @media (max-width: 760px) { .robot-poster { object-position: 38% 50%; } }
+  .robot-hero:global(.is-live) .robot-poster { visibility: hidden; }
+</style>

@@ -126,3 +126,9 @@ Map `generate_lead` to a conversion action in Google Ads.
 - **New calculator:** add pure functions and tests to `lib/calc.ts` / `tests/calc.test.ts`, metadata to `lib/tools.ts`, and a page under `pages/tools/` using `ToolPage.astro`.
 - **New case study:** add it in the CMS at `/keystatic` (see [CONTENT-AND-SEO.md](CONTENT-AND-SEO.md#editing-in-the-cms)).
 - **Server features** (for example an AI opportunity-snapshot form that calls the Claude API): add an API route with `export const prerender = false`. The adapter is already installed; the rest of the site stays static.
+
+## Homepage robot (React Three Fiber island)
+
+- The only React on a public page. `components/robot/RobotHero.astro` renders a poster image and a `RobotIsland` with `client:idle`; the island lazy-loads `RobotScene` (three.js 0.186, @react-three/fiber 9, @react-three/drei 10) as its own chunk after first paint, only where WebGL exists.
+- Asset: `public/models/moksh-robot.glb` (meshopt + WebP, about 1.3 MB), built from the CC0 source by `npm run robot:build` (Blender 5.2 + gltf-transform). See `public/models/README.md`.
+- CSP: `'wasm-unsafe-eval'` in `script-src` for the meshopt decoder bundled with three.js, and `blob:` in `connect-src` because GLTFLoader decodes embedded textures through blob URLs. No third-party host is involved.
