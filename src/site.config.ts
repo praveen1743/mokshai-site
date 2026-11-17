@@ -12,6 +12,8 @@ export const site = {
     'Moksh AI builds AI agents and automation for businesses worldwide, inside the tools they already use, with a person checking the work before anything goes out.',
   // Confirmed by the company (13 Nov 2026): support is staffed around the clock.
   supportHours: '24/7',
+  // Confirmed by the company (17 Nov 2026); stated on mokshai.net/about-us/.
+  teamSize: '500+ people from 12+ countries',
   email: 'info@mokshtech.net', // CONFIRM: old schema used info@mokshai.net
   offices: [
     {
