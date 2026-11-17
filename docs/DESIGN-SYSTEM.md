@@ -64,7 +64,7 @@ Scale: `--t-xs` 13 路 `--t-sm` 15 路 `--t-md` 17 路 `--t-lg` 20 路 `--t-xl` 24鈥
 | Pattern | Where | Rule |
 | --- | --- | --- |
 | Hover lift + gradient border | Cards | 250 ms, `transform` only |
-| Isometric system stack | Homepage hero only (`SystemStack`) | Dashes flow down the connectors (1.6 s loop); each layer lights in turn (10 s cycle); the AI core floats 5 px. CSS only, `data-loop`, off under reduced motion. Hovering a label lights its layer |
+| Isometric system stack | Homepage hero only (`SystemStack`) | Every 9 s the layers compact into the AI core (a beam of light rises through the stack) and explode back out, then the focus walks down the five layers. Pointer: 3D tilt (卤10掳/卤7掳), the stack spreads, the layer under the pointer lifts 14 units and lights while others recede. Packets of light run down the connectors. Script-driven transforms with easing; paused off screen; static exploded view under reduced motion |
 | Gradient shift | Primary buttons | `background-position` |
 | Scroll reveal | `.reveal` | CSS scroll-driven animation, movement only, never opacity |
 | Ambient | HexField (home hero only), hub pulses, marquee, queue panel | Slow, looping, paused or static with reduced motion |

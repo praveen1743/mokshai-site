@@ -73,7 +73,7 @@ Product-style illustrations that show each page's subject. All are HTML/SVG, lab
 
 | File | What it does | Notes |
 | --- | --- | --- |
-| `SystemStack.astro` | Isometric five-layer drawing: your systems → business context → AI agent → human review → business outcomes | Geometry generated in the frontmatter; SVG is `aria-hidden` and the layer labels are a real ordered list positioned by percentage. Phones show short titles only. Colours from tokens via CSS classes. Motion is CSS and pauses with `data-loop` |
+| `SystemStack.astro` | Isometric five-layer drawing: your systems → business context → AI agent → human review → business outcomes | Geometry generated in the frontmatter; SVG is `aria-hidden` and the layer labels are a real ordered list positioned by percentage. Phones show short titles only. Colours from tokens via CSS classes. A bundled script drives compact/explode, tilt, hover spread and layer focus through CSS variables (`--dy`, `--s`, `--rx`, `--ry`, `--lead`, `--beam`); labels follow only the hover lift so they never overlap |
 
 ## Demo agents (`components/agents/`)
 
