@@ -40,7 +40,7 @@ const slug = (label: string) => label.toLowerCase().replace(/[^a-z0-9]+/g, '-');
       </ul>
     </nav>
     <div class="actions">
-      <a class="btn btn-primary book" href="/book/">Book a call <Arrow /></a>
+      <a class="btn btn-primary book" href="/book/">Book a strategy call <Arrow /></a>
       <button class="menu-btn" type="button" aria-expanded="false" aria-controls="mobile-nav">
         <span class="sr">Menu</span>
         <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path class="l1" d="M4 8h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path class="l2" d="M4 16h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
@@ -121,7 +121,7 @@ const slug = (label: string) => label.toLowerCase().replace(/[^a-z0-9]+/g, '-');
     });
   }
 
-  // Desktop "We support" disclosure: click to open, Escape or click/tab away to close.
+  // Desktop "Industries" disclosure: click to open, Escape or click/tab away to close.
   const triggers = Array.from(document.querySelectorAll<HTMLButtonElement>('.menu-trigger'));
   const menuOf = (t: HTMLButtonElement) => document.getElementById(t.getAttribute('aria-controls') ?? '');
   const setOpen = (t: HTMLButtonElement, open: boolean) => {

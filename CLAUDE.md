@@ -1,12 +1,11 @@
 # CLAUDE.md
 
-Marketing site for Moksh AI (mokshai.net). Astro 7 with the Vercel adapter: every public page is prerendered static HTML; only the Keystatic CMS (`/keystatic`, `/api/keystatic`, React) runs on demand. No UI framework on public pages, with one exception: the homepage robot is a React Three Fiber island (`client:idle`). Vanilla TypeScript in `<script>` tags for all other interactivity.
+Marketing site for Moksh AI (mokshai.net). Astro 7 with the Vercel adapter: every public page is prerendered static HTML; only the Keystatic CMS (`/keystatic`, `/api/keystatic`, React) runs on demand. No UI framework on public pages. Vanilla TypeScript in `<script>` tags for interactivity.
 
 ## Commands
 - `npm run dev`: dev server on :4321
 - `npm run test`: Vitest, calculator formulas (`tests/calc.test.ts`)
 - `npm run check`: `astro check` (TypeScript for .ts, .tsx and .astro). `npm run lint`: ESLint (`eslint.config.js`)
-- `npm run robot:build`: rebuilds `public/models/moksh-robot.glb` and its poster from the CC0 source with Blender (see `public/models/README.md`)
 - `npm run build`: build to `.vercel/output/` (then `scripts/vercel-csp-routes.mjs` fixes the CSP routes). Node 22.23.4+. Needs `PUBLIC_FORM_ENDPOINT` for a working booking form; optional `PUBLIC_BOOKING_URL`
 - `dev` and `build` first run `scripts/copy-fonts.mjs`, which copies fonts from `node_modules` into `public/fonts/` (git-ignored)
 
@@ -28,14 +27,14 @@ Vercel, from `main`. Settings live in `vercel.json`; keep `public/.htaccess` and
 - `src/content/case-studies/*.md`: case studies, created by the team in the CMS; `draft: true` until reviewed.
 - `src/components/scenes/`: hero illustrations, one per page topic. Pass them to `PageHero` via `slot="visual"`.
 - `src/lib/agents.ts`: demo agents shown on `/agents/`, the homepage and industry pages. Only agents the company can demo live; previews (`components/agents/AgentPreview.astro`) are labelled illustrations with no result figures.
-- `src/lib/industries.ts`: the "We support" menu and `/industries/[slug]/` pages. An industry is listed only when it has its own page.
+- `src/lib/industries.ts`: the "Industries" menu and `/industries/[slug]/` pages. An industry is listed only when it has its own page.
 
 ## Design rules
 - Use the tokens at the top of `src/styles/global.css`. No new hex values in components.
-- The site is dark by default (`:root` holds the dark values). Articles and legal pages pass `theme="light"` to `Base.astro` for the light reading palette. Write components with tokens only so they work in both; `--ink` is text, `--paper` the ground, `--surface` a panel, `--ink-deep` the deepest ground.
+- The site is warm light by default (`:root`: off-white `--paper`, charcoal `--ink`). `.dark` sections (AI + human, closing CTA, footer, featured panels) re-scope the same tokens to dark values, so components work in both. Write components with tokens only; `--ink` is text, `--paper` the ground, `--surface` a panel, `--ink-deep` the ground of dark sections. The only warm accent is amber (`--amber`, `--amber-on-dark`), and it means "a person does this step". No orange or purple brand accents.
 - Palette comes from the logo: `--blue` #2583DB and `--green` #1FA92F, bridged by `--teal`. On light backgrounds use the `-700` text variants; the raw logo colours are for decoration and dark backgrounds only.
 - Gradient text (`.grad-text`) appears once on the whole site: the homepage H1. All other headings are solid ink. `--grad-deep` is for primary buttons; `--grad` for small decorative accents. The closing CTA (`CtaBand`) is flat ink and runs straight into the footer; do not put it back in a gradient card.
-- 3D appears only in the homepage hero: the Moksh robot (`components/robot/`, React Three Fiber + drei, GLB in `public/models/`). It is a `client:idle` island over a static poster; three.js loads in its own chunk after first paint, rendering stops off screen and in background tabs, reduced motion gets one still frame, no WebGL keeps the poster, phones get a lighter mode (no cursor tracking, lower pixel ratio, no shadow). Never load models, HDRIs or decoders from a CDN: lighting is procedural (`Lightformer`), the GLB uses meshopt (decoder bundled with three), Draco stays off. Clips are authored in Blender (`scripts/blender/build_robot.py`); edit them there and rebuild, never by rotating objects in code. Cursor tracking is layered on top of the clips after the mixer runs. No other page loads three.js.
+- The homepage hero visual is `components/hero/SystemStack.astro`: an isometric five-layer drawing (systems, context, AI agent, human review, outcomes) in SVG and CSS, with real HTML labels. No JavaScript, no 3D or animation libraries on public pages. Its motion (connector dashes, layer highlight, core float) is decorative, pauses off screen via `data-loop` and stops under reduced motion.
 - Ambient lighting (`.glow`) is used only in the homepage hero. Every other section is a flat tint or flat ink. One exception: the static logo-colour light behind the footer glass panel.
 - Glass (frosted `backdrop-filter` panel with a specular rim) is used once: the footer panel in `Footer.astro`. Never stack glass on glass, never put it on content, never set `opacity` below 1 on it or its parents, and keep the `prefers-reduced-transparency` fallback.
 - Hexagons do three jobs only: icon badges (`.hexi`, hub node icons), step numbers (`.step-n`) and the hub core. `HexField` appears only in the homepage hero. Bullets, eyebrow markers, FAQ toggles and slider handles are plain. No grid-line backgrounds.

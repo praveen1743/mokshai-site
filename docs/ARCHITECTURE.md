@@ -29,7 +29,7 @@ File-based routing under `src/pages/`:
 - Static pages map one-to-one to files (`msp.astro` → `/msp/`).
 - `services/[slug].astro` generates one page per service in `lib/serviceDetails.ts` (seven) via `getStaticPaths`.
 - `agents.astro` (`/agents/`) lists the demo agents in `lib/agents.ts`, with a client-side industry filter that only narrows a grid that is complete without JavaScript.
-- `industries/index.astro` (`/industries/`) is the "We support" hub; `industries/[slug].astro` generates one page per entry in `lib/industries.ts` whose `href` starts with `/industries/`. MSPs (`/msp/`) and manufacturing & operations (`/operations/`) keep their hand-built pages.
+- `industries/index.astro` (`/industries/`) is the "Industries" hub; `industries/[slug].astro` generates one page per entry in `lib/industries.ts` whose `href` starts with `/industries/`. MSPs (`/msp/`) and manufacturing & operations (`/operations/`) keep their hand-built pages.
 - `[slug].astro` at the root generates one page per article in `content/insights/`. Articles live at the root so URLs from the old WordPress site keep working without redirects.
 - `insights/[topic].astro` generates one hub page per topic in `lib/topics.ts` (`/insights/msp-automation/` etc.).
 - Internal links between articles, services, calculators and audience pages are generated from article frontmatter; see [CONTENT-AND-SEO.md](CONTENT-AND-SEO.md#internal-linking).
@@ -127,8 +127,3 @@ Map `generate_lead` to a conversion action in Google Ads.
 - **New case study:** add it in the CMS at `/keystatic` (see [CONTENT-AND-SEO.md](CONTENT-AND-SEO.md#editing-in-the-cms)).
 - **Server features** (for example an AI opportunity-snapshot form that calls the Claude API): add an API route with `export const prerender = false`. The adapter is already installed; the rest of the site stays static.
 
-## Homepage robot (React Three Fiber island)
-
-- The only React on a public page. `components/robot/RobotHero.astro` renders a poster image and a `RobotIsland` with `client:idle`; the island lazy-loads `RobotScene` (three.js 0.186, @react-three/fiber 9, @react-three/drei 10) as its own chunk after first paint, only where WebGL exists.
-- Asset: `public/models/moksh-robot.glb` (meshopt + WebP, about 1.3 MB), built from the CC0 source by `npm run robot:build` (Blender 5.2 + gltf-transform). See `public/models/README.md`.
-- CSP: `'wasm-unsafe-eval'` in `script-src` for the meshopt decoder bundled with three.js, and `blob:` in `connect-src` because GLTFLoader decodes embedded textures through blob URLs. No third-party host is involved.

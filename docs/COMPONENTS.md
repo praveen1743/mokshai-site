@@ -29,10 +29,10 @@ Shell for calculator pages: page hero, the calculator (named slot `calc`), a met
 
 | Component | Purpose | Notes |
 | --- | --- | --- |
-| `Header.astro` | Sticky glass header, primary nav, "Book a call" button, mobile menu | Nav items from `site.config.ts` (`NavItem`: a link, or a group with `children`). A group renders on desktop as the "We support" disclosure: a `<button aria-expanded aria-controls>` toggling a solid (not glass) panel; click, Enter or Space opens it; Escape returns focus to the button; clicking or tabbing away closes it. The trigger shows the current state when any child page is active. On mobile a group is a labelled sub-list, not a second disclosure. Mobile menu is a real button with `aria-expanded`; Escape closes it. Add a segment to "We support" only when it has its own page |
+| `Header.astro` | Sticky glass header, primary nav, "Book a call" button, mobile menu | Nav items from `site.config.ts` (`NavItem`: a link, or a group with `children`). A group renders on desktop as the "Industries" disclosure: a `<button aria-expanded aria-controls>` toggling a solid (not glass) panel; click, Enter or Space opens it; Escape returns focus to the button; clicking or tabbing away closes it. The trigger shows the current state when any child page is active. On mobile a group is a labelled sub-list, not a second disclosure. Mobile menu is a real button with `aria-expanded`; Escape closes it. Add a segment to "Industries" only when it has its own page |
 | `Footer.astro` | Brand blurb, site and service links, both offices, Moksh Group links, legal line | All facts from `site.config.ts` |
 | `FounderVideo.astro` | CEO introduction: vertical video (no preload, poster only), name, role, LinkedIn, two quotes and a transcript. Data in `lib/introVideo.ts` and `site.leadership` | `heading?`, `id?`, `transcriptOpen?`. Used on the homepage (after the hero) and `/about/#leadership` |
-| `CtaBand.astro` | Closing call to action on flat ink, directly above the footer so the two read as one dark area | Props: `title`, `text`, `secondaryHref`, `secondaryLabel` |
+| `CtaBand.astro` | Closing call to action on flat ink, directly above the footer so the two read as one dark area | Props: `title`, `text`, `primaryLabel`, `secondaryHref`, `secondaryLabel` |
 | `PageHero.astro` | Interior page header on a flat tinted wash (no lighting or background hexagons) | Props: `eyebrow`, `title`, `accent` (gradient words), `lede`, `crumbs`, `tone`. Default slot for buttons; named slot `visual` for a scene, which switches to a two-column layout |
 
 ## Content blocks
@@ -69,15 +69,11 @@ Product-style illustrations that show each page's subject. All are HTML/SVG, lab
 | `RagScene.astro` | LLM & AI integration | An in-product AI answer grounded in cited sources |
 | `LaunchScene.astro` | AI prototype to production | Launch blockers from a prototype review and their status |
 
-## Homepage robot (`components/robot/`)
+## Homepage hero (`components/hero/`)
 
 | File | What it does | Notes |
 | --- | --- | --- |
-| `RobotHero.astro` | Hero visual: poster image with the 3D island on top | Poster (`public/models/moksh-robot-poster.webp`) shows until the first 3D frame, without WebGL and as the reduced-motion fallback. Fades the cut at the knees with a CSS mask |
-| `RobotIsland.tsx` | `client:idle` React island | Detects WebGL, phone (`lite`) and reduced motion; lazy-loads `RobotScene`; pauses rendering off screen and in background tabs; wires hero buttons with `data-robot="Approve"` / `"Present"` to gestures |
-| `RobotScene.tsx` | R3F `Canvas` (transparent), lights, procedural environment, contact shadow | Light colours read from design tokens. `frameloop` is `never` off screen, `demand` for reduced motion |
-| `Robot.tsx` | Loads the GLB with drei `useGLTF` (meshopt, no Draco) and binds clips with `useAnimations` | Hands the model to `RobotController` |
-| `robotController.ts` | Plays Idle + Float + HeadLook, schedules Blink, runs Present/Approve with cross-fades, adds cursor head/neck tracking after the mixer, disposes geometry, materials and textures on unmount | Plain TypeScript; all per-frame three.js mutation lives here |
+| `SystemStack.astro` | Isometric five-layer drawing: your systems → business context → AI agent → human review → business outcomes | Geometry generated in the frontmatter; SVG is `aria-hidden` and the layer labels are a real ordered list positioned by percentage. Phones show short titles only. Colours from tokens via CSS classes. Motion is CSS and pauses with `data-loop` |
 
 ## Demo agents (`components/agents/`)
 

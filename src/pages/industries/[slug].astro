@@ -24,9 +24,9 @@ const faqs = ind.faqs ?? [];
 <Base
   title={ind.seoTitle ?? ind.name}
   description={ind.description ?? ind.note}
-  schema={[breadcrumbs([{ name: 'We support', path: '/industries/' }, { name: ind.name, path }]), ...(faqs.length ? [faq(faqs)] : [])]}
+  schema={[breadcrumbs([{ name: 'Industries', path: '/industries/' }, { name: ind.name, path }]), ...(faqs.length ? [faq(faqs)] : [])]}
 >
-  <PageHero eyebrow={ind.name} title={ind.title ?? ind.name} lede={ind.lede} crumbs={[{ name: 'We support', href: '/industries/' }]}>
+  <PageHero eyebrow={ind.name} title={ind.title ?? ind.name} lede={ind.lede} crumbs={[{ name: 'Industries', href: '/industries/' }]}>
     <div class="btn-row">
       <a class="btn btn-primary" href="/book/">Book a strategy call <Arrow /></a>
       {demoAgents.length > 0 && <a class="btn btn-secondary" href="#demos">See the demo agents</a>}

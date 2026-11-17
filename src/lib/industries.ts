@@ -1,4 +1,4 @@
-// Industries listed under "We support". MSPs and manufacturing & operations
+// Industries listed under "Industries". MSPs and manufacturing & operations
 // have their own hand-built pages; the rest share /industries/[slug]/.
 // No figures here: every claim must be one the company can stand behind.
 import type { ServiceSlug } from './serviceDetails';

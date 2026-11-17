@@ -4,7 +4,7 @@ Tokens live at the top of `src/styles/global.css`. Components use tokens only, w
 
 ## Principles
 
-1. **Show the work.** Illustrations depict what Moksh AI actually builds (integration maps, queues, permissions), not robots or glowing brains. One deliberate exception, chosen by the company: the homepage hero shows the Moksh robot (white ceramic covers, brushed titanium joints, gloss black faceplate, cyan eyes; built from a CC0 model, see `public/models/README.md`). It appears nowhere else.
+1. **Show the work.** Illustrations depict what Moksh AI actually builds (integration maps, queues, permissions), not robots or glowing brains.
 2. **The logo is the brand device, used sparingly.** Hexagons do three jobs: icon badges, step numbers and the hub core. The `HexField` background appears only in the homepage hero. Bullets, eyebrow markers, FAQ toggles and slider handles are plain shapes. No grid-line backgrounds.
 3. **Colour from the logo, used with intent.** Gradient text appears once on the site (the homepage H1). Gradients otherwise mark primary buttons, the CTA band and small accents. Ambient blue/green lighting appears only in the homepage hero.
 4. **Tinted, never plain white.** Sections alternate paper, sky, mint, wash and deep ink.
@@ -13,9 +13,9 @@ Tokens live at the top of `src/styles/global.css`. Components use tokens only, w
 
 ## Theme
 
-The site is **dark by default**: the values in `:root` are the dark palette, so `--ink` is the main text colour, `--paper` the page ground, `--surface` a raised panel and `--ink-deep` the deepest ground (`.dark` sections, calculator output, footer). Long-form reading pages (articles, privacy policy) pass `theme="light"` to `Base.astro`, which puts `.light` on `<body>`; `.light` restores the light palette below, header included. Components keep using the same token names and work in both.
+The site is **warm light by default**: `:root` holds an off-white ground (`--paper` #F7F5F0), white panels (`--surface`) and charcoal text (`--ink` #15191E). The logo blue and green carry links, accents and primary buttons. Amber is the only warm accent and is reserved for "a person does this step" (human review, approval).
 
-The contrast figures in the table below are for the light palette. On dark, `--blue-700`, `--green-700` and `--teal-700` resolve to the on-dark tints (`#8CC2F7`, `#7FDC8C`, `#5FD0D6`) and `--muted` to `#A3B6C7`, all above 7:1 on `--paper`.
+`.dark` sections re-scope the same tokens to dark values (`--ink` light text, `--paper`/`--surface` deep navy, on-dark tints for `-700` accents), so any component placed inside a dark section keeps working. Dark is used for: the AI + human section on the homepage, the closing CTA and footer, featured panels, and calculator output. `.light` remains as an explicit name for article and legal pages.
 
 ## Colour
 
@@ -64,8 +64,7 @@ Scale: `--t-xs` 13 · `--t-sm` 15 · `--t-md` 17 · `--t-lg` 20 · `--t-xl` 24�
 | Pattern | Where | Rule |
 | --- | --- | --- |
 | Hover lift + gradient border | Cards | 250 ms, `transform` only |
-| Cursor spotlight | Homepage hero only | Soft radial light that follows a fine pointer; off for reduced motion |
-| 3D robot (WebGL, React Three Fiber) | Homepage hero only (`RobotHero`) | Authored clips: Idle breathing, Float, HeadLook, Blink every 2.5–6 s, Present once on load and on hover of "See the demo agents", Approve on hover or focus of "Book a strategy call". Head follows the cursor on desktop. Pauses off screen; one still frame under `prefers-reduced-motion`; poster if WebGL is unavailable |
+| Isometric system stack | Homepage hero only (`SystemStack`) | Dashes flow down the connectors (1.6 s loop); each layer lights in turn (10 s cycle); the AI core floats 5 px. CSS only, `data-loop`, off under reduced motion. Hovering a label lights its layer |
 | Gradient shift | Primary buttons | `background-position` |
 | Scroll reveal | `.reveal` | CSS scroll-driven animation, movement only, never opacity |
 | Ambient | HexField (home hero only), hub pulses, marquee, queue panel | Slow, looping, paused or static with reduced motion |

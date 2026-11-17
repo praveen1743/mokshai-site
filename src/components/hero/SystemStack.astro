@@ -1,0 +1,230 @@
+---
+// Homepage hero visual: how Moksh AI turns business information into finished
+// work. Five isometric layers, read top to bottom: your systems, business
+// context, the AI agent, human review, business outcomes.
+//
+// Pure SVG + CSS, rendered with the page (no JavaScript, nothing to load), so
+// it can never delay the headline. The layer labels are real HTML, positioned
+// over the drawing by percentage, so they stay readable and accessible.
+// Motion: dashes flow down the connectors and each layer lights in turn. Both
+// stop off screen (data-loop) and under prefers-reduced-motion.
+
+const W = 460; // drawing width (the label column sits to its right)
+const H = 640;
+const CX = 222;
+const T = 14; // plate thickness
+
+interface Layer { n: string; key: string; title: string; short: string; items: string; cy: number; w: number }
+const layers: Layer[] = [
+  { n: '01', key: 'systems', title: 'Your business systems', short: 'Systems', items: 'Email, documents, CRM, ERP, helpdesk', cy: 72, w: 300 },
+  { n: '02', key: 'context', title: 'Business context', short: 'Context', items: 'Knowledge, customer information, operational data', cy: 178, w: 300 },
+  { n: '03', key: 'ai', title: 'Moksh AI agent', short: 'AI agent', items: 'Understands, reasons, classifies and prepares the decision', cy: 322, w: 336 },
+  { n: '04', key: 'human', title: 'Human review', short: 'Human review', items: 'Approval, validation, exceptions and escalation', cy: 448, w: 300 },
+  { n: '05', key: 'outcomes', title: 'Business outcomes', short: 'Outcomes', items: 'Updated records, finished workflows, notifications, reports', cy: 552, w: 300 },
+];
+
+const pts = (p: [number, number][]) => p.map(([x, y]) => `${x.toFixed(1)},${y.toFixed(1)}`).join(' ');
+function plate(cx: number, cy: number, w: number) {
+  const hw = w / 2, hh = w / 4;
+  return {
+    top: pts([[cx, cy - hh], [cx + hw, cy], [cx, cy + hh], [cx - hw, cy]]),
+    left: pts([[cx - hw, cy], [cx, cy + hh], [cx, cy + hh + T], [cx - hw, cy + T]]),
+    right: pts([[cx, cy + hh], [cx + hw, cy], [cx + hw, cy + T], [cx, cy + hh + T]]),
+  };
+}
+/** A small isometric block standing on a plate at (x, y). */
+function block(x: number, y: number, s: number, d: number) {
+  return {
+    top: pts([[x, y - s / 2], [x + s, y], [x, y + s / 2], [x - s, y]]),
+    left: pts([[x - s, y], [x, y + s / 2], [x, y + s / 2 + d], [x - s, y + d]]),
+    right: pts([[x, y + s / 2], [x + s, y], [x + s, y + d], [x, y + s / 2 + d]]),
+  };
+}
+/** Point on a plate's top face: u along the left-front edge, v along the right-front edge (0..1 from the centre). */
+const onPlate = (l: Layer, u: number, v: number): [number, number] => [CX - (l.w / 2) * u + (l.w / 2) * v, l.cy + (l.w / 4) * (u + v)];
+
+// What stands on each plate (front half only, so upper plates never hide it).
+const blocks: Record<string, { x: number; y: number; s: number; d: number; tone: string }[]> = {};
+for (const l of layers) {
+  const spots: [number, number][] =
+    l.key === 'systems' ? [[0.55, 0.05], [0.3, 0.3], [0.05, 0.55], [0.62, 0.32], [0.32, 0.62]]
+    : l.key === 'context' ? [[0.45, 0.15], [0.15, 0.45], [0.48, 0.48]]
+    : l.key === 'human' ? [[0.42, 0.22], [0.22, 0.42]]
+    : l.key === 'outcomes' ? [[0.5, 0.12], [0.3, 0.32], [0.12, 0.5], [0.55, 0.45]]
+    : [];
+  blocks[l.key] = spots.map(([u, v], i) => {
+    const [x, y] = onPlate(l, u, v);
+    const flat = l.key === 'context';
+    return { x, y, s: flat ? 22 : 15, d: flat ? 4 + i * 3 : 12, tone: l.key };
+  });
+}
+
+// Connectors between consecutive layers, three per gap (two around the AI core).
+const connectors: { d: string; key: string }[] = [];
+for (let i = 0; i < layers.length - 1; i++) {
+  const up = layers[i], lo = layers[i + 1];
+  const xs = up.key === 'context' ? [-74, 74] : lo.key === 'ai' || up.key === 'ai' ? [-64, 0, 64] : [-56, 0, 56];
+  for (const dx of xs) {
+    const x = CX + dx;
+    const y1 = up.cy + up.w / 4 - Math.abs(dx) / 2 + T; // under the upper plate's front edge
+    const y2 = lo.cy + 6; // onto the lower plate's front half
+    if (up.key === 'ai' && dx === 0) continue; // the core stands there
+    connectors.push({ d: `M${x} ${y1} L${x} ${y2}`, key: `${up.key}-${lo.key}` });
+  }
+}
+
+const ai = layers[2];
+const core = { x: CX, y: ai.cy - 18, r: 40 };
+const hex = (cx: number, cy: number, r: number) =>
+  pts(Array.from({ length: 6 }, (_, k) => { const a = Math.PI / 2 + (k * Math.PI) / 3; return [cx + r * Math.cos(a), cy - r * Math.sin(a)] as [number, number]; }));
+
+// Draw from the bottom of the screen up, so higher plates sit in front.
+const drawOrder = [...layers].reverse();
+---
+<figure class="sys" data-loop>
+  <svg class="sys-svg" viewBox={`0 0 ${W} ${H}`} aria-hidden="true" focusable="false">
+    <defs>
+      <linearGradient id="sys-ai-top" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" class="st-blue" /><stop offset=".5" class="st-teal" /><stop offset="1" class="st-green" />
+      </linearGradient>
+      <linearGradient id="sys-core" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" class="st-blue" /><stop offset=".5" class="st-teal" /><stop offset="1" class="st-green" />
+      </linearGradient>
+      <radialGradient id="sys-halo">
+        <stop offset="0" class="st-halo" /><stop offset="1" class="st-halo-0" />
+      </radialGradient>
+    </defs>
+
+    {drawOrder.map((l) => {
+      const p = plate(CX, l.cy, l.w);
+      const gapBelow = connectors.filter((c) => c.key.endsWith(`-${layers[layers.indexOf(l) + 1]?.key}`) && c.key.startsWith(`${l.key}-`));
+      return (
+        <g class={`layer layer-${l.key}`} data-l={l.key}>
+          {/* connectors from this plate down to the one below are drawn before it */}
+          {gapBelow.map((c) => <path class="wire" d={c.d} />)}
+          <polygon class="side-l" points={p.left} />
+          <polygon class="side-r" points={p.right} />
+          <polygon class="top" points={p.top} />
+          {l.key === 'ai' && <polygon class="tint" points={p.top} />}
+          <polygon class="glow" points={p.top} />
+          {blocks[l.key].map((b) => { const k = block(b.x, b.y, b.s, b.d); return (
+            <g class={`blk blk-${b.tone}`}>
+              <polygon class="b-l" points={k.left} />
+              <polygon class="b-r" points={k.right} />
+              <polygon class="b-t" points={k.top} />
+            </g>
+          ); })}
+          {l.key === 'ai' && (
+            <g class="core">
+              <ellipse cx={core.x} cy={ai.cy + 4} rx="118" ry="52" fill="url(#sys-halo)" class="halo" />
+              <g class="core-float">
+                <polygon points={hex(core.x, core.y, core.r)} fill="url(#sys-core)" class="core-hex" />
+                <rect x={core.x - 17} y={core.y - 17} width="34" height="34" rx="8" class="core-badge" />
+                <image href="/favicon.svg" x={core.x - 13} y={core.y - 13} width="26" height="26" />
+              </g>
+            </g>
+          )}
+          <path class="leader" d={`M${CX + l.w / 2 + 6} ${l.cy} H${W - 4}`} />
+        </g>
+      );
+    })}
+  </svg>
+
+  <ol class="sys-labels" role="list" aria-label="How Moksh AI turns business information into finished work">
+    {layers.map((l) => (
+      <li class={`lbl lbl-${l.key}`} data-l={l.key} style={`top:${((l.cy / H) * 100).toFixed(2)}%`}>
+        <span class="lbl-n mono" aria-hidden="true">{l.n}</span>
+        <span class="lbl-t"><span class="lbl-long">{l.title}</span><span class="lbl-short" aria-hidden="true">{l.short}</span></span>
+        <span class="lbl-i">{l.items}</span>
+      </li>
+    ))}
+  </ol>
+</figure>
+
+<style>
+  .sys { --w: 460; --lw: 300; margin: 0; position: relative; width: 100%; aspect-ratio: 760 / 640; }
+  .sys-svg { position: absolute; left: 0; top: 0; width: calc(100% * var(--w) / 760); height: 100%; overflow: visible; }
+
+  /* plates */
+  .top { fill: var(--surface); stroke: var(--line-strong); stroke-width: 1; }
+  .side-l { fill: var(--track); }
+  .side-r { fill: var(--line-strong); }
+  .glow { fill: var(--sky); stroke: var(--teal); stroke-width: 1.2; opacity: 0; }
+  .layer-ai .top { stroke: var(--teal); }
+  .tint { fill: url(#sys-ai-top); opacity: .16; }
+  .layer-ai .side-l { fill: var(--ink-2); opacity: .55; }
+  .layer-ai .side-r { fill: var(--ink-3); opacity: .55; }
+  .layer-ai .glow { fill: none; stroke: var(--teal); stroke-width: 1.5; }
+  .layer-human .glow { stroke: var(--amber-on-dark); fill: var(--amber-soft); }
+  .layer-outcomes .glow { stroke: var(--green); fill: var(--ok-soft); }
+
+  /* blocks */
+  .blk .b-t { fill: var(--surface); stroke: var(--line-strong); stroke-width: .8; }
+  .blk .b-l { fill: var(--track); }
+  .blk .b-r { fill: var(--line-strong); }
+  .blk-systems .b-t { stroke: var(--blue); }
+  .blk-context .b-t { fill: var(--sky); stroke: var(--teal); }
+  .blk-human .b-t { fill: var(--amber-on-dark); stroke: var(--amber); }
+  .blk-human .b-l { fill: var(--amber); opacity: .7; }
+  .blk-human .b-r { fill: var(--amber); }
+  .blk-outcomes .b-t { fill: var(--ok-soft); stroke: var(--green); }
+  .blk-outcomes .b-l, .blk-outcomes .b-r { fill: var(--green-700); opacity: .55; }
+
+  /* AI core */
+  .st-blue { stop-color: var(--blue); } .st-teal { stop-color: var(--teal); } .st-green { stop-color: var(--green); }
+  .st-halo { stop-color: var(--teal); stop-opacity: .35; } .st-halo-0 { stop-color: var(--teal); stop-opacity: 0; }
+  .core-hex { filter: drop-shadow(0 10px 18px rgba(11, 107, 114, .35)); }
+  .core-badge { fill: var(--surface); }
+
+  /* connectors and leaders */
+  .wire { stroke: var(--teal); stroke-width: 1.4; stroke-dasharray: 3 7; stroke-linecap: round; fill: none; opacity: .8; }
+  .layer-ai .wire { stroke: var(--green); }
+  .layer-human .wire { stroke: var(--amber-on-dark); }
+  .leader { stroke: var(--line-strong); stroke-width: 1; stroke-dasharray: 2 4; fill: none; }
+
+  /* labels: real text over the drawing, one per plate */
+  .sys-labels { list-style: none; margin: 0; padding: 0; position: absolute; left: calc(100% * (var(--w) + 10) / 760); right: 0; top: 0; bottom: 0; }
+  .lbl { position: absolute; left: 0; right: 0; translate: 0 -50%; display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 10px; row-gap: 2px; align-items: baseline; }
+  .lbl-n { grid-row: span 2; font-size: var(--t-xs); color: var(--muted); }
+  .lbl-t { font: 600 var(--t-sm)/1.25 var(--f-body); color: var(--ink); transition: color .2s var(--ease); }
+  .lbl-i { font-size: var(--t-xs); line-height: 1.4; color: var(--muted); }
+  .lbl-short { display: none; }
+  .lbl-ai .lbl-t { font-size: var(--t-md); }
+  .lbl-ai .lbl-n { color: var(--teal-700); }
+  .lbl-human .lbl-n { color: var(--amber); }
+
+  /* hover a label: its plate lights */
+  .sys:has(.lbl-systems:hover) .layer-systems .glow,
+  .sys:has(.lbl-context:hover) .layer-context .glow,
+  .sys:has(.lbl-ai:hover) .layer-ai .glow,
+  .sys:has(.lbl-human:hover) .layer-human .glow,
+  .sys:has(.lbl-outcomes:hover) .layer-outcomes .glow { opacity: .9; animation: none; }
+  .lbl:hover .lbl-t { color: var(--blue-700); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .wire { animation: flow 1.6s linear infinite; }
+    .glow { animation: lit 10s var(--ease) infinite; }
+    .layer-context .glow { animation-delay: 2s; }
+    .layer-ai .glow { animation-delay: 4s; }
+    .layer-human .glow { animation-delay: 6s; }
+    .layer-outcomes .glow { animation-delay: 8s; }
+    .core-float { animation: float 6s ease-in-out infinite; transform-box: fill-box; }
+    .halo { animation: breathe 6s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+  }
+  @keyframes flow { to { stroke-dashoffset: -20; } }
+  @keyframes lit { 0%, 22%, 100% { opacity: 0; } 6%, 14% { opacity: .9; } }
+  @keyframes float { 50% { transform: translateY(-5px); } }
+  @keyframes breathe { 50% { transform: scale(1.06); } }
+
+  /* phones: shorter titles, no detail line */
+  @media (max-width: 560px) {
+    .sys { aspect-ratio: 640 / 640; }
+    .sys-svg { width: calc(100% * var(--w) / 640); }
+    .sys-labels { left: calc(100% * (var(--w) + 6) / 640); }
+    .lbl-i { display: none; }
+    .lbl-long { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+    .lbl-short { display: inline; }
+    .lbl-t, .lbl-ai .lbl-t { font-size: var(--t-xs); }
+    .lbl-n { font-size: 11px; }
+  }
+</style>

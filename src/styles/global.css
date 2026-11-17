@@ -20,9 +20,9 @@
   --blue: #2583db;          /* logo blue: decoration and on-dark only */
   --green: #1fa92f;         /* logo green: decoration and on-dark only */
   --teal: #16a3b0;          /* bridge between the two */
-  --blue-700: #8cc2f7;      /* link/accent text: on dark by default, #155ba6 inside .light */
-  --green-700: #7fdc8c;
-  --teal-700: #5fd0d6;
+  --blue-700: #155ba6;      /* link/accent text on light: 6.8:1; #8cc2f7 inside .dark */
+  --green-700: #157f28;
+  --teal-700: #0b6b72;
   --blue-on-dark: #8cc2f7;
   --green-on-dark: #7fdc8c;
   --teal-on-dark: #5fd0d6;
@@ -30,36 +30,37 @@
   /* gradients */
   --grad: linear-gradient(110deg, #2583db 0%, #16a3b0 50%, #1fa92f 100%);
   --grad-deep: linear-gradient(110deg, #155ba6 0%, #0b6b72 52%, #157f28 100%);
-  --grad-text-light: linear-gradient(100deg, #8cc2f7 0%, #5fd0d6 45%, #7fdc8c 100%);
+  --grad-text-light: linear-gradient(100deg, #155ba6 10%, #0b6b72 55%, #157f28 95%);
   --grad-text-dark: linear-gradient(100deg, #8cc2f7 0%, #5fd0d6 45%, #7fdc8c 100%);
 
-  /* neutrals: the site is dark by default; `.light` (below) restores the light
-     reading values for articles. Token names keep their roles: --ink is the
-     main text colour, --paper the page ground, --surface a raised panel. */
-  --ink: #e9f1f7;
-  --ink-deep: #030b14;      /* deepest ground: .dark sections, calculator output */
-  --ink-2: #0a2238;
-  --ink-3: #10304d;
-  --paper: #061423;
-  --surface: #0b1d2f;
-  --sky: #0a1a2c;
-  --mint: #071b1f;
-  --line: #1c3349;
-  --line-strong: #2d4a63;
-  --muted: #a3b6c7;
+  /* neutrals: warm light by default. `.dark` (below) swaps in the dark values,
+     so any component inside a dark section keeps working. Token names keep their
+     roles: --ink is text, --paper the ground, --surface a raised panel,
+     --ink-deep the ground of dark sections. */
+  --ink: #15191e;
+  --ink-deep: #0a1622;      /* deepest ground: .dark sections, calculator output */
+  --ink-2: #0e2236;
+  --ink-3: #13314c;
+  --paper: #f7f5f0;
+  --surface: #ffffff;
+  --sky: #eef2f4;
+  --mint: #eff3ee;
+  --line: #e3dfd6;
+  --line-strong: #cdc7bb;
+  --muted: #565c65;
   --on-dark: #e9f1f7;
   --on-dark-muted: #a9bccd;
-  --amber: #f2b45c;
-  --amber-soft: #2b1e0b;
+  --amber: #9a5306;
+  --amber-soft: #fdf0de;
   --amber-on-dark: #f2b45c;
-  --focus: #8cc2f7;
-  --wash: linear-gradient(160deg, #0a1c30 0%, #071a22 50%, #081c17 100%);
-  --header-bg: rgba(6, 20, 35, .82);
-  --hexi-soft: linear-gradient(140deg, #10304d, #0d3322);
-  --track: #1f3a52;
-  --ok-soft: #0d2e17; --ok: #7fdc8c;
-  --no-soft: #33110e; --no: #ff9b8f;
-  --row-hover: #0e2338;
+  --focus: #155ba6;
+  --wash: linear-gradient(160deg, #f6f2ea 0%, #f2f3ef 55%, #edf2f0 100%);
+  --header-bg: rgba(247, 245, 240, .86);
+  --hexi-soft: linear-gradient(140deg, #e3edf8, #e1f0e5);
+  --track: #e2ded6;
+  --ok-soft: #e6f3e8; --ok: #0f6a21;
+  --no-soft: #fbebe8; --no: #a1261b;
+  --row-hover: #faf8f4;
 
   /* type */
   --f-display: "Archivo", "Archivo Fallback", "Helvetica Neue", Arial, sans-serif;
@@ -73,8 +74,8 @@
   /* shape & depth */
   --radius: 10px;
   --radius-sm: 6px;
-  --shadow-1: 0 1px 2px rgba(0, 0, 0, .35), 0 6px 18px -8px rgba(0, 0, 0, .5);
-  --shadow-2: 0 2px 4px rgba(0, 0, 0, .3), 0 28px 56px -24px rgba(0, 0, 0, .7), 0 0 40px -20px rgba(37, 131, 219, .25);
+  --shadow-1: 0 1px 2px rgba(31, 26, 18, .05), 0 6px 16px -8px rgba(31, 26, 18, .12);
+  --shadow-2: 0 2px 4px rgba(31, 26, 18, .04), 0 28px 56px -28px rgba(31, 26, 18, .22);
   --shadow-glow: 0 30px 80px -30px rgba(37, 131, 219, .55), 0 20px 60px -30px rgba(31, 169, 47, .45);
   --container: 1200px;
   --gutter: max(20px, env(safe-area-inset-left, 0px));
@@ -82,40 +83,51 @@
   --hex: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
 }
 
-/* Light reading scope: articles and legal pages. Restores the original light
-   palette for everything inside it, including the header. */
-.light {
-  --blue-700: #155ba6; --green-700: #157f28; --teal-700: #0b6b72;
-  --grad-text-light: linear-gradient(100deg, #155ba6 10%, #0b6b72 55%, #157f28 95%);
-  --ink: #061827; --ink-deep: #061827; --ink-2: #0a2238; --ink-3: #10304d;
-  --paper: #f5f8f6; --surface: #ffffff; --sky: #eaf3fc; --mint: #eaf6ee;
-  --line: #d5e0e6; --line-strong: #b4c4cf; --muted: #4f6070;
-  --amber: #a15c07; --amber-soft: #fff4e2; --focus: #155ba6;
-  --wash: linear-gradient(160deg, #e7f1fc 0%, #eef7f6 50%, #eaf6ee 100%);
-  --header-bg: rgba(255, 255, 255, .82);
-  --hexi-soft: linear-gradient(140deg, #dcebfb, #dcf1e2);
-  --track: #dbe5ec;
-  --ok-soft: #e6f5ea; --ok: #0f6a21; --no-soft: #fdeceb; --no: #a1261b;
-  --row-hover: #f7fbfd;
-  --shadow-1: 0 1px 2px rgba(6, 24, 39, .06), 0 4px 14px -6px rgba(6, 24, 39, .10);
-  --shadow-2: 0 2px 4px rgba(6, 24, 39, .05), 0 24px 48px -20px rgba(21, 91, 166, .28);
-  background: var(--paper); color: var(--ink);
-  color-scheme: light;
+/* Dark scope: .dark sections (hero accents, calculator, closing CTA, footer)
+   get the dark values, so tokens work the same inside them. */
+.dark {
+  --blue-700: #8cc2f7;
+  --green-700: #7fdc8c;
+  --teal-700: #5fd0d6;
+  --grad-text-light: linear-gradient(100deg, #8cc2f7 0%, #5fd0d6 45%, #7fdc8c 100%);
+  --ink: #e9f1f7;
+  --paper: #061423;
+  --surface: #0d2032;
+  --sky: #0b1c2e;
+  --mint: #081c20;
+  --line: #1c3349;
+  --line-strong: #2d4a63;
+  --muted: #a3b6c7;
+  --amber: #f2b45c;
+  --amber-soft: #2b1e0b;
+  --focus: #8cc2f7;
+  --hexi-soft: linear-gradient(140deg, #10304d, #0d3322);
+  --track: #1f3a52;
+  --ok-soft: #0d2e17;
+  --ok: #7fdc8c;
+  --no-soft: #33110e;
+  --no: #ff9b8f;
+  --row-hover: #0e2338;
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, .35), 0 6px 18px -8px rgba(0, 0, 0, .5);
+  --shadow-2: 0 2px 4px rgba(0, 0, 0, .3), 0 28px 56px -24px rgba(0, 0, 0, .7);
+  color-scheme: dark;
 }
+/* Articles and legal pages: the default palette, named for clarity. */
+.light { color-scheme: light; }
 
 *, *::before, *::after { box-sizing: border-box; }
 [hidden] { display: none !important; }
 /* Set by the [data-loop] observer in Base.astro while an animation is off screen. */
 .anim-paused, .anim-paused * { animation-play-state: paused !important; }
 html { -webkit-text-size-adjust: 100%; scroll-padding-top: 96px; }
-html { color-scheme: dark; }
+html { color-scheme: light; }
 body { margin: 0; background: var(--paper); color: var(--ink); font: 400 var(--t-md)/1.65 var(--f-body); text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; }
 img, svg { max-width: 100%; height: auto; display: block; }
 a { color: var(--blue-700); text-underline-offset: 3px; text-decoration-thickness: 1px; }
 a:hover { color: var(--teal-700); }
 :focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; border-radius: 3px; }
 .dark :focus-visible, .on-grad :focus-visible { outline-color: #fff; }
-::selection { background: rgba(31, 169, 47, .35); color: inherit; }
+::selection { background: rgba(31, 169, 47, .22); color: inherit; }
 
 h1, h2, h3, h4 { font-family: var(--f-display); font-stretch: 86%; color: inherit; line-height: 1.06; letter-spacing: -0.018em; margin: 0; text-wrap: balance; }
 h1 { font-size: var(--t-3xl); font-weight: 780; letter-spacing: -0.028em; }

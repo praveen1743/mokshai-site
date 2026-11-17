@@ -1,6 +1,6 @@
 ---
 import { site, services } from '../site.config';
-import { topics } from '../lib/topics';
+import { industries } from '../lib/industries';
 import { publishedCaseStudies } from '../lib/caseStudies';
 const year = new Date().getFullYear();
 // Shown only once a case study is published (see /case-studies/).
@@ -13,13 +13,15 @@ const hasCaseStudies = (await publishedCaseStudies()).length > 0;
     <div class="top">
       <div class="intro">
         <img src="/logo-wordmark.svg" alt="Moksh AI" width="151" height="58" class="logo" />
-        <p>AI agents and automation for businesses worldwide, built to work inside the systems you already run and checked by a person.</p>
+        <p>Moksh AI is an AI automation and implementation services company. We build custom AI agents that work inside the systems you already run, with a person approving every decision that matters.</p>
         <p class="mail">Email <a href={`mailto:${site.email}`}>{site.email}</a></p>
       </div>
       <nav aria-label="Footer: company">
         <h2 class="fh">Company</h2>
         <ul>
           <li><a href="/about/">About</a></li>
+          <li><a href="/agents/">AI agents</a></li>
+          <li><a href="/insights/">Insights</a></li>
           <li><a href="/how-we-work/">How we work</a></li>
           <li><a href="/pricing/">Pricing</a></li>
           <li><a href="/security/">Security</a></li>
@@ -34,11 +36,10 @@ const hasCaseStudies = (await publishedCaseStudies()).length > 0;
           {services.map((s) => <li><a href={`/services/${s.slug}/`}>{s.name}</a></li>)}
         </ul>
       </nav>
-      <nav aria-label="Footer: guides">
-        <h2 class="fh">Guides</h2>
+      <nav aria-label="Footer: industries">
+        <h2 class="fh">Industries</h2>
         <ul>
-          {topics.map((t) => <li><a href={`/insights/${t.slug}/`}>{t.name}</a></li>)}
-          <li><a href="/insights/">All insights</a></li>
+          {industries.map((i) => <li><a href={i.href}>{i.name}</a></li>)}
         </ul>
       </nav>
       <div class="offices">

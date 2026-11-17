@@ -2,10 +2,11 @@
 // Closing call to action. It sits on ink directly above the footer, so the
 // two read as one dark area instead of two stacked panels.
 import Arrow from './Arrow.astro';
-interface Props { title?: string; text?: string; secondaryHref?: string; secondaryLabel?: string }
+interface Props { title?: string; text?: string; primaryLabel?: string; secondaryHref?: string; secondaryLabel?: string }
 const {
   title = 'Book a 30-minute call about one workflow',
   text = 'Tell us which workflow takes up your team’s time. You get a straight answer on whether an agent fits, which systems it would touch, and how a pilot would be measured.',
+  primaryLabel = 'Book a strategy call',
   secondaryHref = '/tools/',
   secondaryLabel = 'Size it first with a calculator',
 } = Astro.props;
@@ -18,7 +19,7 @@ const {
       <p class="lede">{text}</p>
     </div>
     <div class="btn-row">
-      <a class="btn btn-primary" href="/book/">Book a strategy call <Arrow /></a>
+      <a class="btn btn-primary" href="/book/">{primaryLabel} <Arrow /></a>
       <a class="btn btn-secondary" href={secondaryHref}>{secondaryLabel}</a>
     </div>
   </div>

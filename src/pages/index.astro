@@ -2,59 +2,132 @@
 import Base from '../layouts/Base.astro';
 import Arrow from '../components/Arrow.astro';
 import Icon from '../components/Icon.astro';
-import RobotHero from '../components/robot/RobotHero.astro';
+import SystemStack from '../components/hero/SystemStack.astro';
 import Faq from '../components/Faq.astro';
 import CtaBand from '../components/CtaBand.astro';
 import FounderVideo from '../components/FounderVideo.astro';
+import MiniCalc from '../components/MiniCalc.astro';
+import AgentCard from '../components/agents/AgentCard.astro';
 import { introVideo } from '../lib/introVideo';
 import { services, site } from '../site.config';
-import AgentCard from '../components/agents/AgentCard.astro';
 import { agents } from '../lib/agents';
 import { industries } from '../lib/industries';
+import { tools } from '../lib/tools';
 import { faq, videoObject } from '../lib/schema';
 
-// One agent each from healthcare, finance and legal on the homepage; the rest live on /agents/.
+// One agent each from healthcare, finance and legal; the rest live on /agents/.
 const homeAgents = ['medical-report-insights', 'financial-reasoning', 'legal-document-review'].map((slug) => agents.find((a) => a.slug === slug)!);
 
+// Manufacturing gets the featured panel: Moksh Group's longest experience.
+const manufacturing = industries.find((i) => i.slug === 'manufacturing')!;
+const otherIndustries = industries.filter((i) => i.slug !== 'manufacturing');
+
+const serviceIcons: Record<string, string> = {
+  'ai-consulting': 'compass',
+  'custom-ai-development': 'copilot',
+  'ai-voice-agents': 'quote',
+  'llm-ai-integration': 'layers',
+  'ai-prototype-to-production': 'route',
+  'ai-implementation-training': 'people',
+  'ai-cost-optimization': 'coins',
+};
+
+const workflows = [
+  { icon: 'doc', t: 'Reading documents', d: 'Pull the fields you need out of invoices, forms, reports and PDFs, and file them where they belong.' },
+  { icon: 'quote', t: 'Routine customer enquiries', d: 'Answer the questions your team answers every day, by chat, email or phone, and pass on the rest.' },
+  { icon: 'inbox', t: 'Incoming email and requests', d: 'Read, sort and route what arrives in shared inboxes, with a draft reply ready for review.' },
+  { icon: 'target', t: 'Quotes and operational documents', d: 'Prepare quotations and job paperwork from requests, drawings and your own pricing rules.' },
+  { icon: 'shield', t: 'Contract review', d: 'Find the clauses that matter, rate the risk and point to the exact passage for a reviewer.' },
+  { icon: 'database', t: 'Updating business records', d: 'Keep the CRM, ERP and helpdesk up to date from the conversations and documents that change them.' },
+  { icon: 'chart', t: 'Reports and summaries', d: 'Turn records, threads and meetings into the summary or report someone would otherwise write by hand.' },
+  { icon: 'route', t: 'Routing exceptions', d: 'Spot what falls outside the rules and send it to the right person with the context attached.' },
+];
+
+const flow = [
+  { who: 'Agent', t: 'Processes the work', d: 'Reads the request or document, gathers what it needs from your systems and prepares the result.' },
+  { who: 'Person', t: 'Validates', d: 'Checks the draft and the evidence behind it, and edits anything that is not right.' },
+  { who: 'Person', t: 'Approves', d: 'Sensitive actions, such as sending, paying or changing a record, wait for a yes.' },
+  { who: 'Agent', t: 'Escalates', d: 'Anything outside its limits goes straight to the right person, with the context attached.', branch: true },
+  { who: 'Agent', t: 'Completes the action', d: 'Updates the record, sends the message or files the document, and logs what it did.' },
+];
+
+const strengths = [
+  { t: 'Business first', d: 'We start from how your work runs and what it costs today, then decide whether AI is the right answer.' },
+  { t: 'Built for you', d: 'Agents are designed around your processes and rules, not adapted from a generic product.' },
+  { t: 'Works with your systems', d: 'We build on the email, documents, CRM, ERP and helpdesk you already run. No rip and replace.' },
+  { t: 'People stay accountable', d: 'Every agent has approval steps, limits and a log, so a person owns every decision that matters.' },
+  { t: 'Practical implementation', d: 'Rollout, training and runbooks are part of the work, so your team can operate what we build.' },
+  { t: 'Cost-conscious', d: 'We pick models and tools for the job and help you cut AI spend you do not need.' },
+  { t: 'Experience in real operations', d: 'Moksh Group has supported manufacturing and fabrication businesses for 15 years, and works across IT services, construction and professional services.' },
+];
+
 const faqs = [
-  { q: 'What does Moksh AI do?', a: 'We design, build and run AI agents and automation for businesses of any size and industry, anywhere in the world. The agents work inside the tools you already use, take on repetitive work such as answering routine requests, reading documents, updating records and preparing reports, and hand anything outside their limits to a person with the context attached.' },
+  { q: 'What does Moksh AI do?', a: 'Moksh AI is an AI automation and implementation services company. We help businesses find where AI creates real value, then design, build and run custom AI agents that work inside the systems they already use: reading documents, answering routine requests, updating records and preparing work, with a person approving anything that matters.' },
   { q: 'Will AI agents replace our staff?', a: 'No. Agents take the repetitive layer of the work. Your people stay responsible for judgement calls, sensitive actions, complex cases and customer relationships. What changes is how your team spends its day.' },
-  { q: 'Which tools do your agents work with?', a: 'Agents are built on the APIs of the systems you already run, such as email, Microsoft 365 or Google Workspace, your CRM, accounting software, helpdesk or ERP. We do not ask you to replace your stack. On the first call we review your tools and tell you plainly whether an agent can work with them.' },
-  { q: 'Are AI agents secure?', a: 'They can be, when they are configured properly. We scope each agent to the minimum access it needs, log every action it takes, keep client data separated, and route sensitive actions to a person for approval. See our security page for the questions we answer before any build.' },
-  { q: 'Where is the Moksh AI team, and who do you work with?', a: `We work with clients worldwide. Moksh AI is the AI practice of Moksh Infotech Pvt Ltd: we contract from our US office in Lake Hiawatha, New Jersey, our delivery team works from Ahmedabad, India, and support is available ${site.supportHours}.` },
+  { q: 'Which business systems can AI agents work with?', a: 'Agents are built on the APIs of the systems you already run, such as email, Microsoft 365 or Google Workspace, your CRM, accounting software, helpdesk, PSA or ERP. We do not ask you to replace your stack. On the first call we review your tools and tell you plainly whether an agent can work with them.' },
+  { q: 'Are AI agents secure?', a: 'They can be, when they are configured properly. We scope each agent to the minimum access it needs, log every action it takes, keep client data separated, and route sensitive actions to a person for approval. Our security page lists the questions we answer before any build.' },
+  { q: 'How does human approval work?', a: 'For each agent we agree which actions it may take on its own, which need a person’s approval, and which it must never take. Anything that needs approval arrives with the agent’s draft and the information it used, so the reviewer can approve, edit or reject it in one step. Every action is logged, and approvals can be loosened later only where the results support it.' },
+  { q: 'How does the implementation process work?', a: 'In three steps, each ending in a decision you make. Discovery maps one workflow and agrees how success will be measured. A pilot runs one agent on that workflow with approval switched on. Scale extends what works to neighbouring workflows, with training and runbooks for your team.' },
+  { q: 'How do we get started?', a: 'Book a 30-minute strategy call and tell us about one workflow that takes up your team’s time. We tell you whether an agent fits, which systems it would touch and what a discovery would involve. Every engagement is quoted as a fixed scope before work starts.' },
+  { q: 'Which industries can benefit from AI automation?', a: `Any business with repeatable, rules-based work. We already have agents, guides or demos for managed service providers and their clients, manufacturing and operations, fintech and insurance, healthcare, real estate, legal and professional services, and e-commerce. We work with teams worldwide, and support is available ${site.supportHours}.` },
 ];
 ---
 <Base
-  title="AI Agents & Automation for Any Business | Moksh AI"
-  description={`Moksh AI builds AI agents and automation for businesses worldwide, inside the tools you already use, with a person checking the work. Support available ${site.supportHours}.`}
+  title="AI Agents & Automation Services for Business | Moksh AI"
+  description="Moksh AI builds custom AI agents that work inside your existing systems and automate business workflows, with a person approving every decision that matters. Strategy, development and implementation."
   schema={[faq(faqs), videoObject(introVideo)]}
 >
-  <!-- HERO: the only section with ambient lighting -->
-  <section class="hero dark glow" data-spotlight>
-    <div class="spot" aria-hidden="true"></div>
+  <!-- 1. HERO: the only section with ambient lighting -->
+  <section class="hero wash glow" aria-labelledby="hero-h">
     <div class="container hero-grid">
       <div class="hero-copy">
-        <h1>AI agents for any business, <span class="grad-text">checked by a human</span></h1>
-        <p class="lede">Agents that read, check and draft inside the tools you already use. A person approves every decision that matters.</p>
+        <span class="eyebrow">AI automation built around your business</span>
+        <h1 id="hero-h">AI agents that get work done, <span class="grad-text">with your people in control</span></h1>
+        <p class="lede">Moksh AI designs and builds AI agents that work inside the systems your team already uses. They take on repetitive work and process information faster, and a person approves every decision that matters.</p>
         <div class="btn-row">
-          <a class="btn btn-primary" href="/book/" data-robot="Approve">Book a strategy call <Arrow /></a>
-          <a class="btn btn-secondary" href="/agents/" data-robot="Present">See the demo agents</a>
+          <a class="btn btn-primary" href="/book/">Book a strategy call <Arrow /></a>
+          <a class="btn btn-secondary" href="/agents/">Explore AI agents</a>
         </div>
-        <ul class="hero-meta mono" role="list" aria-label="Industries we support">{['Healthcare', 'Finance', 'Legal', 'Real estate', 'E-commerce', 'MSPs', 'Operations', '24/7 support'].map((x) => <li>{x}</li>)}</ul>
+        <ul class="proof" role="list">
+          <li>Built around your existing workflows</li>
+          <li>Human approval where it matters</li>
+          <li>Designed for real business operations</li>
+        </ul>
       </div>
-      <div class="hero-visual">
-        <RobotHero />
-      </div>
+      <div class="hero-visual"><SystemStack /></div>
     </div>
   </section>
 
-  <!-- DEMO AGENTS: three of the agents we show on calls -->
-  <section class="section" aria-labelledby="demo-h">
+  <!-- 2. WORK AI CAN HANDLE: editorial list -->
+  <section class="section" aria-labelledby="work-h">
+    <div class="container">
+      <div class="head">
+        <span class="eyebrow">What we automate</span>
+        <h2 id="work-h">Your team shouldn’t spend its day on work AI can handle</h2>
+        <p class="lede">These are the jobs agents take on first. Each one keeps a person in the loop for anything unusual, sensitive or uncertain.</p>
+      </div>
+      <ol class="work" role="list">
+        {workflows.map((w, i) => (
+          <li class="reveal">
+            <span class="hexi sm soft"><Icon name={w.icon} /></span>
+            <div>
+              <h3><span class="mono w-n">{String(i + 1).padStart(2, '0')}</span>{w.t}</h3>
+              <p>{w.d}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- 3. DEMO AGENTS -->
+  <section class="section sky" aria-labelledby="demo-h">
     <div class="container">
       <div class="row-head">
         <div class="stack-sm">
           <span class="eyebrow">Demo agents</span>
-          <h2 id="demo-h">Agents we can show you working today</h2>
+          <h2 id="demo-h">See what intelligent automation looks like in practice</h2>
+          <p class="note">Working demonstrations we run live on a call with sample data. The previews are illustrations, not customer deployments.</p>
         </div>
         <a class="link-arrow" href="/agents/">All {agents.length} demo agents</a>
       </div>
@@ -62,37 +135,49 @@ const faqs = [
     </div>
   </section>
 
-  <!-- WE SUPPORT: every industry with a page behind it -->
-  <section class="section sky" aria-labelledby="ind-h">
+  <!-- 4. INDUSTRIES: manufacturing featured, the rest as a list -->
+  <section class="section" aria-labelledby="ind-h">
     <div class="container">
       <div class="row-head">
         <div class="stack-sm">
-          <span class="eyebrow">We support</span>
-          <h2 id="ind-h">Built for teams in these industries, and any business with repeatable work</h2>
+          <span class="eyebrow">Industries</span>
+          <h2 id="ind-h">AI automation designed for the way your industry works</h2>
         </div>
         <a class="link-arrow" href="/industries/">All industries</a>
       </div>
-      <ul class="ind-list" role="list">
-        {industries.map((i) => (
-          <li><a href={i.href}><span class="hexi sm"><Icon name={i.icon} /></span><span class="ind-t"><strong>{i.name}</strong><small>{i.note}</small></span></a></li>
-        ))}
-      </ul>
+      <div class="ind">
+        <a class="ind-feature dark" href={manufacturing.href}>
+          <span class="tag">Where Moksh Group started</span>
+          <span class="if-title">{manufacturing.name}</span>
+          <span class="if-text">Moksh Group has supported manufacturing and fabrication businesses for 15 years. Agents prepare quotes from RFQs and drawings, read incoming documents, answer order-status questions and take the handoffs out of the back office.</span>
+          <span class="if-tasks mono">Quoting · Intake · Order status · Back office</span>
+          <span class="link-arrow">AI for manufacturing and operations</span>
+        </a>
+        <ul class="ind-list" role="list">
+          {otherIndustries.map((i) => (
+            <li><a href={i.href}><span class="hexi sm"><Icon name={i.icon} /></span><span class="ind-t"><strong>{i.name}</strong><small>{i.note}</small></span></a></li>
+          ))}
+        </ul>
+      </div>
     </div>
   </section>
 
-  <!-- SERVICES: editorial list, not cards -->
-  <section class="section">
+  <!-- 5. SERVICES: numbered editorial list -->
+  <section class="section mint" aria-labelledby="svc-h">
     <div class="container">
-      <div class="row-head reveal">
-        <h2>What we build, and how we help you run it</h2>
+      <div class="row-head">
+        <div class="stack-sm">
+          <span class="eyebrow">Services</span>
+          <h2 id="svc-h">Everything you need to turn AI opportunities into working business solutions</h2>
+        </div>
         <a class="link-arrow" href="/services/">All services</a>
       </div>
       <ol class="svc-list" role="list">
         {services.map((s, i) => (
-          <li class="reveal">
+          <li>
             <a href={`/services/${s.slug}/`}>
               <span class="svc-n mono">0{i + 1}</span>
-              <span class="svc-name">{s.name}</span>
+              <span class="svc-name"><span class="svc-ic" aria-hidden="true"><Icon name={serviceIcons[s.slug] ?? 'copilot'} /></span>{s.name}</span>
               <span class="svc-text">{s.short}</span>
               <span class="svc-go" aria-hidden="true"><Arrow /></span>
             </a>
@@ -102,121 +187,219 @@ const faqs = [
     </div>
   </section>
 
-  <!-- CEO VIDEO: the first real person on the site -->
-  <section class="section mint">
-    <div class="container"><FounderVideo /></div>
+  <!-- 6. AI + HUMAN: the operating model, with the CEO -->
+  <section class="section dark" aria-labelledby="human-h">
+    <div class="container">
+      <div class="head">
+        <span class="eyebrow">AI plus human</span>
+        <h2 id="human-h">AI handles the repetitive work while your people keep the decisions that matter</h2>
+        <p class="lede">Agents process, analyse and prepare the work. People supervise sensitive actions, review exceptions and make the calls that need judgement. Every step is logged.</p>
+      </div>
+      <ol class="flow" role="list">
+        {flow.map((f, i) => (
+          <li class:list={['flow-step', { person: f.who === 'Person', branch: f.branch }]}>
+            <span class="flow-who mono">{String(i + 1).padStart(2, '0')} · {f.who}</span>
+            <h3>{f.t}</h3>
+            <p>{f.d}</p>
+          </li>
+        ))}
+      </ol>
+      <p class="small-link">The rule behind every agent we build: read <a href="/human-in-the-loop-ai-approval-design/">how we design approval steps</a>.</p>
+      <div class="ceo"><FounderVideo heading="Why Moksh Group started Moksh AI" /></div>
+    </div>
   </section>
 
-  <!-- PROCESS -->
-  <section class="section sky">
+  <!-- 7. HOW WE WORK -->
+  <section class="section" aria-labelledby="how-h">
     <div class="container">
-      <div class="head reveal">
-        <span class="eyebrow">How an engagement runs</span>
-        <h2>Three steps, each ending in a decision you make</h2>
+      <div class="head">
+        <span class="eyebrow">How we work</span>
+        <h2 id="how-h">From the first workflow to measurable business automation</h2>
       </div>
       <ol class="steps" role="list">
         <li class="step reveal">
           <span class="step-n">01</span>
           <h3>Discovery</h3>
-          <p>We map one workflow end to end: who touches it, which systems hold the data, and where the time goes. We agree the baseline and the metric a pilot will be judged on.</p>
-          <dl><dt>You get</dt><dd>A ranked list of what is worth automating, and what is not</dd><dt>You decide</dt><dd>Whether to pilot, and which workflow</dd></dl>
+          <p>We map one business workflow, understand the systems behind it and find where automation makes sense.</p>
+          <dl><dt>Outcome</dt><dd>A prioritised automation opportunity and an agreed measurement baseline</dd></dl>
         </li>
         <li class="step reveal">
           <span class="step-n">02</span>
           <h3>Pilot</h3>
-          <p>We build one agent on one queue, with human approval switched on. It runs against live work and is measured against the baseline from discovery.</p>
-          <dl><dt>You get</dt><dd>Measured results on your own data</dd><dt>You decide</dt><dd>Keep it, change it, or stop</dd></dl>
+          <p>We build an agent for the chosen workflow with human approval switched on, and run it against live work.</p>
+          <dl><dt>Outcome</dt><dd>Measured performance on your own workflow and data</dd></dl>
         </li>
         <li class="step reveal">
           <span class="step-n">03</span>
           <h3>Scale</h3>
-          <p>We extend to neighbouring workflows, loosen approvals where the data supports it, train your team and hand over runbooks. Accuracy and running cost are reviewed every month.</p>
-          <dl><dt>You get</dt><dd>Agents your team owns and trusts</dd><dt>You decide</dt><dd>What comes next, on evidence</dd></dl>
+          <p>We extend what works into neighbouring workflows, train your team and set up the operating procedures.</p>
+          <dl><dt>Outcome</dt><dd>AI your team can operate, supervise and improve</dd></dl>
         </li>
       </ol>
       <div class="after-steps">
-        <p>You contract with our New Jersey office; the build team works from Ahmedabad. Running cost and accuracy are reviewed with you every month.</p>
+        <p>Each step ends in a decision you make, and every engagement is quoted as a fixed scope before work starts.</p>
         <a class="link-arrow" href="/how-we-work/">How we work in detail</a>
       </div>
     </div>
   </section>
 
-  <!-- FAQ -->
-  <section class="section">
+  <!-- 8. VALUE: live calculator with stated assumptions -->
+  <section class="section sky" aria-labelledby="roi-h" id="estimate">
+    <div class="container roi">
+      <div class="stack-sm">
+        <span class="eyebrow">Free calculators</span>
+        <h2 id="roi-h">Understand the value of automation before you invest</h2>
+        <p class="lede">Estimate time saved, workload removed and what it is worth, with your own numbers. The formulas are shown and nothing is sent anywhere.</p>
+        <ul class="tool-list" role="list">
+          {tools.filter((t) => t.slug !== 'msp-ticket-roi').map((t) => (<li><a href={`/tools/${t.slug}/`}><strong>{t.name}</strong><span>{t.description}</span></a></li>))}
+        </ul>
+        <p class="note">Results are estimates from the inputs you enter, not a promise of savings. A pilot measures the real figure on your own work.</p>
+      </div>
+      <div><MiniCalc /></div>
+    </div>
+  </section>
+
+  <!-- 9. WHY MOKSH AI -->
+  <section class="section" aria-labelledby="why-h">
+    <div class="container why">
+      <div class="stack-sm why-head">
+        <span class="eyebrow">Why Moksh AI</span>
+        <h2 id="why-h">Practical AI expertise, built around your business</h2>
+        <dl class="why-facts">
+          <div><dt>Contracting</dt><dd>US office, Lake Hiawatha, New Jersey</dd></div>
+          <div><dt>Delivery</dt><dd>Engineering team in Ahmedabad, India</dd></div>
+          <div><dt>Support</dt><dd>Available {site.supportHours}</dd></div>
+          <div><dt>Group</dt><dd>Part of <a href="https://moksh-group.com/" rel="noopener">Moksh Group</a></dd></div>
+        </dl>
+      </div>
+      <ol class="why-list" role="list">
+        {strengths.map((s, i) => (<li><span class="mono">{String(i + 1).padStart(2, '0')}</span><div><h3>{s.t}</h3><p>{s.d}</p></div></li>))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- 10. FAQ -->
+  <section class="section mint" aria-labelledby="faq-h">
     <div class="container faq-grid">
-      <div class="stack-sm reveal">
-        <h2>Questions buyers ask first</h2>
+      <div class="stack-sm">
+        <h2 id="faq-h">Questions buyers ask first</h2>
         <p class="lede">If yours is not here, ask it on the call.</p>
       </div>
       <Faq items={faqs} />
     </div>
   </section>
 
-  <CtaBand />
+  <!-- 11. CLOSING CTA: flat ink into the footer -->
+  <CtaBand
+    title="Let’s find the right AI opportunity for your business"
+    text="Tell us about a workflow that takes up your team’s time. We’ll tell you whether AI automation makes sense and what an implementation could look like."
+    primaryLabel="Book a 30-minute strategy call"
+    secondaryHref="/agents/"
+    secondaryLabel="Explore AI agents"
+  />
 </Base>
 
 <style>
-  .hero { padding-block: clamp(64px, 9vw, 128px) clamp(64px, 8vw, 112px); }
-  .hero::before { opacity: .7; }
-  .hero::after { opacity: .5; }
-  .hero-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: clamp(36px, 5vw, 80px); align-items: center; }
+  /* hero */
+  .hero { padding-block: clamp(48px, 7vw, 104px) clamp(56px, 7vw, 96px); }
+  .hero.glow::before { opacity: .16; }
+  .hero.glow::after { opacity: .12; }
+  .hero-grid { display: grid; grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr); gap: clamp(32px, 4vw, 64px); align-items: center; }
   @media (max-width: 980px) { .hero-grid { grid-template-columns: minmax(0, 1fr); } }
-  .hero-copy { display: grid; gap: 26px; position: relative; z-index: 1; }
-  .hero h1 { color: #fff; max-width: 15ch; font-size: clamp(2.4rem, 1.5rem + 3vw, 3.9rem); }
-  .hero .lede { max-width: 44ch; }
-  .hero-meta { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px 18px; max-width: 56ch; font-size: var(--t-xs); letter-spacing: .06em; text-transform: uppercase; color: var(--on-dark-muted); }
-  .hero-meta li { white-space: nowrap; }
-  .hero-meta li:last-child { color: var(--green-on-dark); }
-  .hero-visual { position: relative; isolation: isolate; }
-  /* Cursor spotlight: a soft logo-blue light that follows the pointer across the hero. */
-  .spot { position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: 0; transition: opacity .4s var(--ease);
-    background: radial-gradient(520px circle at var(--mx, 50%) var(--my, 50%), rgba(140, 194, 247, .11), rgba(95, 208, 214, .05) 40%, transparent 70%); }
-  .hero:global(.spot-on) .spot { opacity: 1; }
-  .hero-grid { position: relative; z-index: 1; }
+  .hero-copy { display: grid; gap: 24px; position: relative; z-index: 1; }
+  .hero h1 { max-width: 16ch; font-size: clamp(2.4rem, 1.4rem + 3.4vw, 4.1rem); }
+  .hero .lede { max-width: 48ch; }
+  .proof { list-style: none; margin: 4px 0 0; padding: 18px 0 0; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 10px 22px; font-size: var(--t-sm); color: var(--muted); }
+  .proof li { display: inline-flex; align-items: center; gap: 8px; }
+  .proof li::before { content: ""; width: 10px; height: 5px; border-left: 2px solid var(--green-700); border-bottom: 2px solid var(--green-700); transform: rotate(-45deg) translateY(-2px); }
+  .hero-visual { position: relative; }
 
-  .agent-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: 24px; }
-  .ind-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0 28px; }
-  @media (max-width: 1080px) { .ind-list { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .note { font-size: var(--t-sm); color: var(--muted); max-width: 64ch; }
+  .row-head { display: flex; justify-content: space-between; align-items: end; gap: 16px 32px; flex-wrap: wrap; margin-bottom: clamp(28px, 4vw, 44px); }
+  .row-head h2 { max-width: 24ch; }
+
+  /* 2. work */
+  .work { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: clamp(28px, 5vw, 72px); }
+  @media (max-width: 760px) { .work { grid-template-columns: minmax(0, 1fr); } }
+  .work li { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 18px; align-items: start; padding-block: 22px; border-top: 1px solid var(--line); }
+  .work h3 { font-size: var(--t-lg); display: flex; align-items: baseline; gap: 10px; }
+  .w-n { font-size: var(--t-xs); color: var(--muted); font-weight: 500; }
+  .work p { margin-top: 6px; color: var(--muted); }
+
+  /* 3. agents */
+  .agent-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 330px), 1fr)); gap: 24px; }
+
+  /* 4. industries */
+  .ind { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(24px, 4vw, 56px); align-items: stretch; }
+  @media (max-width: 900px) { .ind { grid-template-columns: minmax(0, 1fr); } }
+  .ind-feature { display: grid; gap: 16px; align-content: start; padding: clamp(26px, 3.4vw, 44px); border-radius: 18px; text-decoration: none; color: var(--ink); position: relative; overflow: hidden; isolation: isolate; transition: transform .25s var(--ease); }
+  .ind-feature::after { content: ""; position: absolute; z-index: -1; right: -80px; bottom: -80px; width: 260px; height: 260px; border-radius: 50%; background: radial-gradient(circle, rgba(31, 169, 47, .28), transparent 70%); pointer-events: none; }
+  .ind-feature:hover { transform: translateY(-3px); color: var(--ink); }
+  .if-title { font: 750 var(--t-2xl)/1.05 var(--f-display); font-stretch: 86%; letter-spacing: -0.02em; }
+  .if-text { color: var(--muted); max-width: 52ch; }
+  .if-tasks { font-size: var(--t-xs); letter-spacing: .06em; text-transform: uppercase; color: var(--teal-700); }
+  .ind-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 28px; align-content: start; }
   @media (max-width: 560px) { .ind-list { grid-template-columns: minmax(0, 1fr); } }
-  .ind-list a { display: flex; align-items: center; gap: 14px; min-height: 76px; padding-block: 14px; border-bottom: 1px solid var(--line-strong); color: inherit; text-decoration: none; }
+  .ind-list a { display: flex; align-items: center; gap: 14px; min-height: 76px; padding-block: 14px; border-bottom: 1px solid var(--line); color: inherit; text-decoration: none; }
   .ind-t { display: grid; gap: 2px; }
   .ind-t strong { font-weight: 600; transition: color .2s var(--ease); }
   .ind-t small { font-size: var(--t-xs); color: var(--muted); }
   .ind-list a:hover strong { color: var(--blue-700); }
 
-
-  .row-head { display: flex; justify-content: space-between; align-items: end; gap: 16px; flex-wrap: wrap; margin-bottom: clamp(28px, 4vw, 44px); }
+  /* 5. services */
   .svc-list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line-strong); }
-  .svc-list a { display: grid; grid-template-columns: 72px minmax(0, .9fr) minmax(0, 1.3fr) 40px; gap: 24px; align-items: baseline; padding-block: 28px; border-bottom: 1px solid var(--line-strong); color: inherit; text-decoration: none; transition: background-color .25s var(--ease), padding .25s var(--ease); }
+  .svc-list a { display: grid; grid-template-columns: 56px minmax(0, .95fr) minmax(0, 1.25fr) 40px; gap: 24px; align-items: center; padding-block: 24px; border-bottom: 1px solid var(--line-strong); color: inherit; text-decoration: none; transition: background-color .25s var(--ease), padding .25s var(--ease); }
   .svc-list a:hover { background: var(--surface); padding-inline: 16px; }
   .svc-n { font-size: var(--t-sm); color: var(--muted); }
-  .svc-name { font: 700 var(--t-xl)/1.15 var(--f-display); font-stretch: 88%; letter-spacing: -0.01em; }
+  .svc-name { display: flex; align-items: center; gap: 14px; font: 700 var(--t-lg)/1.2 var(--f-display); font-stretch: 90%; letter-spacing: -0.01em; }
+  .svc-ic { display: grid; place-items: center; width: 36px; height: 36px; flex: none; border-radius: 10px; background: var(--surface); border: 1px solid var(--line); color: var(--teal-700); }
+  .svc-ic :global(svg) { width: 18px; height: 18px; }
   .svc-text { color: var(--muted); }
   .svc-go { justify-self: end; color: var(--blue-700); }
   .svc-go :global(svg) { width: 20px; height: 20px; transition: transform .25s var(--ease); }
   .svc-list a:hover .svc-go :global(svg) { transform: translateX(4px); }
-  @media (max-width: 860px) { .svc-list a { grid-template-columns: 44px minmax(0, 1fr); gap: 6px 14px; } .svc-text { grid-column: 2; } .svc-go { display: none; } }
+  @media (max-width: 860px) { .svc-list a { grid-template-columns: 36px minmax(0, 1fr); gap: 8px 14px; } .svc-text { grid-column: 2; } .svc-go { display: none; } }
+
+  /* 6. AI + human */
+  .flow { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; position: relative; }
+  @media (max-width: 1000px) { .flow { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 560px) { .flow { grid-template-columns: minmax(0, 1fr); } }
+  .flow-step { display: grid; gap: 8px; align-content: start; padding: 20px; border-radius: var(--radius); border: 1px solid var(--line); background: var(--surface); position: relative; }
+  .flow-step h3 { font-size: var(--t-lg); }
+  .flow-step p { font-size: var(--t-sm); color: var(--muted); }
+  .flow-who { font-size: var(--t-xs); letter-spacing: .06em; text-transform: uppercase; color: var(--teal-700); }
+  .flow-step.person { border-color: rgba(242, 180, 92, .45); }
+  .flow-step.person .flow-who { color: var(--amber); }
+  .flow-step.branch { border-style: dashed; }
+  .small-link { margin-top: 22px; font-size: var(--t-sm); color: var(--muted); }
+  .ceo { margin-top: clamp(44px, 6vw, 72px); padding-top: clamp(36px, 5vw, 56px); border-top: 1px solid var(--line); }
 
   .after-steps { margin-top: 32px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 12px 32px; }
   .after-steps p { color: var(--muted); max-width: 64ch; }
 
+  /* 8. value */
+  .roi { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(28px, 5vw, 64px); align-items: start; }
+  @media (max-width: 960px) { .roi { grid-template-columns: minmax(0, 1fr); } }
+  .tool-list { list-style: none; margin: 8px 0 0; padding: 0; }
+  .tool-list a { display: grid; gap: 4px; padding-block: 14px; border-bottom: 1px solid var(--line-strong); color: inherit; text-decoration: none; }
+  .tool-list a strong { color: var(--ink); transition: color .2s var(--ease); }
+  .tool-list a span { font-size: var(--t-sm); color: var(--muted); }
+  .tool-list a:hover strong { color: var(--blue-700); }
 
+  /* 9. why */
+  .why { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: clamp(32px, 5vw, 80px); align-items: start; }
+  @media (max-width: 900px) { .why { grid-template-columns: minmax(0, 1fr); } }
+  .why-facts { margin: 12px 0 0; display: grid; gap: 0; border-top: 1px solid var(--line); }
+  .why-facts div { display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 12px; padding-block: 12px; border-bottom: 1px solid var(--line); font-size: var(--t-sm); }
+  .why-facts dt { font: 500 var(--t-xs)/1.6 var(--f-mono); letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
+  .why-facts dd { margin: 0; }
+  .why-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 32px; }
+  @media (max-width: 600px) { .why-list { grid-template-columns: minmax(0, 1fr); } }
+  .why-list li { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 10px; padding-block: 20px; border-top: 1px solid var(--line); }
+  .why-list .mono { font-size: var(--t-xs); color: var(--teal-700); padding-top: 4px; }
+  .why-list h3 { font-size: var(--t-lg); }
+  .why-list p { margin-top: 6px; color: var(--muted); font-size: var(--t-sm); }
 
   .faq-grid { display: grid; grid-template-columns: minmax(0, .75fr) minmax(0, 1.25fr); gap: clamp(32px, 5vw, 72px); align-items: start; }
   @media (max-width: 900px) { .faq-grid { grid-template-columns: minmax(0, 1fr); } }
 </style>
-
-<script>
-  // Spotlight: only with a fine pointer and motion allowed; one style write per frame.
-  const hero = document.querySelector<HTMLElement>('[data-spotlight]');
-  if (hero && matchMedia('(pointer: fine)').matches && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    let raf = 0, x = 0, y = 0;
-    hero.addEventListener('pointermove', (e) => {
-      const r = hero.getBoundingClientRect();
-      x = e.clientX - r.left; y = e.clientY - r.top;
-      if (!raf) raf = requestAnimationFrame(() => { hero.style.setProperty('--mx', `${x}px`); hero.style.setProperty('--my', `${y}px`); raf = 0; });
-    });
-    hero.addEventListener('pointerenter', () => hero.classList.add('spot-on'));
-    hero.addEventListener('pointerleave', () => hero.classList.remove('spot-on'));
-  }
-</script>

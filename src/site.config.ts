@@ -69,45 +69,45 @@ export const services = [
   {
     slug: 'ai-consulting',
     name: 'AI strategy & consulting',
-    short: 'Find the work worth automating, rank it by payback, and leave with a roadmap your team can run.',
+    short: 'Find where AI creates real value, rank the opportunities by payback and leave with a roadmap your team can run.',
   },
   {
     slug: 'custom-ai-development',
     name: 'Custom AI agents & development',
-    short: 'Agents built around the tools you already run (email, CRM, helpdesk, ERP, PSA), with escalation rules you set.',
+    short: 'Agents designed around your processes and the systems you already run, with approval and escalation rules you set.',
   },
   {
     slug: 'ai-voice-agents',
     name: 'AI voice agents & assistants',
-    short: 'Phone and voice assistants that answer routine calls, look things up in your systems and hand the caller to a person with a summary.',
+    short: 'Voice assistants that handle routine calls, look up information and pass complex requests to your staff with the context attached.',
   },
   {
     slug: 'llm-ai-integration',
     name: 'LLM & AI integration',
-    short: 'Add AI features such as summaries, document Q&A, search and chat to the product or tools you already have, without a rewrite.',
+    short: 'Add document intelligence, knowledge search, summaries and chat to the applications and systems you already have.',
   },
   {
     slug: 'ai-prototype-to-production',
     name: 'AI prototype to production',
-    short: 'Take an AI demo or app-builder prototype and make it ready for real users: login, data security, payments, hosting and monitoring.',
+    short: 'Turn a promising AI prototype into a production application with proper login, data security, deployment and monitoring.',
   },
   {
     slug: 'ai-implementation-training',
     name: 'Implementation & training',
-    short: 'Rollout, integration, and hands-on training so the people who use the agent trust it.',
+    short: 'Deploy AI into daily workflows and train the people who use it, so they trust it and know when to step in.',
   },
   {
     slug: 'ai-cost-optimization',
     name: 'AI cost optimisation',
-    short: 'Cut overlapping AI subscriptions with open-source models, low-code tools and targeted automation.',
+    short: 'Cut unnecessary AI spend with the right mix of open-source models, low-code tools and targeted automation.',
   },
 ] as const;
 export type ServiceSlug = (typeof services)[number]['slug'];
 
-// "We support" lists an industry only when it has its own page behind it (src/lib/industries.ts).
+// "Industries" lists an industry only when it has its own page behind it (src/lib/industries.ts).
 export const nav: NavItem[] = [
   {
-    label: 'We support',
+    label: 'Industries',
     children: [
       ...industries.map((i) => ({ label: i.name, href: i.href, note: i.note })),
       { label: 'All industries', href: '/industries/', note: 'Every industry we support' },

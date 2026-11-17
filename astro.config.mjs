@@ -99,8 +99,7 @@ export default defineConfig({
         `img-src 'self' data: blob: ${[...google.img, ...github.img].join(' ')}`,
         "font-src 'self'",
         "media-src 'self'",
-        // blob: lets three.js's GLTFLoader decode the homepage robot's embedded textures (same-page memory, no host).
-        `connect-src 'self' blob: ${[...google.connect, ...github.connect, formOrigin].filter(Boolean).join(' ')}`,
+        `connect-src 'self' ${[...google.connect, ...github.connect, formOrigin].filter(Boolean).join(' ')}`,
         `frame-src ${google.frame.join(' ')}`,
         "object-src 'none'",
         "base-uri 'self'",
@@ -108,9 +107,7 @@ export default defineConfig({
         "frame-ancestors 'self'",
         'upgrade-insecure-requests',
       ],
-      // 'wasm-unsafe-eval' lets the homepage robot's meshopt decoder (bundled with
-      // three.js, no network) compile its WebAssembly. It does not allow eval() of JavaScript.
-      scriptDirective: { resources: ["'self'", "'wasm-unsafe-eval'", ...google.script] },
+      scriptDirective: { resources: ["'self'", ...google.script] },
       styleDirective: { resources: ["'self'", "'unsafe-inline'"] },
     },
   },
