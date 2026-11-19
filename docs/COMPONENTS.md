@@ -73,7 +73,7 @@ Product-style illustrations that show each page's subject. All are HTML/SVG, lab
 
 | File | What it does | Notes |
 | --- | --- | --- |
-| `SystemStack.astro` | Isometric five-layer drawing: your systems → business context → AI agent → human review → business outcomes | Geometry generated in the frontmatter; SVG is `aria-hidden` and the layer labels are a real ordered list positioned by percentage. Phones show short titles only. Colours from tokens via CSS classes. A bundled script drives compact/explode, tilt, hover spread and layer focus through CSS variables (`--dy`, `--s`, `--rx`, `--ry`, `--lead`, `--beam`); labels follow only the hover lift so they never overlap |
+| `HeroRender.astro` | Homepage hero: Blender studio render of the five layers (systems → knowledge and data → AI layer → human review → outcomes) | Frame 0 is an `<img>` (LCP-safe); a bundled script draws the WebP sequence from `public/hero/d/` (desktop) or `public/hero/m/` (phones, every other frame) on a canvas: one unfold on load, scroll folds it, pointer lean (±6°). Labels are an ordered list placed from `public/hero/labels.json`, written by the render script. Still image under reduced motion or Save-Data. Re-render with `scripts/hero/render_stack.py`, then `node scripts/hero/encode.mjs <dir>` |
 
 ## Demo agents (`components/agents/`)
 

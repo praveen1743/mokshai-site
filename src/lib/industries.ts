@@ -46,7 +46,7 @@ export const industries: Industry[] = [
       { t: 'Safe AI at work', d: 'An acceptable-use policy, approved tools and a check for AI apps staff already use without approval.' },
     ],
     agents: ['email-meeting-assistant', 'ecommerce-personal-shopper'],
-    services: ['ai-consulting', 'custom-ai-development', 'ai-implementation-training'],
+    services: ['ai-consulting', 'ai-workflow-automation', 'custom-ai-development', 'ai-implementation-training'],
     faqs: [
       { q: 'We are a small team. Is this worth it for us?', a: 'Often yes, because a few hours saved per person each week is a large share of a small team\'s capacity. The first call tells you plainly whether one workflow is worth automating, and we say so if it is not.' },
       { q: 'Our IT is managed by an MSP. Does that matter?', a: 'No. We work with your MSP on access and security, and agree who supports what before anything goes live.' },
@@ -75,7 +75,7 @@ export const industries: Industry[] = [
       { t: 'Customer support', d: 'Answer balance, status and policy questions by chat or phone, and hand anything sensitive to a person.' },
     ],
     agents: ['claims-automation', 'financial-reasoning', 'legal-document-review'],
-    services: ['custom-ai-development', 'ai-voice-agents', 'llm-ai-integration'],
+    services: ['enterprise-ai-integration', 'ai-workflow-automation', 'rag-knowledge-systems', 'custom-ai-development'],
     faqs: [
       { q: 'Can the agent approve a claim or a transaction on its own?', a: 'Only where you decide it may, and only within limits you set. By default, anything that moves money or changes a customer\'s position goes to a person for approval.' },
       { q: 'How is customer data protected?', a: 'Each agent gets the minimum access it needs, every action is logged, and we agree where data is stored and which models may process it before the build starts. See our security page for the questions we answer first.' },
@@ -100,7 +100,7 @@ export const industries: Industry[] = [
       { t: 'Scheduling and front desk', d: 'A voice or chat assistant that books, reschedules and answers routine questions, and transfers the rest.' },
     ],
     agents: ['medical-report-insights', 'claims-automation'],
-    services: ['custom-ai-development', 'ai-voice-agents', 'llm-ai-integration'],
+    services: ['ai-workflow-automation', 'rag-knowledge-systems', 'ai-voice-agents', 'custom-ai-development'],
     faqs: [
       { q: 'Does the agent give medical advice?', a: 'No. It summarises and flags what is in a report for a clinician or the patient\'s care team to review. Clinical decisions stay with qualified people.' },
       { q: 'How do you handle patient data?', a: 'We agree with you where data is stored, who can see it, which models may process it and what is logged, and build to your privacy and regulatory requirements. Nothing goes live until that is signed off.' },
@@ -126,7 +126,7 @@ export const industries: Industry[] = [
       { t: 'Listing drafts', d: 'Draft listing descriptions from property details and photos for an agent to edit.' },
     ],
     agents: ['email-meeting-assistant', 'legal-document-review'],
-    services: ['custom-ai-development', 'ai-voice-agents', 'llm-ai-integration'],
+    services: ['ai-voice-agents', 'ai-workflow-automation', 'llm-ai-integration', 'custom-ai-development'],
     faqs: [
       { q: 'Will it work with our CRM?', a: 'Agents are built on the APIs of the systems you already use. On the first call we review your CRM and tell you plainly whether an agent can work with it.' },
       { q: 'Can it answer the phone after hours?', a: 'Yes. A voice assistant can answer enquiries and tenant calls around the clock and pass anything urgent to the person on call.' },
@@ -151,7 +151,7 @@ export const industries: Industry[] = [
       { t: 'Drafting support', d: 'First drafts of routine letters and summaries for a professional to edit.' },
     ],
     agents: ['legal-document-review', 'email-meeting-assistant'],
-    services: ['custom-ai-development', 'llm-ai-integration', 'ai-consulting'],
+    services: ['rag-knowledge-systems', 'ai-workflow-automation', 'custom-ai-development', 'ai-consulting'],
     faqs: [
       { q: 'Can we trust what the agent finds?', a: 'Every finding links to the passage it came from, so a reviewer can check it in seconds. The agent prepares the review; a qualified person signs it off.' },
       { q: 'Is client material kept confidential?', a: 'We agree storage, access and model processing with you before the build, keep each client\'s documents separated, and log every action the agent takes.' },
@@ -176,7 +176,7 @@ export const industries: Industry[] = [
       { t: 'Catalogue clean-up', d: 'Finds duplicates, missing attributes and inconsistent categories.' },
     ],
     agents: ['ecommerce-personal-shopper', 'email-meeting-assistant'],
-    services: ['custom-ai-development', 'llm-ai-integration', 'ai-prototype-to-production'],
+    services: ['llm-ai-integration', 'ai-workflow-automation', 'enterprise-ai-integration', 'ai-prototype-to-production'],
     faqs: [
       { q: 'Which store platforms do you work with?', a: 'We build on the APIs of the platform you use. On the first call we review your store and tell you plainly what an agent can connect to.' },
       { q: 'Can the assistant make up products or prices?', a: 'It only recommends products returned by a search of your catalogue, with live prices from your store, and it says so when nothing matches.' },

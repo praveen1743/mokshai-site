@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 import Arrow from '../components/Arrow.astro';
 import Icon from '../components/Icon.astro';
-import SystemStack from '../components/hero/SystemStack.astro';
+import HeroRender from '../components/hero/HeroRender.astro';
 import Faq from '../components/Faq.astro';
 import CtaBand from '../components/CtaBand.astro';
 import FounderVideo from '../components/FounderVideo.astro';
@@ -27,9 +27,12 @@ const serviceIcons: Record<string, string> = {
   'custom-ai-development': 'copilot',
   'ai-voice-agents': 'quote',
   'llm-ai-integration': 'layers',
-  'ai-prototype-to-production': 'route',
+  'ai-prototype-to-production': 'power',
   'ai-implementation-training': 'people',
   'ai-cost-optimization': 'coins',
+  'rag-knowledge-systems': 'stack',
+  'enterprise-ai-integration': 'database',
+  'ai-workflow-automation': 'route',
 };
 
 const workflows = [
@@ -39,16 +42,16 @@ const workflows = [
   { icon: 'target', t: 'Quotes and operational documents', d: 'Prepare quotations and job paperwork from requests, drawings and your own pricing rules.' },
   { icon: 'shield', t: 'Contract review', d: 'Find the clauses that matter, rate the risk and point to the exact passage for a reviewer.' },
   { icon: 'database', t: 'Updating business records', d: 'Keep the CRM, ERP and helpdesk up to date from the conversations and documents that change them.' },
-  { icon: 'chart', t: 'Reports and summaries', d: 'Turn records, threads and meetings into the summary or report someone would otherwise write by hand.' },
-  { icon: 'route', t: 'Routing exceptions', d: 'Spot what falls outside the rules and send it to the right person with the context attached.' },
+  { icon: 'layers', t: 'AI inside your own apps', d: 'Add a copilot, smart search or summaries to the software your team or your customers already use.' },
+  { icon: 'stack', t: 'Answers from company knowledge', d: 'Let staff ask questions of your policies, manuals and past work, and get answers with the source attached.' },
 ];
 
 const flow = [
-  { who: 'Agent', t: 'Processes the work', d: 'Reads the request or document, gathers what it needs from your systems and prepares the result.' },
+  { who: 'AI', t: 'Processes the work', d: 'Reads the request or document, gathers what it needs from your systems and prepares the result.' },
   { who: 'Person', t: 'Validates', d: 'Checks the draft and the evidence behind it, and edits anything that is not right.' },
   { who: 'Person', t: 'Approves', d: 'Sensitive actions, such as sending, paying or changing a record, wait for a yes.' },
-  { who: 'Agent', t: 'Escalates', d: 'Anything outside its limits goes straight to the right person, with the context attached.', branch: true },
-  { who: 'Agent', t: 'Completes the action', d: 'Updates the record, sends the message or files the document, and logs what it did.' },
+  { who: 'AI', t: 'Escalates', d: 'Anything outside its limits goes straight to the right person, with the context attached.', branch: true },
+  { who: 'AI', t: 'Completes the action', d: 'Updates the record, sends the message or files the document, and logs what it did.' },
 ];
 
 const strengths = [
@@ -62,31 +65,32 @@ const strengths = [
 ];
 
 const faqs = [
-  { q: 'What does Moksh AI do?', a: 'Moksh AI is an AI automation and implementation services company. We help businesses find where AI creates real value, then design, build and run custom AI agents that work inside the systems they already use: reading documents, answering routine requests, updating records and preparing work, with a person approving anything that matters.' },
+  { q: 'What does Moksh AI do?', a: 'Moksh AI is an AI implementation, integration and automation services company. We help businesses find where AI creates real value, then build it into the systems they already run: AI features in existing apps, RAG assistants that answer from company knowledge, integrations with ERP, CRM and helpdesk systems, automated workflows and document processing, custom AI agents and voice assistants. A person approves anything that matters.' },
   { q: 'Will AI agents replace our staff?', a: 'No. Agents take the repetitive layer of the work. Your people stay responsible for judgement calls, sensitive actions, complex cases and customer relationships. What changes is how your team spends its day.' },
   { q: 'Which business systems can AI agents work with?', a: 'Agents are built on the APIs of the systems you already run, such as email, Microsoft 365 or Google Workspace, your CRM, accounting software, helpdesk, PSA or ERP. We do not ask you to replace your stack. On the first call we review your tools and tell you plainly whether an agent can work with them.' },
   { q: 'Are AI agents secure?', a: 'They can be, when they are configured properly. We scope each agent to the minimum access it needs, log every action it takes, keep client data separated, and route sensitive actions to a person for approval. Our security page lists the questions we answer before any build.' },
   { q: 'How does human approval work?', a: 'For each agent we agree which actions it may take on its own, which need a person’s approval, and which it must never take. Anything that needs approval arrives with the agent’s draft and the information it used, so the reviewer can approve, edit or reject it in one step. Every action is logged, and approvals can be loosened later only where the results support it.' },
   { q: 'How does the implementation process work?', a: 'In three steps, each ending in a decision you make. Discovery maps one workflow and agrees how success will be measured. A pilot runs one agent on that workflow with approval switched on. Scale extends what works to neighbouring workflows, with training and runbooks for your team.' },
   { q: 'How do we get started?', a: 'Book a 30-minute strategy call and tell us about one workflow that takes up your team’s time. We tell you whether an agent fits, which systems it would touch and what a discovery would involve. Every engagement is quoted as a fixed scope before work starts.' },
+  { q: 'What is the difference between RAG, automation and AI agents?', a: 'RAG (retrieval-augmented generation) lets AI answer from your own documents and data, with sources. Workflow automation runs a defined process end to end, with AI handling steps such as reading a document or classifying a request. An agent decides its own steps towards a goal and takes actions in your systems. Most projects combine them, and we recommend the simplest one that does the job.' },
   { q: 'Which industries can benefit from AI automation?', a: `Any business with repeatable, rules-based work. We already have agents, guides or demos for managed service providers and their clients, manufacturing and operations, fintech and insurance, healthcare, real estate, legal and professional services, and e-commerce. We work with teams worldwide, and support is available ${site.supportHours}.` },
 ];
 ---
 <Base
-  title="AI Agents & Automation Services for Business | Moksh AI"
-  description="Moksh AI builds custom AI agents that work inside your existing systems and automate business workflows, with a person approving every decision that matters. Strategy, development and implementation."
+  title="AI Implementation, Integration & Automation Services | Moksh AI"
+  description="Moksh AI builds AI into the systems you already run: AI features in existing apps, RAG knowledge assistants, ERP and CRM integrations, workflow and document automation and custom AI agents, with people in control."
   schema={[faq(faqs), videoObject(introVideo)]}
 >
   <!-- 1. HERO: the only section with ambient lighting -->
   <section class="hero wash glow" aria-labelledby="hero-h">
     <div class="container hero-grid">
       <div class="hero-copy">
-        <span class="eyebrow">AI automation built around your business</span>
-        <h1 id="hero-h">AI agents that get work done, <span class="grad-text">with your people in control</span></h1>
-        <p class="lede">Moksh AI designs and builds AI agents that work inside the systems your team already uses. They take on repetitive work and process information faster, and a person approves every decision that matters.</p>
+        <span class="eyebrow">AI implementation, integration and automation</span>
+        <h1 id="hero-h">Practical AI built into your business, <span class="grad-text">with your people in control</span></h1>
+        <p class="lede">We put AI to work inside the systems you already run: AI features in your apps, assistants that answer from your own knowledge, integrations with your ERP and CRM, automated workflows and custom agents. A person approves every decision that matters.</p>
         <div class="btn-row">
           <a class="btn btn-primary" href="/book/">Book a strategy call <Arrow /></a>
-          <a class="btn btn-secondary" href="/agents/">Explore AI agents</a>
+          <a class="btn btn-secondary" href="/services/">See what we build</a>
         </div>
         <ul class="proof" role="list">
           <li>Built around your existing workflows</li>
@@ -94,7 +98,7 @@ const faqs = [
           <li>Designed for real business operations</li>
         </ul>
       </div>
-      <div class="hero-visual"><SystemStack /></div>
+      <div class="hero-visual"><HeroRender /></div>
     </div>
   </section>
 
@@ -103,8 +107,8 @@ const faqs = [
     <div class="container">
       <div class="head">
         <span class="eyebrow">What we automate</span>
-        <h2 id="work-h">Your team shouldn’t spend its day on work AI can handle</h2>
-        <p class="lede">These are the jobs agents take on first. Each one keeps a person in the loop for anything unusual, sensitive or uncertain.</p>
+        <h2 id="work-h">Where AI is paying off for businesses today</h2>
+        <p class="lede">Most of the value comes from AI connected to your own data and systems, not from another standalone tool. These are the jobs we are asked to take on first, each with a person in the loop for anything unusual or sensitive.</p>
       </div>
       <ol class="work" role="list">
         {workflows.map((w, i) => (
@@ -174,9 +178,10 @@ const faqs = [
       </div>
       <ol class="svc-list" role="list">
         {services.map((s, i) => (
-          <li>
+          <li data-group={s.group}>
+            {(i === 0 || services[i - 1].group !== s.group) && <span class="svc-group mono">{s.group === 'Plan' ? 'Plan · decide what is worth doing' : s.group === 'Build' ? 'Build · put AI into your business' : 'Run · adopt it and keep it affordable'}</span>}
             <a href={`/services/${s.slug}/`}>
-              <span class="svc-n mono">0{i + 1}</span>
+              <span class="svc-n mono">{String(i + 1).padStart(2, '0')}</span>
               <span class="svc-name"><span class="svc-ic" aria-hidden="true"><Icon name={serviceIcons[s.slug] ?? 'copilot'} /></span>{s.name}</span>
               <span class="svc-text">{s.short}</span>
               <span class="svc-go" aria-hidden="true"><Arrow /></span>
@@ -193,7 +198,7 @@ const faqs = [
       <div class="head">
         <span class="eyebrow">AI plus human</span>
         <h2 id="human-h">AI handles the repetitive work while your people keep the decisions that matter</h2>
-        <p class="lede">Agents process, analyse and prepare the work. People supervise sensitive actions, review exceptions and make the calls that need judgement. Every step is logged.</p>
+        <p class="lede">AI processes, analyses and prepares the work. People supervise sensitive actions, review exceptions and make the calls that need judgement. Every step is logged.</p>
       </div>
       <div class="flow-wrap">
       <div class="flow-bar" aria-hidden="true"></div>
@@ -298,8 +303,8 @@ const faqs = [
     title="Let’s find the right AI opportunity for your business"
     text="Tell us about a workflow that takes up your team’s time. We’ll tell you whether AI automation makes sense and what an implementation could look like."
     primaryLabel="Book a 30-minute strategy call"
-    secondaryHref="/agents/"
-    secondaryLabel="Explore AI agents"
+    secondaryHref="/services/"
+    secondaryLabel="See what we build"
   />
 </Base>
 
@@ -355,6 +360,7 @@ const faqs = [
   .svc-list a { display: grid; grid-template-columns: 56px minmax(0, .95fr) minmax(0, 1.25fr) 40px; gap: 24px; align-items: center; padding-block: 24px; border-bottom: 1px solid var(--line-strong); color: inherit; text-decoration: none; transition: background-color .25s var(--ease), padding .25s var(--ease); }
   .svc-list a:hover { background: var(--surface); padding-inline: 16px; }
   .svc-n { font-size: var(--t-sm); color: var(--muted); }
+  .svc-group { display: block; padding: 28px 0 10px; font-size: var(--t-xs); letter-spacing: .1em; text-transform: uppercase; color: var(--teal-700); }
   .svc-name { display: flex; align-items: center; gap: 14px; font: 700 var(--t-lg)/1.2 var(--f-display); font-stretch: 90%; letter-spacing: -0.01em; }
   .svc-ic { display: grid; place-items: center; width: 36px; height: 36px; flex: none; border-radius: 10px; background: var(--surface); border: 1px solid var(--line); color: var(--teal-700); }
   .svc-ic :global(svg) { width: 18px; height: 18px; }

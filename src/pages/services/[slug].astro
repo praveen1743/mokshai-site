@@ -11,6 +11,8 @@ import SpendScene from '../../components/scenes/SpendScene.astro';
 import CallScene from '../../components/scenes/CallScene.astro';
 import LaunchScene from '../../components/scenes/LaunchScene.astro';
 import RagScene from '../../components/scenes/RagScene.astro';
+import IntakeScene from '../../components/scenes/IntakeScene.astro';
+import PermissionScene from '../../components/scenes/PermissionScene.astro';
 import { serviceDetails, type ServiceSlug } from '../../lib/serviceDetails';
 import { services } from '../../site.config';
 import { breadcrumbs, faq, service } from '../../lib/schema';
@@ -39,7 +41,9 @@ const reading = postsForService(await allPosts(), slug).slice(0, 4);
     {slug === 'ai-implementation-training' && <RolloutScene slot="visual" />}
     {slug === 'ai-cost-optimization' && <SpendScene slot="visual" />}
     {slug === 'ai-voice-agents' && <CallScene slot="visual" />}
-    {slug === 'llm-ai-integration' && <RagScene slot="visual" />}
+    {(slug === 'llm-ai-integration' || slug === 'rag-knowledge-systems') && <RagScene slot="visual" />}
+    {slug === 'ai-workflow-automation' && <IntakeScene slot="visual" />}
+    {slug === 'enterprise-ai-integration' && <PermissionScene slot="visual" />}
     {slug === 'ai-prototype-to-production' && <LaunchScene slot="visual" />}
   </PageHero>
 

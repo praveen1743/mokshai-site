@@ -9,7 +9,7 @@ export const site = {
   legalName: 'Moksh Infotech Pvt Ltd',
   cin: 'U72501GJ2022PTC131216',
   description:
-    'Moksh AI builds AI agents and automation for businesses worldwide, inside the tools they already use, with a person checking the work before anything goes out.',
+    'Moksh AI is an AI implementation and automation services company. We build AI into the systems businesses already run: AI features in existing apps, RAG knowledge assistants, enterprise integrations, workflow automation and custom agents, with people in control.',
   // Confirmed by the company (13 Nov 2026): support is staffed around the clock.
   supportHours: '24/7',
   // Confirmed by the company (17 Nov 2026); stated on mokshai.net/about-us/.
@@ -67,41 +67,68 @@ export const site = {
 export type NavLink = { label: string; href: string; note?: string };
 export type NavItem = NavLink | { label: string; children: NavLink[] };
 
+// Ten services in three groups: Plan (decide what is worth doing), Build (put AI
+// into the business) and Run (adopt it and keep it affordable).
 export const services = [
   {
     slug: 'ai-consulting',
-    name: 'AI strategy & consulting',
-    short: 'Find where AI creates real value, rank the opportunities by payback and leave with a roadmap your team can run.',
+    group: 'Plan',
+    name: 'AI strategy, readiness & governance',
+    short: 'Find where AI creates real value, check your data and risks, and leave with a ranked roadmap and the rules AI will run under.',
+  },
+  {
+    slug: 'llm-ai-integration',
+    group: 'Build',
+    name: 'AI in your existing apps',
+    short: 'Add copilots, summaries, document Q&A, search and chat to the applications and SaaS products you already run, without a rewrite.',
+  },
+  {
+    slug: 'rag-knowledge-systems',
+    group: 'Build',
+    name: 'RAG & knowledge systems',
+    short: 'Assistants that answer from your own documents, policies and records, cite their sources and respect who is allowed to see what.',
+  },
+  {
+    slug: 'enterprise-ai-integration',
+    group: 'Build',
+    name: 'Enterprise AI integration',
+    short: 'Connect AI to your ERP, CRM, helpdesk and data platforms through secure APIs, so it reads and updates the systems of record.',
+  },
+  {
+    slug: 'ai-workflow-automation',
+    group: 'Build',
+    name: 'AI workflow & document automation',
+    short: 'Automate multi-step processes end to end, from reading invoices and forms to routing approvals across your systems.',
   },
   {
     slug: 'custom-ai-development',
-    name: 'Custom AI agents & development',
-    short: 'Agents designed around your processes and the systems you already run, with approval and escalation rules you set.',
+    group: 'Build',
+    name: 'Custom AI agents',
+    short: 'Agents designed around your processes that take actions in your systems, with approval and escalation rules you set.',
   },
   {
     slug: 'ai-voice-agents',
+    group: 'Build',
     name: 'AI voice agents & assistants',
     short: 'Voice assistants that handle routine calls, look up information and pass complex requests to your staff with the context attached.',
   },
   {
-    slug: 'llm-ai-integration',
-    name: 'LLM & AI integration',
-    short: 'Add document intelligence, knowledge search, summaries and chat to the applications and systems you already have.',
-  },
-  {
     slug: 'ai-prototype-to-production',
+    group: 'Build',
     name: 'AI prototype to production',
     short: 'Turn a promising AI prototype into a production application with proper login, data security, deployment and monitoring.',
   },
   {
     slug: 'ai-implementation-training',
-    name: 'Implementation & training',
-    short: 'Deploy AI into daily workflows and train the people who use it, so they trust it and know when to step in.',
+    group: 'Run',
+    name: 'Implementation, training & support',
+    short: 'Deploy AI into daily work, train the people who use it, and monitor accuracy and cost once it is live.',
   },
   {
     slug: 'ai-cost-optimization',
+    group: 'Run',
     name: 'AI cost optimisation',
-    short: 'Cut unnecessary AI spend with the right mix of open-source models, low-code tools and targeted automation.',
+    short: 'Cut unnecessary AI spend with the right mix of models, open-source options, low-code tools and targeted automation.',
   },
 ] as const;
 export type ServiceSlug = (typeof services)[number]['slug'];

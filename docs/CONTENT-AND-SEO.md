@@ -5,6 +5,7 @@
 | Content | File |
 | --- | --- |
 | Company facts, nav, services list, Moksh Group companies | `src/site.config.ts` |
+| Service page copy (answer, includes, FAQs) | `src/lib/serviceDetails.ts` |
 | Service page copy and FAQs | `src/lib/serviceDetails.ts` |
 | Demo agents (`/agents/`, homepage, industry pages) | `src/lib/agents.ts`. List only agents the company can demo live; previews are drawings labelled "Illustrative", never screenshots or result figures |
 | Industries ("Industries" menu, `/industries/`) | `src/lib/industries.ts`. Add an industry only with its own page copy, tasks and FAQs |
@@ -198,3 +199,13 @@ Target keywords per article, from US search volume and keyword difficulty (OpenS
 | `/tools/ai-readiness-scorecard/` | ai readiness assessment tool | |
 
 Checked and deliberately not targeted: "ai quoting software" (the results suggest most searchers want quotation generators), "copilot vs chatgpt" (consumer traffic), "mcp server" (developers looking for the tool).
+
+## Service lines
+
+Ten services in three groups (`group` in `src/site.config.ts`), shown in that order on `/services/` and the homepage:
+
+- **Plan**: AI strategy, readiness and governance.
+- **Build**: AI in your existing apps, RAG and knowledge systems, enterprise AI integration (ERP, CRM, helpdesk), AI workflow and document automation, custom AI agents, voice agents, prototype to production.
+- **Run**: implementation, training and support; AI cost optimisation.
+
+The site is about AI implementation broadly, not agents only. Use "AI" for the general case and "agent" only for software that takes multi-step actions.

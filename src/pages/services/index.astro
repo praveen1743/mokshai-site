@@ -12,13 +12,13 @@ const schema = [
   ...services.map((s) => service({ name: s.name, path: `/services/${s.slug}/`, description: serviceDetails[s.slug].description, serviceType: serviceDetails[s.slug].serviceType })),
 ];
 ---
-<Base title="AI Consulting & Implementation Services" description="AI strategy consulting, custom AI agent development, implementation and training, and AI cost optimisation for MSPs and operations-heavy businesses." schema={schema}>
-  <PageHero eyebrow="Services" title="Four services, from roadmap to running agents" lede="Every engagement follows the same rule: the agent prepares the work, a person makes the decision. Start with any one of these and add the others only if they pay.">
+<Base title="AI Consulting & Implementation Services" description="AI services from strategy to production: AI in existing apps, RAG knowledge systems, enterprise AI integration, workflow and document automation, custom agents, voice assistants, implementation and cost optimisation." schema={schema}>
+  <PageHero eyebrow="Services" title="AI services from first idea to running in production" lede="Plan what is worth doing, build AI into the systems you already run, then run it with your team. Start with any one service and add others only when they pay.">
     <Hub slot="visual" tone="light"
-      core={{ title: 'Your agent', sub: 'built and run by us' }}
+      core={{ title: 'Your AI', sub: 'built into your systems' }}
       left={[
-        { label: 'Strategy', sub: 'what to automate', icon: 'compass' },
-        { label: 'Build', sub: 'custom agents', icon: 'code' },
+        { label: 'Plan', sub: 'strategy & readiness', icon: 'compass' },
+        { label: 'Build', sub: 'apps, RAG, integration', icon: 'code' },
       ]}
       right={[
         { label: 'Rollout', sub: 'training & adoption', icon: 'people' },
@@ -28,14 +28,21 @@ const schema = [
     />
   </PageHero>
   <section class="section">
-    <div class="container list">
-      {services.map((s, i) => (
-        <a class="svc-row" href={`/services/${s.slug}/`}>
-          <span class="mono n">0{i + 1}</span>
-          <h2>{s.name}</h2>
-          <p>{serviceDetails[s.slug].answer}</p>
-          <span class="link-arrow">Details</span>
-        </a>
+    <div class="container">
+      {(['Plan', 'Build', 'Run'] as const).map((g) => (
+        <div class="group">
+          <h2 class="g-h"><span class="mono">{g}</span>{g === 'Plan' ? 'Decide what is worth doing' : g === 'Build' ? 'Put AI into the business you already run' : 'Adopt it, support it and keep it affordable'}</h2>
+          <div class="list">
+            {services.filter((s) => s.group === g).map((s) => (
+              <a class="svc-row" href={`/services/${s.slug}/`}>
+                <span class="mono n">{String(services.findIndex((x) => x.slug === s.slug) + 1).padStart(2, '0')}</span>
+                <h3>{s.name}</h3>
+                <p>{s.short}</p>
+                <span class="link-arrow">Details</span>
+              </a>
+            ))}
+          </div>
+        </div>
       ))}
     </div>
   </section>
@@ -44,8 +51,11 @@ const schema = [
 <style>
   .list { border-top: 1px solid var(--line); }
   .svc-row { display: grid; grid-template-columns: 64px minmax(0, .9fr) minmax(0, 1.4fr) auto; gap: 24px; align-items: baseline; padding-block: 32px; border-bottom: 1px solid var(--line); color: inherit; text-decoration: none; }
-  .svc-row:hover h2 { color: var(--blue-700); }
-  .svc-row h2 { font-size: var(--t-xl); transition: color .18s var(--ease); }
+  .svc-row:hover h3 { color: var(--blue-700); }
+  .svc-row h3 { font-size: var(--t-xl); transition: color .18s var(--ease); }
+  .group + .group { margin-top: clamp(40px, 6vw, 72px); }
+  .g-h { font-size: var(--t-xl); display: flex; align-items: baseline; gap: 14px; margin-bottom: 18px; }
+  .g-h .mono { font-size: var(--t-xs); letter-spacing: .1em; text-transform: uppercase; color: var(--teal-700); font-weight: 500; }
   .svc-row p { color: var(--muted); }
   .svc-row .link-arrow { color: var(--blue-700); }
   .n { color: var(--muted); font-size: var(--t-sm); }

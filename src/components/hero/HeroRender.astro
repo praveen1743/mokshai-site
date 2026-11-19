@@ -1,0 +1,158 @@
+---
+// Homepage hero visual: a studio render (Blender, Cycles) of how Moksh AI
+// works, read top to bottom: your systems, your knowledge and data, the AI
+// layer, human review, business outcomes.
+//
+// The first frame is a plain <img> (the exploded view), so the page never waits
+// for it. A bundled script then loads the frame sequence and draws it on a
+// canvas: the stack unfolds once on load, scrolling folds it into the AI layer,
+// and it leans slightly towards the pointer. Transforms only (CLS 0); with
+// reduced motion, a slow connection or no script, the still image stays.
+// Frames are made by scripts/hero/render_stack.py and scripts/hero/encode.mjs.
+import labelsY from '../../../public/hero/labels.json';
+
+const FRAMES = 48;
+const layers = [
+  { n: '01', key: 'systems', title: 'Your systems', items: 'Apps, email, documents, CRM, ERP, helpdesk' },
+  { n: '02', key: 'context', title: 'Your knowledge and data', items: 'Documents, policies, records, indexed for retrieval' },
+  { n: '03', key: 'ai', title: 'The AI layer', items: 'LLM features, RAG answers, automations and agents' },
+  { n: '04', key: 'human', title: 'Human review', items: 'Approval, exceptions and escalation' },
+  { n: '05', key: 'outcomes', title: 'Business outcomes', items: 'Updated records, finished workflows, reports' },
+] as const;
+const ys = labelsY as Record<string, number>;
+---
+<figure class="hr" data-hero-render data-frames={FRAMES} data-loop>
+  <div class="hr-stage">
+    <img class="hr-poster" src="/hero/d/f_000.webp" srcset="/hero/m/f_000.webp 540w, /hero/d/f_000.webp 900w" sizes="(max-width: 700px) 92vw, 560px" width="900" height="900" alt="" fetchpriority="high" decoding="async" />
+    <canvas class="hr-canvas" width="900" height="900" aria-hidden="true"></canvas>
+  </div>
+  <ol class="hr-labels" role="list" aria-label="How Moksh AI fits into your business">
+    {layers.map((l) => (
+      <li class={`hr-l hr-${l.key}`} style={`top:${(ys[l.key] * 100).toFixed(2)}%`}>
+        <span class="hr-n mono" aria-hidden="true">{l.n}</span>
+        <span class="hr-t">{l.title}</span>
+        <span class="hr-i">{l.items}</span>
+      </li>
+    ))}
+  </ol>
+</figure>
+
+<style>
+  .hr { position: relative; margin: 0; aspect-ratio: 1 / 1; width: 100%; max-width: 640px; margin-inline: auto; }
+  .hr-stage { position: absolute; top: 0; bottom: 0; left: -14%; width: 100%; transform: perspective(1200px) rotateX(var(--tx, 0deg)) rotateY(var(--ty, 0deg)); transition: transform .6s var(--ease); }
+  .hr-poster, .hr-canvas { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+  .hr-canvas { opacity: 0; }
+  .hr.is-live .hr-canvas { opacity: 1; }
+  .hr.is-live .hr-poster { visibility: hidden; }
+
+  .hr-labels { list-style: none; margin: 0; padding: 0; position: absolute; top: 0; bottom: 0; left: 62%; right: 0; transform: translateX(var(--lx, 0px)); }
+  .hr-l { position: absolute; left: 0; right: 0; transform: translateY(-50%); display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 10px; row-gap: 2px; padding-left: 12px; border-left: 2px solid var(--line-strong); }
+  .hr-n { grid-row: span 2; font-size: var(--t-xs); color: var(--muted); padding-top: 2px; }
+  .hr-t { font: 600 var(--t-sm)/1.25 var(--f-body); color: var(--ink); }
+  .hr-i { font-size: var(--t-xs); line-height: 1.4; color: var(--muted); }
+  .hr-ai { border-left-color: var(--teal); }
+  .hr-ai .hr-n { color: var(--teal-700); }
+  .hr-ai .hr-t { font-size: var(--t-md); }
+  .hr-human { border-left-color: var(--amber); }
+  .hr-human .hr-n { color: var(--amber); }
+  .hr-outcomes { border-left-color: var(--green); }
+  .hr-systems { border-left-color: var(--blue); }
+
+  @media (max-width: 560px) {
+    .hr-stage { left: -20%; }
+    .hr-labels { left: 58%; }
+    .hr-i { display: none; }
+    .hr-l { padding-left: 8px; }
+  }
+</style>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-hero-render]');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const conn = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
+  if (root && !reduce && !conn?.saveData) {
+    const canvas = root.querySelector('canvas') as HTMLCanvasElement;
+    const stage = root.querySelector('.hr-stage') as HTMLElement;
+    const labels = root.querySelector('.hr-labels') as HTMLElement;
+    const ctx = canvas.getContext('2d');
+    const total = Number(root.dataset.frames) || 48;
+    const small = window.matchMedia('(max-width: 700px)').matches;
+    const step = small ? 2 : 1; // phones load every other frame at a smaller size
+    const dir = small ? 'm' : 'd';
+    const idx: number[] = [];
+    for (let i = 0; i < total; i += step) idx.push(i);
+    if (idx[idx.length - 1] !== total - 1) idx.push(total - 1);
+    const imgs: (HTMLImageElement | null)[] = idx.map(() => null);
+
+    const load = (k: number) => new Promise<void>((res) => {
+      const im = new Image();
+      im.decoding = 'async';
+      im.onload = () => { imgs[k] = im; res(); };
+      im.onerror = () => res();
+      im.src = `/hero/${dir}/f_${String(idx[k]).padStart(3, '0')}.webp`;
+    });
+
+    let shown = -1;
+    const draw = (f: number) => {
+      // f in 0..1 (0 = exploded, 1 = folded); nearest loaded frame
+      let k = Math.round(f * (idx.length - 1));
+      while (k > 0 && !imgs[k]) k--;
+      const im = imgs[k];
+      if (!ctx || !im || k === shown) return;
+      if (canvas.width !== im.naturalWidth) { canvas.width = im.naturalWidth; canvas.height = im.naturalHeight; }
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(im, 0, 0);
+      shown = k;
+    };
+
+    let fold = 0; // from scroll
+    let intro = 1; // 1 = folded at start of the intro, eased to 0
+    const apply = () => {
+      const f = Math.max(fold, intro);
+      draw(f);
+      const hide = Math.min(1, f * 1.6);
+      labels.style.opacity = String(1 - hide);
+      labels.style.setProperty('--lx', `${(-24 * hide).toFixed(1)}px`);
+    };
+
+    const onScroll = () => {
+      const r = root.getBoundingClientRect();
+      const span = Math.max(1, r.height * 0.9);
+      fold = Math.min(1, Math.max(0, (window.innerHeight * 0.18 - r.top) / span));
+      requestAnimationFrame(apply);
+    };
+
+    const run = async () => {
+      await Promise.all(idx.map((_, k) => load(k)));
+      if (!imgs[0]) return;
+      root.classList.add('is-live');
+      const t0 = performance.now();
+      const D = 1700;
+      const tick = (t: number) => {
+        const p = Math.min(1, (t - t0) / D);
+        intro = 1 - (1 - Math.pow(1 - p, 3)); // ease-out cubic, folded -> exploded
+        apply();
+        if (p < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+    };
+
+    // Start once the hero is near the viewport and the page has finished its critical load.
+    const start = () => ('requestIdleCallback' in window ? (window as Window & { requestIdleCallback: (cb: () => void) => void }).requestIdleCallback(() => void run()) : setTimeout(() => void run(), 200));
+    if (document.readyState === 'complete') start(); else window.addEventListener('load', start, { once: true });
+
+    // Pointer lean (fine pointers only)
+    if (window.matchMedia('(pointer: fine)').matches) {
+      root.addEventListener('pointermove', (e) => {
+        const r = root.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width - 0.5;
+        const y = (e.clientY - r.top) / r.height - 0.5;
+        stage.style.setProperty('--ty', `${(x * 6).toFixed(2)}deg`);
+        stage.style.setProperty('--tx', `${(-y * 4).toFixed(2)}deg`);
+      });
+      root.addEventListener('pointerleave', () => { stage.style.setProperty('--ty', '0deg'); stage.style.setProperty('--tx', '0deg'); });
+    }
+  }
+</script>
