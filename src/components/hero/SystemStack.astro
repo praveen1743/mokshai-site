@@ -298,7 +298,10 @@ const geometry = JSON.stringify({ exploded: layers.map((l) => l.cy), compact: co
     const frame = (now: number) => {
       const dt = Math.min(0.05, (now - last) / 1000); last = now;
       const k = 1 - Math.exp(-dt * 5);
-      e += (eTarget - e) * k;
+      // Scrolling away from the hero folds the stack into the AI core.
+      const hr = fig.getBoundingClientRect();
+      const scrolled = Math.min(1, Math.max(0, (innerHeight * 0.32 - hr.top) / (hr.height * 0.9)));
+      e += (Math.min(eTarget, 1 - 0.94 * scrolled) - e) * k;
       rx += (rxT - rx) * k; ry += (ryT - ry) * k;
       for (let i = 0; i < lift.length; i++) lift[i] += (liftT[i] - lift[i]) * k;
       const px = fig.clientHeight / g.height; // SVG unit -> CSS px for the labels

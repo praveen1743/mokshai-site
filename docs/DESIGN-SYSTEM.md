@@ -64,6 +64,7 @@ Scale: `--t-xs` 13 路 `--t-sm` 15 路 `--t-md` 17 路 `--t-lg` 20 路 `--t-xl` 24鈥
 | Pattern | Where | Rule |
 | --- | --- | --- |
 | Hover lift + gradient border | Cards | 250 ms, `transform` only |
+| Homepage scroll motion | `index.astro` sections | CSS scroll timelines, transforms only, inside `@supports (animation-timeline: view())` and reduced-motion no-preference. Hero: copy lifts away faster than the drawing and the stack folds into the AI core. Work list: columns slide in from opposite sides. Demo agents: dealt like cards. Industries: manufacturing panel grows, its light drifts. Services: rules draw across, numbers slide home. AI + human (peak): a bar runs along the flow and each step rises as it arrives. How we work: connector draws, hexagon numbers turn in. Calculator: tilts up. Why Moksh AI: sticky heading, no animation. FAQ and CTA: still |
 | Isometric system stack | Homepage hero only (`SystemStack`) | Every 9 s the layers compact into the AI core (a beam of light rises through the stack) and explode back out, then the focus walks down the five layers. Pointer: 3D tilt (卤10掳/卤7掳), the stack spreads, the layer under the pointer lifts 14 units and lights while others recede. Packets of light run down the connectors. Script-driven transforms with easing; paused off screen; static exploded view under reduced motion |
 | Gradient shift | Primary buttons | `background-position` |
 | Scroll reveal | `.reveal` | CSS scroll-driven animation, movement only, never opacity |

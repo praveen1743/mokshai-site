@@ -108,7 +108,7 @@ const faqs = [
       </div>
       <ol class="work" role="list">
         {workflows.map((w, i) => (
-          <li class="reveal">
+          <li>
             <span class="hexi sm soft"><Icon name={w.icon} /></span>
             <div>
               <h3><span class="mono w-n">{String(i + 1).padStart(2, '0')}</span>{w.t}</h3>
@@ -195,6 +195,8 @@ const faqs = [
         <h2 id="human-h">AI handles the repetitive work while your people keep the decisions that matter</h2>
         <p class="lede">Agents process, analyse and prepare the work. People supervise sensitive actions, review exceptions and make the calls that need judgement. Every step is logged.</p>
       </div>
+      <div class="flow-wrap">
+      <div class="flow-bar" aria-hidden="true"></div>
       <ol class="flow" role="list">
         {flow.map((f, i) => (
           <li class:list={['flow-step', { person: f.who === 'Person', branch: f.branch }]}>
@@ -204,6 +206,7 @@ const faqs = [
           </li>
         ))}
       </ol>
+      </div>
       <p class="small-link">The rule behind every agent we build: read <a href="/human-in-the-loop-ai-approval-design/">how we design approval steps</a>.</p>
       <div class="ceo"><FounderVideo heading="Why Moksh Group started Moksh AI" /></div>
     </div>
@@ -217,19 +220,19 @@ const faqs = [
         <h2 id="how-h">From the first workflow to measurable business automation</h2>
       </div>
       <ol class="steps" role="list">
-        <li class="step reveal">
+        <li class="step">
           <span class="step-n">01</span>
           <h3>Discovery</h3>
           <p>We map one business workflow, understand the systems behind it and find where automation makes sense.</p>
           <dl><dt>Outcome</dt><dd>A prioritised automation opportunity and an agreed measurement baseline</dd></dl>
         </li>
-        <li class="step reveal">
+        <li class="step">
           <span class="step-n">02</span>
           <h3>Pilot</h3>
           <p>We build an agent for the chosen workflow with human approval switched on, and run it against live work.</p>
           <dl><dt>Outcome</dt><dd>Measured performance on your own workflow and data</dd></dl>
         </li>
-        <li class="step reveal">
+        <li class="step">
           <span class="step-n">03</span>
           <h3>Scale</h3>
           <p>We extend what works into neighbouring workflows, train your team and set up the operating procedures.</p>
@@ -255,7 +258,7 @@ const faqs = [
         </ul>
         <p class="note">Results are estimates from the inputs you enter, not a promise of savings. A pilot measures the real figure on your own work.</p>
       </div>
-      <div><MiniCalc /></div>
+      <div class="roi-calc"><MiniCalc /></div>
     </div>
   </section>
 
@@ -403,4 +406,78 @@ const faqs = [
 
   .faq-grid { display: grid; grid-template-columns: minmax(0, .75fr) minmax(0, 1.25fr); gap: clamp(32px, 5vw, 72px); align-items: start; }
   @media (max-width: 900px) { .faq-grid { grid-template-columns: minmax(0, 1fr); } }
+
+  /* ---------------------------------------------------------------------------
+     Scroll motion. Each section moves differently; content is readable at rest
+     (transforms only, never opacity), nothing moves layout, browsers without
+     scroll timelines and reduced-motion visitors get the static page.
+     The FAQ and the closing CTA are deliberately still.
+     ------------------------------------------------------------------------- */
+  section { overflow-x: clip; }
+  .flow-wrap { position: relative; }
+  .flow-bar { position: absolute; left: 0; right: 0; top: -18px; height: 2px; border-radius: 2px; background: var(--grad); transform-origin: left; }
+  @media (min-width: 901px) { .why-head { position: sticky; top: 112px; } }
+
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      /* 1. hero: copy lifts away faster than the drawing (depth on exit) */
+      .hero-copy { animation: sc-hero-copy linear both; animation-timeline: view(); animation-range: exit 0% exit 100%; }
+      .hero-visual { animation: sc-hero-visual linear both; animation-timeline: view(); animation-range: exit 0% exit 100%; }
+
+      /* 2. work: the two columns slide in from opposite sides */
+      .work li { animation: sc-slide linear both; animation-timeline: view(); animation-range: entry 0% entry 80%; --from-x: -40px; }
+      .work li:nth-child(even) { --from-x: 40px; }
+      @media (max-width: 760px) { .work li, .work li:nth-child(even) { --from-x: 0px; } }
+
+      /* 3. demo agents: dealt like a hand of cards, then settle flat */
+      .agent-grid > :global(*) { animation: sc-deal linear both; animation-timeline: view(); animation-range: entry 0% cover 38%; transform-origin: 50% 100%; }
+      .agent-grid > :global(*:nth-child(1)) { --rot: -6deg; --dx: 60px; }
+      .agent-grid > :global(*:nth-child(2)) { --rot: 0deg; --dx: 0px; }
+      .agent-grid > :global(*:nth-child(3)) { --rot: 6deg; --dx: -60px; }
+      @media (max-width: 760px) { .agent-grid > :global(*) { --rot: 0deg !important; --dx: 0px !important; } }
+
+      /* 4. industries: the manufacturing panel grows in, its light drifts across */
+      .ind-feature { animation: sc-grow linear both; animation-timeline: view(); animation-range: entry 0% entry 90%; }
+      .ind-feature::after { animation: sc-drift linear both; animation-timeline: view(); animation-range: cover 0% cover 100%; }
+      .ind-list li { animation: sc-rise linear both; animation-timeline: view(); animation-range: entry 0% entry 100%; }
+
+      /* 5. services: each rule draws across, numbers and arrows slide home */
+      .svc-list li { position: relative; }
+      .svc-list li::before { content: ""; position: absolute; left: 0; right: 0; top: -1px; height: 2px; background: var(--teal); transform-origin: left; animation: sc-draw linear both; animation-timeline: view(); animation-range: entry 20% cover 45%; }
+      .svc-n, .svc-go { animation: sc-nudge linear both; animation-timeline: view(); animation-range: entry 10% cover 40%; }
+
+      /* 6. AI + human (the peak): the bar runs along the flow and each step
+         rises as it arrives */
+      .flow-wrap { view-timeline: --flow block; }
+      .flow-bar { animation: sc-draw linear both; animation-timeline: --flow; animation-range: entry 60% cover 62%; }
+      .flow-step { animation: sc-step linear both; animation-timeline: --flow; }
+      .flow-step:nth-child(1) { animation-range: entry 50% cover 30%; }
+      .flow-step:nth-child(2) { animation-range: entry 70% cover 38%; }
+      .flow-step:nth-child(3) { animation-range: entry 90% cover 46%; }
+      .flow-step:nth-child(4) { animation-range: cover 22% cover 54%; }
+      .flow-step:nth-child(5) { animation-range: cover 30% cover 62%; }
+
+      /* 7. how we work: the connector draws, the hexagon numbers turn into place */
+      .steps { view-timeline: --steps block; }
+      .steps::before { transform-origin: left; animation: sc-draw linear both; animation-timeline: --steps; animation-range: entry 40% cover 50%; }
+      .step-n { animation: sc-turn linear both; animation-timeline: view(); animation-range: entry 20% cover 35%; }
+
+      /* 8. value: the calculator tilts up off the page */
+      .roi-calc { animation: sc-tilt linear both; animation-timeline: view(); animation-range: entry 0% cover 40%; transform-origin: 50% 100%; }
+
+      /* 9. why: the heading holds (sticky) while the list scrolls past. No animation. */
+    }
+  }
+  @keyframes sc-hero-copy { to { transform: translateY(-90px); } }
+  @keyframes sc-hero-visual { to { transform: translateY(40px) scale(.95); } }
+  @keyframes sc-slide { from { transform: translate(var(--from-x), 36px); } }
+  @keyframes sc-deal { from { transform: translate(var(--dx), 90px) rotate(var(--rot)) scale(.94); } }
+  @keyframes sc-grow { from { transform: scale(.9) translateY(30px); } }
+  @keyframes sc-drift { from { transform: translate(-260px, -200px); } to { transform: translate(40px, 30px); } }
+  @keyframes sc-rise { from { transform: translateY(32px); } }
+  @keyframes sc-draw { from { transform: scaleX(0); } }
+  @keyframes sc-nudge { from { transform: translateX(-28px); } }
+  @keyframes sc-step { from { transform: translateY(56px) scale(.94); } }
+  @keyframes sc-turn { from { transform: rotate(-120deg) scale(.5); } }
+  @keyframes sc-tilt { from { transform: perspective(1100px) rotateX(18deg) translateY(60px); } }
 </style>
