@@ -14,11 +14,15 @@ const last = all[all.length - 1];
 const pick = all.filter((i) => i % 2 === 0 || i === last);
 for (const d of ['d', 'm']) mkdirSync(join('public/hero', d), { recursive: true });
 const bytes = { d: 0, m: 0 };
+// Soft round mask: the shadow catcher leaves a faint haze to the frame edges,
+// which shows as a rectangle on the page. Fade the edges to fully transparent.
+const mask = Buffer.from('<svg xmlns="http://www.w3.org/2000/svg" width="900" height="900"><defs><radialGradient id="g" cx="50%" cy="52%" r="50%"><stop offset="0.72" stop-color="#fff" stop-opacity="1"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs><rect width="900" height="900" fill="url(#g)"/></svg>');
 for (const [k, i] of pick.entries()) {
   const inp = join(src, `f_${String(i).padStart(3, '0')}.png`);
   const out = `f_${String(k).padStart(3, '0')}.webp`;
-  bytes.d += (await sharp(inp).resize(900, 900).webp({ quality: 74, alphaQuality: 80, effort: 6 }).toFile(join('public/hero/d', out))).size;
-  bytes.m += (await sharp(inp).resize(540, 540).webp({ quality: 70, alphaQuality: 75, effort: 6 }).toFile(join('public/hero/m', out))).size;
+  const img = await sharp(inp).resize(900, 900).composite([{ input: mask, blend: 'dest-in' }]).png().toBuffer();
+  bytes.d += (await sharp(img).webp({ quality: 74, alphaQuality: 80, effort: 6 }).toFile(join('public/hero/d', out))).size;
+  bytes.m += (await sharp(img).resize(540, 540).webp({ quality: 70, alphaQuality: 75, effort: 6 }).toFile(join('public/hero/m', out))).size;
 }
 copyFileSync(join(src, 'labels.json'), 'public/hero/labels.json');
 console.log(`${pick.length} frames; desktop ${(bytes.d / 1024).toFixed(0)} KB, mobile ${(bytes.m / 1024).toFixed(0)} KB`);
