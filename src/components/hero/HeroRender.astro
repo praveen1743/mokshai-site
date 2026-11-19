@@ -11,7 +11,7 @@
 // Frames are made by scripts/hero/render_stack.py and scripts/hero/encode.mjs.
 import labelsY from '../../../public/hero/labels.json';
 
-const FRAMES = 48;
+const FRAMES = 25;
 const layers = [
   { n: '01', key: 'systems', title: 'Your systems', items: 'Apps, email, documents, CRM, ERP, helpdesk' },
   { n: '02', key: 'context', title: 'Your knowledge and data', items: 'Documents, policies, records, indexed for retrieval' },
@@ -75,10 +75,10 @@ const ys = labelsY as Record<string, number>;
     const stage = root.querySelector('.hr-stage') as HTMLElement;
     const labels = root.querySelector('.hr-labels') as HTMLElement;
     const ctx = canvas.getContext('2d');
-    const total = Number(root.dataset.frames) || 48;
+    const total = Number(root.dataset.frames) || 25;
     const small = window.matchMedia('(max-width: 700px)').matches;
-    const step = small ? 2 : 1; // phones load every other frame at a smaller size
-    const dir = small ? 'm' : 'd';
+    const step = 1;
+    const dir = small ? 'm' : 'd'; // phones get smaller frames
     const idx: number[] = [];
     for (let i = 0; i < total; i += step) idx.push(i);
     if (idx[idx.length - 1] !== total - 1) idx.push(total - 1);

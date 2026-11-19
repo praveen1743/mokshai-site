@@ -3,7 +3,7 @@ Renders the homepage hero: five layers (your systems, business context, AI,
 human review, business outcomes) as a lit studio scene, folding from exploded
 (frame 0) into the AI core (last frame) while the camera eases in.
 
-    python scripts/hero/render_stack.py -- <logo.png> <out_dir> [frames] [size] [samples] [only_frame]
+    python scripts/hero/render_stack.py -- <logo.png> <out_dir> [frames] [size] [samples] [frame,frame,...]
 
 Needs Blender 5.2 as a Python module (pip install bpy==5.2.4) or the app
 (blender -b -P ... -- args). Writes <out_dir>/f_###.png (RGBA, transparent
@@ -23,7 +23,7 @@ LOGO, OUT = argv[0], argv[1]
 FRAMES = int(argv[2]) if len(argv) > 2 else 48
 SIZE = int(argv[3]) if len(argv) > 3 else 1000
 SAMPLES = int(argv[4]) if len(argv) > 4 else 48
-ONLY = int(argv[5]) if len(argv) > 5 else None
+ONLY = [int(x) for x in argv[5].split(",")] if len(argv) > 5 else None
 
 bpy.ops.wm.read_factory_settings(use_empty=True)
 sc = bpy.context.scene
@@ -247,7 +247,7 @@ def pose(f):
 
 import os
 os.makedirs(OUT, exist_ok=True)
-frames = [ONLY] if ONLY is not None else range(FRAMES)
+frames = ONLY if ONLY is not None else range(FRAMES)
 for f in frames:
     pose(f)
     bpy.context.view_layer.update()
