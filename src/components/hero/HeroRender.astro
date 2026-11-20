@@ -11,7 +11,7 @@
 // Frames are made by scripts/hero/render_stack.py and scripts/hero/encode.mjs.
 import labelsY from '../../../public/hero/labels.json';
 
-const FRAMES = 25;
+const FRAMES = 48;
 const layers = [
   { n: '01', key: 'systems', title: 'Your systems', items: 'Apps, email, documents, CRM, ERP, helpdesk' },
   { n: '02', key: 'context', title: 'Your knowledge and data', items: 'Documents, policies, records, indexed for retrieval' },
@@ -23,7 +23,7 @@ const ys = labelsY as Record<string, number>;
 ---
 <figure class="hr" data-hero-render data-frames={FRAMES} data-loop>
   <div class="hr-stage">
-    <img class="hr-poster" src="/hero/d/f_000.webp" srcset="/hero/m/f_000.webp 540w, /hero/d/f_000.webp 900w" sizes="(max-width: 700px) 92vw, 560px" width="900" height="900" alt="" fetchpriority="high" decoding="async" />
+    <img class="hr-poster" src="/hero/d/f_000.webp" srcset="/hero/m/f_000.webp 480w, /hero/d/f_000.webp 900w" sizes="(max-width: 700px) 92vw, 560px" width="900" height="900" alt="" fetchpriority="high" decoding="async" />
     <canvas class="hr-canvas" width="900" height="900" aria-hidden="true"></canvas>
   </div>
   <ol class="hr-labels" role="list" aria-label="How Moksh AI fits into your business">
@@ -42,10 +42,11 @@ const ys = labelsY as Record<string, number>;
   .hr-stage { position: absolute; top: 0; bottom: 0; left: -14%; width: 100%; transform: perspective(1200px) rotateX(var(--tx, 0deg)) rotateY(var(--ty, 0deg)); transition: transform .6s var(--ease); }
   .hr-poster, .hr-canvas { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
   .hr-canvas { opacity: 0; }
+  .hr-stage { will-change: transform; }
   .hr.is-live .hr-canvas { opacity: 1; }
   .hr.is-live .hr-poster { visibility: hidden; }
 
-  .hr-labels { list-style: none; margin: 0; padding: 0; position: absolute; top: 0; bottom: 0; left: 62%; right: 0; transform: translateX(var(--lx, 0px)); }
+  .hr-labels { list-style: none; margin: 0; padding: 0; position: absolute; top: 0; bottom: 0; left: 62%; right: 0; will-change: transform, opacity; }
   .hr-l { position: absolute; left: 0; right: 0; transform: translateY(-50%); display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 10px; row-gap: 2px; padding-left: 12px; border-left: 2px solid var(--line-strong); }
   .hr-n { grid-row: span 2; font-size: var(--t-xs); color: var(--muted); padding-top: 2px; }
   .hr-t { font: 600 var(--t-sm)/1.25 var(--f-body); color: var(--ink); }
@@ -75,71 +76,88 @@ const ys = labelsY as Record<string, number>;
     const stage = root.querySelector('.hr-stage') as HTMLElement;
     const labels = root.querySelector('.hr-labels') as HTMLElement;
     const ctx = canvas.getContext('2d');
-    const total = Number(root.dataset.frames) || 25;
-    const small = window.matchMedia('(max-width: 700px)').matches;
-    const step = 1;
-    const dir = small ? 'm' : 'd'; // phones get smaller frames
-    const idx: number[] = [];
-    for (let i = 0; i < total; i += step) idx.push(i);
-    if (idx[idx.length - 1] !== total - 1) idx.push(total - 1);
-    const imgs: (HTMLImageElement | null)[] = idx.map(() => null);
+    const total = Number(root.dataset.frames) || 48;
+    const dir = window.matchMedia('(max-width: 700px)').matches ? 'm' : 'd'; // phones get smaller frames
+    const bmp: (ImageBitmap | HTMLImageElement | null)[] = Array.from({ length: total }, () => null);
 
-    const load = (k: number) => new Promise<void>((res) => {
+    // Fetch and decode every frame up front, so drawing never waits on a decode.
+    const load = async (i: number) => {
       const im = new Image();
-      im.decoding = 'async';
-      im.onload = () => { imgs[k] = im; res(); };
-      im.onerror = () => res();
-      im.src = `/hero/${dir}/f_${String(idx[k]).padStart(3, '0')}.webp`;
-    });
+      im.src = `/hero/${dir}/f_${String(i).padStart(3, '0')}.webp`;
+      try {
+        await im.decode();
+        bmp[i] = 'createImageBitmap' in window ? await createImageBitmap(im) : im;
+      } catch { /* missing frame: the nearest loaded one is used */ }
+    };
+    const nearest = (i: number) => { let k = i; while (k > 0 && !bmp[k]) k--; return bmp[k]; };
 
-    let shown = -1;
-    const draw = (f: number) => {
-      // f in 0..1 (0 = exploded, 1 = folded); nearest loaded frame
-      let k = Math.round(f * (idx.length - 1));
-      while (k > 0 && !imgs[k]) k--;
-      const im = imgs[k];
-      if (!ctx || !im || k === shown) return;
-      if (canvas.width !== im.naturalWidth) { canvas.width = im.naturalWidth; canvas.height = im.naturalHeight; }
+    // Draw position p (0 = exploded, total-1 = folded), blending the two
+    // neighbouring frames so the motion is continuous between renders.
+    let drawn = -1;
+    const draw = (p: number) => {
+      if (!ctx || Math.abs(p - drawn) < 0.002) return;
+      const i = Math.floor(p), t = p - i;
+      const a = nearest(i), b = t > 0.01 ? nearest(Math.min(total - 1, i + 1)) : null;
+      if (!a) return;
+      if (canvas.width !== a.width) { canvas.width = a.width; canvas.height = a.height; }
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.drawImage(im, 0, 0);
-      shown = k;
+      ctx.globalAlpha = 1;
+      ctx.drawImage(a, 0, 0);
+      if (b && b !== a) { ctx.globalAlpha = t; ctx.drawImage(b, 0, 0); ctx.globalAlpha = 1; }
+      drawn = p;
     };
 
-    let fold = 0; // from scroll
-    let intro = 1; // 1 = folded at start of the intro, eased to 0
-    const apply = () => {
-      const f = Math.max(fold, intro);
-      draw(f);
-      const hide = Math.min(1, f * 1.6);
+    let fold = 0; // target from scroll, 0..1
+    let intro = 1; // 1 = folded at the start of the intro, eased to 0
+    let cur = 1; // smoothed position actually shown, 0..1
+    let last = 0;
+    let running = false;
+    let visible = true;
+
+    const frame = (now: number) => {
+      const dt = Math.min(64, now - (last || now));
+      last = now;
+      const target = Math.max(fold, intro);
+      // Ease towards the target at the same speed whatever the frame rate.
+      cur += (target - cur) * (1 - Math.exp(-dt / 110));
+      if (Math.abs(target - cur) < 0.0005) cur = target;
+      draw(cur * (total - 1));
+      const hide = Math.min(1, cur * 1.6);
       labels.style.opacity = String(1 - hide);
-      labels.style.setProperty('--lx', `${(-24 * hide).toFixed(1)}px`);
+      labels.style.transform = `translate3d(${(-24 * hide).toFixed(1)}px,0,0)`;
+      if (cur !== target && visible) requestAnimationFrame(frame);
+      else { running = false; last = 0; }
     };
+    const wake = () => { if (!running && visible) { running = true; requestAnimationFrame(frame); } };
 
     const onScroll = () => {
       const r = root.getBoundingClientRect();
-      const span = Math.max(1, r.height * 0.9);
-      fold = Math.min(1, Math.max(0, (80 - r.top) / span)); // starts once the visual reaches the header
-      requestAnimationFrame(apply);
+      fold = Math.min(1, Math.max(0, (80 - r.top) / Math.max(1, r.height * 0.9))); // starts once the visual reaches the header
+      wake();
     };
 
     const run = async () => {
-      await Promise.all(idx.map((_, k) => load(k)));
-      if (!imgs[0]) return;
+      await load(0);
+      if (!bmp[0]) return;
+      draw(total - 1);
+      await Promise.all(Array.from({ length: total - 1 }, (_, k) => load(k + 1)));
       root.classList.add('is-live');
       const t0 = performance.now();
       const D = 1700;
-      const tick = (t: number) => {
+      const intro_ = (t: number) => {
         const p = Math.min(1, (t - t0) / D);
-        intro = 1 - (1 - Math.pow(1 - p, 3)); // ease-out cubic, folded -> exploded
-        apply();
-        if (p < 1) requestAnimationFrame(tick);
+        intro = Math.pow(1 - p, 3); // ease-out cubic, folded -> exploded
+        wake();
+        if (p < 1) requestAnimationFrame(intro_);
       };
-      requestAnimationFrame(tick);
+      requestAnimationFrame(intro_);
       window.addEventListener('scroll', onScroll, { passive: true });
       onScroll();
     };
 
-    // Start once the hero is near the viewport and the page has finished its critical load.
+    // Pause the loop while the hero is off screen.
+    new IntersectionObserver(([e]) => { visible = e.isIntersecting; if (visible) wake(); }).observe(root);
+
     const start = () => ('requestIdleCallback' in window ? (window as Window & { requestIdleCallback: (cb: () => void) => void }).requestIdleCallback(() => void run()) : setTimeout(() => void run(), 200));
     if (document.readyState === 'complete') start(); else window.addEventListener('load', start, { once: true });
 
