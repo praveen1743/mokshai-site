@@ -27,17 +27,19 @@ const layers = [
   { n: '05', key: 'outcomes', title: 'Business outcomes', short: 'Outcomes', items: 'Updated records, finished workflows, reports', href: '/services/ai-workflow-automation/' },
 ] as const;
 const ys = labelsY as Record<string, number>;
-const pl = plates as Record<string, number[][]>;
+// plates.json: per frame, each layer's top face on screen (fractions of the frame)
+const perFrame = plates as Record<string, number[][]>[];
+const pl = perFrame[0];
 const pts = (k: string) => pl[k].map(([x, y]) => `${x},${y}`).join(' ');
 // Contact shadow under the stack, placed from the first frame (the script moves it with the fold).
 const [sx, sy, sw] = (track as number[][])[0];
 const shadowStyle = `left:${(sx * 100).toFixed(2)}%;top:${(sy * 100).toFixed(2)}%;width:${(sw * 100).toFixed(2)}%`;
 ---
-<figure class="hr" data-hero-render data-frames={FRAMES} data-track={JSON.stringify(track)} data-loop>
+<figure class="hr" data-hero-render data-frames={FRAMES} data-track={JSON.stringify(track)} data-plates={JSON.stringify(perFrame)} data-loop>
   <div class="hr-stage">
     <div class="hr-shadow" style={shadowStyle} aria-hidden="true"></div>
-    <img class="hr-poster" src="/hero/d/f_000.webp" srcset="/hero/m/f_000.webp 480w, /hero/d/f_000.webp 900w" sizes="(max-width: 700px) 92vw, 560px" width="900" height="900" alt="" fetchpriority="high" decoding="async" />
-    <canvas class="hr-canvas" width="900" height="900" aria-hidden="true"></canvas>
+    <img class="hr-poster" src="/hero/d/f_000.webp" srcset="/hero/m/f_000.webp 640w, /hero/d/f_000.webp 1200w" sizes="(max-width: 700px) 92vw, 560px" width="1200" height="1200" alt="" fetchpriority="high" decoding="async" />
+    <canvas class="hr-canvas" width="1200" height="1200" aria-hidden="true"></canvas>
     <svg class="hr-plates" viewBox="0 0 1 1" preserveAspectRatio="none" aria-hidden="true" focusable="false">
       {layers.map((l) => <polygon class={`p p-${l.key}`} data-k={l.key} points={pts(l.key)} />)}
     </svg>
@@ -66,18 +68,22 @@ const shadowStyle = `left:${(sx * 100).toFixed(2)}%;top:${(sy * 100).toFixed(2)}
   .hr.is-live .hr-poster { visibility: hidden; }
 
   .hr-labels { list-style: none; margin: 0; padding: 0; position: absolute; top: 0; bottom: 0; left: 62%; right: 0; will-change: transform, opacity; }
-  .hr-l { position: absolute; left: 0; right: 0; transform: translateY(-50%); border-left: 2px solid var(--c, var(--line-strong)); }
+  .hr-l { position: absolute; left: 0; right: 0; transform: translateY(-50%); }
   .hr-l a { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 10px; row-gap: 2px; padding: 6px 8px 6px 12px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; color: inherit; text-decoration: none; transition: background-color .3s var(--ease); }
   .hr-t { position: relative; }
   .hr-short { display: none; }
   .hr-go { position: absolute; margin-left: 6px; color: var(--blue-700); opacity: 0; transform: translateX(-4px); transition: opacity .25s var(--ease), transform .25s var(--ease); }
-  .hr-l.is-on a { background: color-mix(in oklab, var(--c, var(--teal)) 10%, transparent); }
-  .hr-l.is-on .hr-t { color: var(--blue-700); }
+  .hr-l::before { content: ''; position: absolute; left: -2px; top: 0; bottom: 0; width: 4px; background: var(--c); transform: scaleX(.5); transform-origin: left; transition: transform .35s var(--ease); }
+  .hr-l.is-on::before { transform: scaleX(1); }
+  .hr-labels:has(.is-on) .hr-l:not(.is-on) .hr-t { color: var(--muted); }
+  .hr-t { transition: color .3s var(--ease); }
+  .hr-l.is-on .hr-t { color: var(--ink); }
   .hr-l a:hover .hr-go, .hr-l a:focus-visible .hr-go { opacity: 1; transform: none; }
   .hr-l a:focus-visible { outline: 2px solid var(--blue-700); outline-offset: 2px; }
   .hr-plates { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; will-change: opacity; }
-  .p { fill: transparent; stroke: transparent; stroke-width: 1.5; vector-effect: non-scaling-stroke; stroke-linejoin: round; transition: fill .4s var(--ease), stroke .4s var(--ease); }
-  .p.is-on { fill: color-mix(in oklab, var(--c) 16%, transparent); stroke: var(--c); }
+  /* Highlight: a soft light along the plate's top edge, not a filled shape. */
+  .p { fill: color-mix(in oklab, var(--c) 7%, transparent); stroke: var(--c); stroke-width: 1.25; vector-effect: non-scaling-stroke; stroke-linejoin: round; opacity: 0; filter: drop-shadow(0 0 6px color-mix(in oklab, var(--c) 70%, transparent)); transition: opacity .45s var(--ease); }
+  .p.is-on { opacity: .9; }
   .p-systems, .hr-systems { --c: var(--blue); }
   .p-context, .hr-context { --c: var(--teal); }
   .p-ai, .hr-ai { --c: var(--teal); }
@@ -118,7 +124,7 @@ const shadowStyle = `left:${(sx * 100).toFixed(2)}%;top:${(sy * 100).toFixed(2)}
       if (on === k) return;
       if (on) { polys.get(on)?.classList.remove('is-on'); items.get(on)?.classList.remove('is-on'); }
       on = k;
-      if (k) { polys.get(k)?.classList.add('is-on'); items.get(k)?.classList.add('is-on'); }
+      if (k) { movePlates(cur * ((Number(root.dataset.frames) || 48) - 1)); polys.get(k)?.classList.add('is-on'); items.get(k)?.classList.add('is-on'); }
     };
     let held = false; // pointer or keyboard focus on a label
     items.forEach((li, k) => {
@@ -189,6 +195,16 @@ const shadowStyle = `left:${(sx * 100).toFixed(2)}%;top:${(sy * 100).toFixed(2)}
     };
 
     // The shadow follows the stack's footprint per frame (interpolated).
+    // The highlight outlines follow the plates frame by frame (interpolated).
+    const pf = JSON.parse(root.dataset.plates || '[]') as Record<string, number[][]>[];
+    const movePlates = (p: number) => {
+      if (pf.length < 2) return;
+      const i = Math.min(pf.length - 2, Math.floor(p)), t = p - i;
+      polys.forEach((el, k) => {
+        if (!k || !pf[i][k]) return;
+        el.setAttribute('points', pf[i][k].map((c, j) => `${(c[0] + (pf[i + 1][k][j][0] - c[0]) * t).toFixed(4)},${(c[1] + (pf[i + 1][k][j][1] - c[1]) * t).toFixed(4)}`).join(' '));
+      });
+    };
     const shadow = root.querySelector('.hr-shadow') as HTMLElement;
     const tr = JSON.parse(root.dataset.track || '[]') as number[][];
     let stageW = stage.offsetWidth;
@@ -215,6 +231,7 @@ const shadowStyle = `left:${(sx * 100).toFixed(2)}%;top:${(sy * 100).toFixed(2)}
       if (Math.abs(target - cur) < 0.0005) cur = target;
       draw(cur * (total - 1));
       moveShadow(cur * (total - 1));
+      if (on) movePlates(cur * (total - 1));
       const hide = Math.min(1, cur * 1.8);
       labels.style.opacity = String(1 - hide);
       labels.style.transform = `translate3d(${(-24 * hide).toFixed(1)}px,0,0)`;

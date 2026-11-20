@@ -9,6 +9,7 @@ Needs Blender 5.2 as a Python module (pip install bpy==5.2.4) or the app
 (blender -b -P ... -- args). Writes <out_dir>/f_###.png (RGBA, transparent
 background with a shadow catcher) and <out_dir>/labels.json (screen y of each
 layer at frame 0, as a fraction of the image height, for the HTML labels).
+Run once more with GEOM_ONLY=1 to write plates.json (no rendering).
 """
 import json
 import math
@@ -55,7 +56,7 @@ def mat(name, color, rough=0.35, metal=0.0, coat=0.0, trans=0.0, ior=1.45, emit=
 
 
 M = {
-    "ceramic": mat("Ceramic", "#F4F1EA", rough=0.34, coat=0.7),
+    "ceramic": mat("Ceramic", "#F6F3EE", rough=0.24, coat=1.0),
     "ceramic_edge": mat("Edge", "#DCD6CB", rough=0.5),
     "glass_ai": mat("AI glass", "#BFE7EA", rough=0.12, trans=1.0, coat=1.0, emit="#16A3B0", strength=0.25),
     "frost": mat("Frost", "#CFEDEE", rough=0.3, coat=0.8, emit="#16A3B0", strength=0.15),
@@ -68,6 +69,10 @@ M = {
     "wire_blue": mat("Wire blue", "#2583DB", emit="#2583DB", strength=4.0),
     "wire_green": mat("Wire green", "#1FA92F", emit="#1FA92F", strength=4.0),
     "wire_amber": mat("Wire amber", "#F2B45C", emit="#F2B45C", strength=4.0),
+    "edge_blue": mat("Edge blue", "#2583DB", emit="#2583DB", strength=6.0),
+    "edge_teal": mat("Edge teal", "#16A3B0", emit="#16A3B0", strength=6.0),
+    "edge_amber": mat("Edge amber", "#F2B45C", emit="#F2B45C", strength=6.0),
+    "edge_green": mat("Edge green", "#1FA92F", emit="#1FA92F", strength=6.0),
     "packet": mat("Packet", "#FFFFFF", emit="#9EF0F2", strength=18.0),
 }
 # blue modules: tinted edge via a coloured base
@@ -109,6 +114,12 @@ for name, z, size, t, m in LAYERS:
         base = rounded_box("ai_base", (size * 0.98, size * 0.98, 0.07), -0.13, M["navy"], bevel=0.03)
         base.parent = root
     groups[name] = root
+    # A thin light seam in the layer's colour around the plate's lower edge.
+    # (The AI layer is glass over a navy base: a seam inside it would tint the whole slab.)
+    seam = {"systems": "edge_blue", "context": "edge_teal", "human": "edge_amber", "outcomes": "edge_green"}.get(name)
+    if seam:
+        strip = rounded_box(f"{name}_seam", (size * 1.012, size * 1.012, t * 0.14), -t * 0.4, M[seam], bevel=0.02)
+        strip.parent = root
 
 
 def module(parent, x, y, s, h, m, z0):
@@ -185,7 +196,8 @@ def area(loc, energy, color, size):
     sc.collection.objects.link(o)
 
 
-area((-5, -4, 8), 2600, (1.0, 0.98, 0.95), 7)
+area((-5, -4, 8), 2400, (1.0, 0.98, 0.95), 9)
+area((-3, -6, 7), 260, (1.0, 1.0, 1.0), 3)
 area((5, 4, 3), 900, (0.45, 0.85, 0.88), 4)
 area((0, -8, 1), 500, (1.0, 0.95, 0.9), 6)
 sc.world = bpy.data.worlds.new("W")
@@ -258,19 +270,25 @@ for f in frames:
             labels[name] = round(1 - p.y, 4)
         with open(f"{OUT}/labels.json", "w") as fh:
             json.dump(labels, fh)
-        # Top face of each plate on screen (fractions of the frame), for the
-        # page's highlight overlay. Corners: back, right, front, left.
-        plates = {}
-        for name, z, size, t, _m in LAYERS:
-            pts = []
-            for lx, ly in ((0, 1), (1, 0), (0, -1), (-1, 0)):
-                w = groups[name].matrix_world.translation + Vector((lx * size / math.sqrt(2), ly * size / math.sqrt(2), t / 2))
-                q = world_to_camera_view(sc, cam, w)
-                pts.append([round(q.x, 4), round(1 - q.y, 4)])
-            plates[name] = pts
-        with open(f"{OUT}/plates.json", "w") as fh:
-            json.dump(plates, fh)
+        # GEOM_ONLY=1: write plates.json (each layer's top face on screen, per
+        # frame, as fractions of the frame; corners back, right, front, left) for
+        # the page's highlight overlay, then stop without rendering.
         if os.environ.get("GEOM_ONLY"):
+            per = []
+            for g in range(FRAMES):
+                pose(g)
+                bpy.context.view_layer.update()
+                fr = {}
+                for name, z, size, t, _m in LAYERS:
+                    q4 = []
+                    for lx, ly in ((0, 1), (1, 0), (0, -1), (-1, 0)):
+                        w = groups[name].matrix_world.translation + Vector((lx * size / math.sqrt(2), ly * size / math.sqrt(2), t / 2))
+                        q = world_to_camera_view(sc, cam, w)
+                        q4.append([round(q.x, 4), round(1 - q.y, 4)])
+                    fr[name] = q4
+                per.append(fr)
+            with open(f"{OUT}/plates.json", "w") as fh:
+                json.dump(per, fh)
             sys.exit(0)
     r.filepath = f"{OUT}/f_{f:03d}.png"
     bpy.ops.render.render(write_still=True)

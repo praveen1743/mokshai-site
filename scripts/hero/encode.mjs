@@ -1,7 +1,7 @@
 // Encodes the rendered hero frames (PNG) to WebP for the site.
 //   node scripts/hero/encode.mjs <render_dir>
-// Uses every rendered frame, numbered 0..n-1. Writes public/hero/d/ (900 px),
-// public/hero/m/ (480 px)
+// Uses every rendered frame, numbered 0..n-1. Writes public/hero/d/ (1200 px),
+// public/hero/m/ (640 px)
 // and public/hero/labels.json. Set FRAMES in HeroRender.astro to n.
 import { mkdirSync, readdirSync, copyFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -19,11 +19,12 @@ const track = []; // per frame: [centre x, bottom y, width] as fractions of the 
 // Also strip the shadow-catcher shadow (near-black, partly transparent pixels):
 // its render noise changes every frame and flickers in motion. HeroRender draws
 // one smooth CSS shadow instead, placed from track.json.
-const mask = Buffer.from('<svg xmlns="http://www.w3.org/2000/svg" width="900" height="900"><defs><radialGradient id="g" cx="50%" cy="52%" r="50%"><stop offset="0.72" stop-color="#fff" stop-opacity="1"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs><rect width="900" height="900" fill="url(#g)"/></svg>');
+const D = 1200, M = 640; // desktop and phone frame sizes (px)
+const mask = Buffer.from('<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1200"><defs><radialGradient id="g" cx="50%" cy="52%" r="50%"><stop offset="0.72" stop-color="#fff" stop-opacity="1"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs><rect width="1200" height="1200" fill="url(#g)"/></svg>');
 for (const [k, i] of pick.entries()) {
   const inp = join(src, `f_${String(i).padStart(3, '0')}.png`);
   const out = `f_${String(k).padStart(3, '0')}.webp`;
-  const { data, info } = await sharp(inp).resize(900, 900).composite([{ input: mask, blend: 'dest-in' }]).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+  const { data, info } = await sharp(inp).resize(D, D).composite([{ input: mask, blend: 'dest-in' }]).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
   let minX = 1e9, maxX = -1, maxY = -1;
   for (let p = 0; p < data.length; p += 4) {
     const a = data[p + 3];
@@ -33,8 +34,8 @@ for (const [k, i] of pick.entries()) {
   }
   track.push([+((minX + maxX) / 2 / info.width).toFixed(4), +(maxY / info.height).toFixed(4), +((maxX - minX) / info.width).toFixed(4)]);
   const img = await sharp(data, { raw: info }).png().toBuffer();
-  bytes.d += (await sharp(img).webp({ quality: 74, alphaQuality: 80, effort: 6 }).toFile(join('public/hero/d', out))).size;
-  bytes.m += (await sharp(img).resize(480, 480).webp({ quality: 66, alphaQuality: 70, effort: 6 }).toFile(join('public/hero/m', out))).size;
+  bytes.d += (await sharp(img).webp({ quality: 78, alphaQuality: 85, effort: 6 }).toFile(join('public/hero/d', out))).size;
+  bytes.m += (await sharp(img).resize(M, M).webp({ quality: 70, alphaQuality: 75, effort: 6 }).toFile(join('public/hero/m', out))).size;
 }
 copyFileSync(join(src, 'labels.json'), 'public/hero/labels.json');
 copyFileSync(join(src, 'plates.json'), 'public/hero/plates.json');
