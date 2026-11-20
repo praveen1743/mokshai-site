@@ -15,7 +15,7 @@ Tokens live at the top of `src/styles/global.css`. Components use tokens only, w
 
 The site is **warm light by default**: `:root` holds an off-white ground (`--paper` #F7F5F0), white panels (`--surface`) and charcoal text (`--ink` #15191E). The logo blue and green carry links, accents and primary buttons. Amber is the only warm accent and is reserved for "a person does this step" (human review, approval).
 
-`.dark` sections re-scope the same tokens to dark values (`--ink` light text, `--paper`/`--surface` deep navy, on-dark tints for `-700` accents), so any component placed inside a dark section keeps working. Dark is used for: the AI + human section on the homepage, the closing CTA and footer, featured panels, and calculator output. `.light` remains as an explicit name for article and legal pages.
+`.dark` sections re-scope the same tokens to dark values (`--ink` light text, `--paper`/`--surface` deep navy, on-dark tints for `-700` accents), so any component placed inside a dark section keeps working. Dark is used for: the AI + human section on the homepage, the closing CTA and footer, and featured panels. `.light` remains as an explicit name for article and legal pages.
 
 ## Colour
 
@@ -56,7 +56,7 @@ Scale: `--t-xs` 13 · `--t-sm` 15 · `--t-md` 17 · `--t-lg` 20 · `--t-xl` 24�
 
 - Container 1200 px with a 20 px safe-area-aware gutter.
 - Section rhythm: `.section` 64–128 px, `.section-tight` 44–80 px.
-- Radius: 10 px cards, 6 px inputs, 18 px scenes and calculators, 24 px CTA band, pill buttons.
+- Radius: 10 px cards, 6 px inputs, 18 px scenes, 24 px CTA band, pill buttons.
 - Shadows: `--shadow-1` (resting card), `--shadow-2` (hover/open), `--shadow-glow` (blue/green glow for hero objects).
 
 ## Motion

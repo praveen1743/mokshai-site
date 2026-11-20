@@ -6,13 +6,11 @@ import HeroRender from '../components/hero/HeroRender.astro';
 import Faq from '../components/Faq.astro';
 import CtaBand from '../components/CtaBand.astro';
 import FounderVideo from '../components/FounderVideo.astro';
-import MiniCalc from '../components/MiniCalc.astro';
 import AgentCard from '../components/agents/AgentCard.astro';
 import { introVideo } from '../lib/introVideo';
 import { services, site } from '../site.config';
 import { agents } from '../lib/agents';
 import { industries } from '../lib/industries';
-import { tools } from '../lib/tools';
 import { faq, videoObject } from '../lib/schema';
 
 // One agent each from healthcare, finance and legal; the rest live on /agents/.
@@ -252,24 +250,8 @@ const faqs = [
     </div>
   </section>
 
-  <!-- 8. VALUE: live calculator with stated assumptions -->
-  <section class="section sky" aria-labelledby="roi-h" id="estimate">
-    <div class="container roi">
-      <div class="stack-sm">
-        <span class="eyebrow">Free calculators</span>
-        <h2 id="roi-h">Understand the value of automation before you invest</h2>
-        <p class="lede">Estimate time saved, workload removed and what it is worth, with your own numbers. The formulas are shown and nothing is sent anywhere.</p>
-        <ul class="tool-list" role="list">
-          {tools.filter((t) => t.slug !== 'msp-ticket-roi').map((t) => (<li><a href={`/tools/${t.slug}/`}><strong>{t.name}</strong><span>{t.description}</span></a></li>))}
-        </ul>
-        <p class="note">Results are estimates from the inputs you enter, not a promise of savings. A pilot measures the real figure on your own work.</p>
-      </div>
-      <div class="roi-calc"><MiniCalc /></div>
-    </div>
-  </section>
-
-  <!-- 9. WHY MOKSH AI -->
-  <section class="section" aria-labelledby="why-h">
+  <!-- 8. WHY MOKSH AI -->
+  <section class="section sky" aria-labelledby="why-h">
     <div class="container why">
       <div class="stack-sm why-head">
         <span class="eyebrow">Why Moksh AI</span>
@@ -397,13 +379,6 @@ const faqs = [
   .after-steps p { color: var(--muted); max-width: 64ch; }
 
   /* 8. value */
-  .roi { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(28px, 5vw, 64px); align-items: start; }
-  @media (max-width: 960px) { .roi { grid-template-columns: minmax(0, 1fr); } }
-  .tool-list { list-style: none; margin: 8px 0 0; padding: 0; }
-  .tool-list a { display: grid; gap: 4px; padding-block: 14px; border-bottom: 1px solid var(--line-strong); color: inherit; text-decoration: none; }
-  .tool-list a strong { color: var(--ink); transition: color .2s var(--ease); }
-  .tool-list a span { font-size: var(--t-sm); color: var(--muted); }
-  .tool-list a:hover strong { color: var(--blue-700); }
 
   /* 9. why */
   .why { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: clamp(32px, 5vw, 80px); align-items: start; }
@@ -474,9 +449,6 @@ const faqs = [
       .steps::before { transform-origin: left; animation: sc-draw linear both; animation-timeline: --steps; animation-range: entry 40% cover 50%; }
       .step-n { animation: sc-turn linear both; animation-timeline: view(); animation-range: entry 20% cover 35%; }
 
-      /* 8. value: the calculator tilts up off the page */
-      .roi-calc { animation: sc-tilt linear both; animation-timeline: view(); animation-range: entry 0% cover 40%; transform-origin: 50% 100%; }
-
       /* 9. why: the heading holds (sticky) while the list scrolls past. No animation. */
     }
   }
@@ -489,5 +461,4 @@ const faqs = [
   @keyframes sc-nudge { from { transform: translateX(-28px); } }
   @keyframes sc-step { from { transform: translateY(56px) scale(.94); } }
   @keyframes sc-turn { from { transform: rotate(-120deg) scale(.5); } }
-  @keyframes sc-tilt { from { transform: perspective(1100px) rotateX(18deg) translateY(60px); } }
 </style>

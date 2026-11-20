@@ -1,23 +1,22 @@
 # Moksh AI
 
-> Moksh AI (Moksh Infotech Pvt Ltd, part of Moksh Group) designs, builds and runs AI agents and automation for managed service providers (MSPs) and operations-heavy businesses. Agents work inside existing tools (PSA/ITSM, RMM, Microsoft 365, business systems), handle repetitive work such as ticket triage, alert correlation and document preparation, and route anything that needs judgement or carries security risk to a person. US office: Lake Hiawatha, New Jersey. Delivery team: Ahmedabad, India. Contact: info@mokshtech.net.
+> Moksh AI (Moksh Infotech Pvt Ltd, part of Moksh Group) builds AI into the systems businesses already run: AI features in existing apps, RAG knowledge assistants, ERP and CRM integrations, workflow and document automation, and custom AI agents, with people approving the decisions that matter. Agents work inside existing tools (PSA/ITSM, RMM, Microsoft 365, business systems), handle repetitive work such as ticket triage, alert correlation and document preparation, and route anything that needs judgement or carries security risk to a person. US office: Lake Hiawatha, New Jersey. Delivery team: Ahmedabad, India. Contact: info@mokshtech.net.
 
 ## Services
-- [AI strategy & consulting](https://mokshai.net/services/ai-consulting/): workflow mapping, ranked automation candidates, business case and pilot brief
-- [Custom AI agents & development](https://mokshai.net/services/custom-ai-development/): agents on your PSA, RMM, Microsoft 365 and business systems
-- [Implementation & training](https://mokshai.net/services/ai-implementation-training/): staged rollout and role-based training
+- [AI strategy, readiness & governance](https://mokshai.net/services/ai-consulting/): where AI creates value, data and risk checks, a ranked roadmap
+- [AI in your existing apps](https://mokshai.net/services/llm-ai-integration/): copilots, summaries, document Q&A, search and chat in apps you already run
+- [RAG & knowledge systems](https://mokshai.net/services/rag-knowledge-systems/): assistants that answer from your own documents with citations and permissions
+- [Enterprise AI integration](https://mokshai.net/services/enterprise-ai-integration/): AI connected to ERP, CRM, helpdesk and data platforms through secure APIs
+- [AI workflow & document automation](https://mokshai.net/services/ai-workflow-automation/): multi-step processes, invoices and forms, approvals across systems
+- [Custom AI agents](https://mokshai.net/services/custom-ai-development/): agents that act in your systems under approval and escalation rules
+- [AI voice agents & assistants](https://mokshai.net/services/ai-voice-agents/): routine calls, lookups and warm handoff to staff
+- [AI prototype to production](https://mokshai.net/services/ai-prototype-to-production/): login, data security, deployment and monitoring for an existing prototype
+- [Implementation, training & support](https://mokshai.net/services/ai-implementation-training/): rollout, role-based training, monitoring once live
 - [AI cost optimisation](https://mokshai.net/services/ai-cost-optimization/): remove unused and overlapping AI subscriptions
 
 ## Who it is for
 - [AI agents for MSPs](https://mokshai.net/msp/): ticket triage, tier-1 resolution, NOC alert correlation, documentation, white-label AI
 - [AI automation for operations teams](https://mokshai.net/operations/): quote preparation, document intake, status updates, reporting
-
-## Calculators (free, formulas shown)
-- [MSP ticket automation ROI](https://mokshai.net/tools/msp-ticket-roi/)
-- [Back-office time savings](https://mokshai.net/tools/back-office-hours/)
-- [AI subscription audit](https://mokshai.net/tools/ai-spend-audit/)
-- [AI project budget planner](https://mokshai.net/tools/ai-budget-planner/)
-- [AI readiness scorecard](https://mokshai.net/tools/ai-readiness-scorecard/): eight questions on data access, process, governance and systems
 
 ## Templates (Word, free)
 - [AI acceptable use policy template](https://mokshai.net/templates/ai-acceptable-use-policy-template.docx)

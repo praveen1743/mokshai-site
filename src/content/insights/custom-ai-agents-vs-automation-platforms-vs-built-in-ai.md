@@ -7,7 +7,6 @@ audience: general
 topic: strategy-and-roi
 summary: "Use the AI features already built into your PSA, ERP or Microsoft 365 when they cover the job. Use an automation platform when the work follows fixed rules across several systems. Build a custom agent when the work needs judgement over unstructured input, spans systems the others cannot reach, or has to follow your own approval rules."
 services: [ai-consulting, custom-ai-development, ai-cost-optimization]
-tools: [ai-budget-planner, ai-spend-audit]
 takeaways:
   - "Check what your existing tools already include before buying or building anything."
   - "Automation platforms suit rule-based workflows; agents suit work that needs reading and judgement."
@@ -61,11 +60,11 @@ A chatbot talks, RPA repeats, and an agent works a queue. For real examples of a
 
 ## Five questions that decide it
 
-1. **Does a tool you already pay for do this?** Check before anything else. Our [AI subscription audit](/tools/ai-spend-audit/) is a quick way to see what you are already paying for, and where tools overlap.
+1. **Does a tool you already pay for do this?** Check before anything else. An [AI cost optimisation](/services/ai-cost-optimization/) review shows what you are already paying for, and where tools overlap.
 2. **Is the input structured?** A form with fields suits a platform. A free-text email, a PDF drawing or a messy ticket description usually needs an agent to read it.
 3. **How many systems does the work touch?** One system points to built-in features. Several systems with good connectors point to a platform. Systems with no ready connector, or a mix of email, files and APIs, point to an agent.
 4. **How much judgement is involved?** If two people could reasonably handle the item differently, you need an agent with clear limits and a person approving the borderline cases.
-5. **What will it cost over a year?** Add licences, build time and running cost for twelve months. Our [AI project budget planner](/tools/ai-budget-planner/) shows the most a project should cost to pay back within your target.
+5. **What will it cost over a year?** Add licences, build time and running cost for twelve months. [How to calculate the ROI of an AI agent](/how-to-calculate-ai-agent-roi/) shows the most a project should cost to pay back within your target.
 
 ## A layered example
 

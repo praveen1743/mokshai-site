@@ -23,7 +23,6 @@ export function relatedPosts(post: Post, posts: Post[], limit = 3): Post[] {
 }
 
 export const postsForService = (posts: Post[], slug: string) => posts.filter((p) => p.data.services.includes(slug as never));
-export const postsForTool = (posts: Post[], slug: string) => posts.filter((p) => p.data.tools.includes(slug as never));
 export const postsForAudience = (posts: Post[], audience: 'msp' | 'operations') =>
   posts.filter((p) => p.data.audience === audience || p.data.audience === 'general');
 

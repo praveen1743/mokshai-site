@@ -7,7 +7,6 @@ audience: msp
 topic: msp-automation
 summary: "The Model Context Protocol (MCP) is an open standard for connecting AI assistants and agents to other software. An MCP server exposes a system's actions and data, such as searching tickets or reading device details, in a form any compatible AI client can use. For MSPs it means one way to connect AI to the PSA, RMM and documentation platform instead of a custom integration per tool. It also means new risks: prompt injection through ticket text, over-broad credentials and unvetted servers. Treat every MCP server as a privileged integration, with its own limited account, per-client separation, logging and human approval on anything that changes a system."
 services: [custom-ai-development, ai-consulting]
-tools: [msp-ticket-roi, ai-readiness-scorecard]
 takeaways:
   - "MCP is an open standard that lets AI clients use the actions and data of other systems through 'MCP servers'."
   - "For MSPs it can replace one-off integrations between AI and the PSA, RMM and documentation tools."
@@ -77,6 +76,6 @@ Our [AI agent security checklist](/ai-agent-security-checklist/) covers the same
 
 ## Where to start
 
-Start read-only: connect documentation and ticket history to an assistant that helps technicians look things up, with no write access. Measure whether it saves time. Then add one write action with approval, such as setting ticket category and priority, as described in [how to automate tier-1 tickets](/how-to-automate-tier-1-tickets-with-an-ai-agent/). The [MSP ticket automation ROI calculator](/tools/msp-ticket-roi/) helps size each step.
+Start read-only: connect documentation and ticket history to an assistant that helps technicians look things up, with no write access. Measure whether it saves time. Then add one write action with approval, such as setting ticket category and priority, as described in [how to automate tier-1 tickets](/how-to-automate-tier-1-tickets-with-an-ai-agent/). [How to calculate the ROI of an AI agent](/how-to-calculate-ai-agent-roi/) helps size each step.
 
 If you want MCP servers or agents built around your PSA and RMM with these controls in place, that is what our [custom AI agent development](/services/custom-ai-development/) team does.

@@ -7,7 +7,6 @@ audience: operations
 topic: operations
 summary: "For small and mid-sized manufacturers, the quickest returns from AI are usually in the office, not on the shop floor: preparing quotes from RFQs and drawings, entering customer purchase orders, matching supplier invoices, answering order status emails, keeping drawings and certificates in order, and drafting weekly reports. These need no sensors or new machines, use documents you already receive, and keep pricing and engineering decisions with your people."
 services: [custom-ai-development, ai-consulting]
-tools: [back-office-hours, ai-budget-planner, ai-readiness-scorecard]
 takeaways:
   - "Office work is often the fastest place for a small manufacturer to get value from AI: no hardware, and the documents already exist."
   - "Quote preparation is usually the first candidate, because slow quotes lose work."
@@ -81,9 +80,9 @@ This is usually the first candidate because slow quotes lose work. See [automati
 
 1. **List the office work** that repeats each week and roughly how often.
 2. **Measure one job** for two to four weeks: items per week and minutes per item.
-3. **Estimate the value** with the [back-office time savings calculator](/tools/back-office-hours/), which also shows how much more work the same team could take on.
-4. **Check readiness** with the [AI readiness scorecard](/tools/ai-readiness-scorecard/), especially whether your ERP has an API or reliable exports.
-5. **Set a budget ceiling** with the [AI project budget planner](/tools/ai-budget-planner/) and run a short supervised pilot.
+3. **Estimate the value** using the method in [how to calculate the ROI of an AI agent](/how-to-calculate-ai-agent-roi/), including how much more work the same team could take on.
+4. **Check readiness** with the [AI readiness assessment checklist](/ai-readiness-assessment-checklist/), especially whether your ERP has an API or reliable exports.
+5. **Set a budget ceiling** from the expected value, then run a short supervised pilot.
 
 ## What to keep with people
 

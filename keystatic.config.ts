@@ -7,7 +7,6 @@
 import { config, collection, fields } from '@keystatic/core';
 import { topics } from './src/lib/topics';
 import { services } from './src/site.config';
-import { tools } from './src/lib/tools';
 
 const audienceOptions = [
   { label: 'For MSPs', value: 'msp' },
@@ -15,7 +14,6 @@ const audienceOptions = [
   { label: 'For any team', value: 'general' },
 ];
 const serviceOptions = services.map((s) => ({ label: s.name, value: s.slug }));
-const toolOptions = tools.map((t) => ({ label: t.name, value: t.slug }));
 const topicOptions = topics.map((t) => ({ label: t.name, value: t.slug }));
 
 // Body editor. Saved as plain Markdown (.md) with GitHub-style tables, so the
@@ -61,7 +59,6 @@ export default config({
         audience: fields.select({ label: 'Audience', options: audienceOptions, defaultValue: 'general' }),
         topic: fields.select({ label: 'Topic hub', options: topicOptions, defaultValue: topicOptions[0].value }),
         services: fields.multiselect({ label: 'Related services', description: 'Shown under "Put this into practice".', options: serviceOptions }),
-        tools: fields.multiselect({ label: 'Related calculators', options: toolOptions }),
         takeaways: fields.array(fields.text({ label: 'Takeaway', multiline: true }), {
           label: 'Key takeaways',
           itemLabel: (p) => p.value || 'Takeaway',
@@ -114,7 +111,6 @@ export default config({
         published: fields.date({ label: 'Published', validation: { isRequired: true }, defaultValue: { kind: 'today' } }),
         updated: fields.date({ label: 'Last updated' }),
         services: fields.multiselect({ label: 'Related services', options: serviceOptions }),
-        tools: fields.multiselect({ label: 'Related calculators', options: toolOptions }),
         quote: fields.object(
           {
             text: fields.text({ label: 'Quote', description: 'Only with the person’s written permission.', multiline: true }),

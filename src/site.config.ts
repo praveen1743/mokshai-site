@@ -140,7 +140,7 @@ export const nav: NavItem[] = [
     children: [
       ...industries.map((i) => ({ label: i.name, href: i.href, note: i.note })),
       { label: 'All industries', href: '/industries/', note: 'Every industry we support' },
-      { label: 'Not sure where AI fits?', href: '/tools/ai-readiness-scorecard/', note: 'Take the readiness scorecard' },
+      { label: 'Not sure where AI fits?', href: '/ai-readiness-assessment-checklist/', note: 'Read the AI readiness checklist' },
     ],
   },
   {
@@ -151,7 +151,6 @@ export const nav: NavItem[] = [
     ],
   },
   { label: 'AI agents', href: '/agents/' },
-  { label: 'Calculators', href: '/tools/' },
   { label: 'Insights', href: '/insights/' },
   { label: 'About', href: '/about/' },
 ];

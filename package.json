@@ -7,7 +7,7 @@
     "dev": "node scripts/copy-fonts.mjs && astro dev",
     "build": "node scripts/copy-fonts.mjs && astro build && node scripts/vercel-csp-routes.mjs",
     "preview": "astro preview --host",
-    "test": "vitest run",
+    "test": "vitest run --passWithNoTests",
     "check": "astro check",
     "lint": "eslint ."
   },

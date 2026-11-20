@@ -8,7 +8,6 @@ import PageHero from '../../components/PageHero.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import { article, breadcrumbs } from '../../lib/schema';
 import { services } from '../../site.config';
-import { tools } from '../../lib/tools';
 
 export async function getStaticPaths() {
   const items = await publishedCaseStudies();
@@ -19,7 +18,6 @@ const { Content } = await render(item);
 const d = item.data;
 const path = `/case-studies/${item.id}/`;
 const relServices = services.filter((s) => d.services.includes(s.slug));
-const relTools = tools.filter((t) => d.tools.includes(t.slug));
 const quote = d.quote?.text ? d.quote : undefined;
 ---
 <Base
@@ -54,12 +52,11 @@ const quote = d.quote?.text ? d.quote : undefined;
           {quote.name && <figcaption>{quote.name}{quote.role && `, ${quote.role}`}</figcaption>}
         </figure>
       )}
-      {(relServices.length > 0 || relTools.length > 0) && (
-        <nav class="cs-links" aria-label="Related services and calculators">
+      {relServices.length > 0 && (
+        <nav class="cs-links" aria-label="Related services">
           <p class="tag">Related</p>
           <ul role="list">
             {relServices.map((s) => <li><a href={`/services/${s.slug}/`}>{s.name}</a></li>)}
-            {relTools.map((t) => <li><a href={`/tools/${t.slug}/`}>{t.name}</a></li>)}
           </ul>
         </nav>
       )}

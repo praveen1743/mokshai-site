@@ -1,13 +1,12 @@
 ---
 title: "AI Readiness Assessment: What to Check Before You Spend on AI or Copilot"
-description: "An AI readiness assessment checklist for smaller businesses and MSP clients: data access, process, governance and systems, with a free two-minute scorecard."
+description: "An AI readiness assessment checklist for smaller businesses and MSP clients: data access, process, governance and systems, with what to fix first."
 published: 2026-11-06
 updated: 2026-11-06
 audience: general
 topic: strategy-and-roi
 summary: "An AI readiness assessment checks four things before you buy AI tools or fund an AI project: whether data access is tidy enough that AI will not surface what people should not see, whether there is a measured workflow with an owner, whether you have a policy and know which AI tools are already in use, and whether your systems can be connected safely. Fix the weakest of the four first; a pilot stalls on its weakest part."
 services: [ai-consulting, ai-implementation-training]
-tools: [ai-readiness-scorecard, ai-budget-planner]
 takeaways:
   - "Readiness comes down to four areas: data and access, process, governance, and systems."
   - "For Microsoft 365 Copilot, the biggest risk is oversharing: Copilot can show a user anything their account can open."
@@ -17,7 +16,7 @@ faqs:
   - q: "What is an AI readiness assessment?"
     a: "A structured check of whether a business can adopt AI safely and measure the result. It looks at data access and quality, the workflows AI would support, policies and governance, and the systems and accounts an AI tool or agent would need."
   - q: "How long does an AI readiness assessment take?"
-    a: "A self-assessment like our scorecard takes a few minutes. A reviewed assessment, where someone checks permissions, licences and systems directly, typically takes days to a few weeks depending on the size of the environment."
+    a: "A self-assessment with this checklist takes under an hour. A reviewed assessment, where someone checks permissions, licences and systems directly, typically takes days to a few weeks depending on the size of the environment."
   - q: "What is a Copilot readiness assessment?"
     a: "A readiness check focused on Microsoft 365 Copilot. It concentrates on oversharing in SharePoint, OneDrive and Teams, sensitivity labels, retention, licensing and a rollout plan by team, because Copilot works with whatever content each user can already access."
   - q: "Can an MSP run an AI readiness assessment for clients?"
@@ -31,7 +30,7 @@ An AI readiness assessment checks four things before you buy AI tools or fund an
 3. **Governance.** Do you have a policy, and do you know which AI tools are already in use?
 4. **Systems.** Can the tools and agents connect safely, with their own accounts and logs?
 
-Fix the weakest area first. A pilot stalls on its weakest part, whatever the overall score. You can score your business in two minutes with our free [AI readiness scorecard](/tools/ai-readiness-scorecard/); this guide explains what each question is checking and what to do about it.
+Fix the weakest area first. A pilot stalls on its weakest part, whatever the overall score. This guide explains what each area is checking and what to do about it; if you want it reviewed with you, that is part of our [AI strategy and readiness](/services/ai-consulting/) work.
 
 ## 1. Data and access
 
@@ -88,10 +87,10 @@ Fix the weakest area first. A pilot stalls on its weakest part, whatever the ove
 |---|---|
 | Fix the foundations first | Work on the lowest-scoring area. Policy and tool inventory are usually the quickest wins. |
 | Ready for a narrow pilot, with conditions | Choose a workflow that avoids the weak area, or fix it in parallel with discovery. |
-| Ready to pilot | Choose the workflow, set a baseline, a target and a stop rule, and set a budget ceiling with the [AI project budget planner](/tools/ai-budget-planner/). |
+| Ready to pilot | Choose the workflow, set a baseline, a target and a stop rule, and set a budget ceiling as described in [how to calculate the ROI of an AI agent](/how-to-calculate-ai-agent-roi/). |
 
 ## For MSPs: readiness as a service
 
-Readiness reviews are a natural service for managed service providers, who already manage the tenant, identities and devices. A typical sequence is a scorecard or discovery call, a permissions and sharing review, a policy, a phased rollout of AI tools by team, and an ongoing quarterly review. The work that follows the assessment, clean-up, rollout and training, is usually worth more to the client than the assessment itself.
+Readiness reviews are a natural service for managed service providers, who already manage the tenant, identities and devices. A typical sequence is a self-assessment or discovery call, a permissions and sharing review, a policy, a phased rollout of AI tools by team, and an ongoing quarterly review. The work that follows the assessment, clean-up, rollout and training, is usually worth more to the client than the assessment itself.
 
 If you would like an assessment reviewed by someone who checks the systems directly, that is the first stage of our [AI strategy and consulting](/services/ai-consulting/) work, and our [implementation and training](/services/ai-implementation-training/) service covers the rollout.

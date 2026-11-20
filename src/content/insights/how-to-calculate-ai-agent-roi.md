@@ -7,7 +7,6 @@ audience: general
 topic: strategy-and-roi
 summary: "Multiply the items the agent handles by the minutes it saves per item to get hours returned, value those hours at the loaded cost of the people who did the work, subtract the agent's monthly running cost, and divide the one-time build cost by that net monthly value to get the payback period. Use your own baseline numbers, not a vendor's averages."
 services: [ai-consulting, ai-cost-optimization]
-tools: [msp-ticket-roi, back-office-hours, ai-budget-planner, ai-spend-audit]
 takeaways:
   - "Hours returned = items handled by the agent × minutes saved per item ÷ 60."
   - "Net monthly value = hours returned × loaded hourly cost − running cost."
@@ -37,7 +36,7 @@ This guide walks through each input, shows a worked example with clearly hypothe
 | Payback period (months) | one-time build cost ÷ net value per month |
 | Net after twelve months | net value × 12 − build cost |
 
-All four of our calculators use these formulas and show them on the page: [MSP ticket automation ROI](/tools/msp-ticket-roi/), [back-office time savings](/tools/back-office-hours/), [AI subscription audit](/tools/ai-spend-audit/) and [AI project budget planner](/tools/ai-budget-planner/).
+We use these formulas when we scope a project with you on a [strategy call](/book/), with your own figures in place of the examples.
 
 ## The inputs, and where to find them
 
@@ -68,11 +67,11 @@ An MSP receives 1,500 tickets a month. 45% are tier-1. In the pilot, the agent h
 | Payback | $15,000 ÷ $1,781 | about 8.4 months |
 | Net after twelve months | $1,781 × 12 − $15,000 | about $6,370 |
 
-You can change every one of these inputs in the [MSP ticket automation ROI calculator](/tools/msp-ticket-roi/).
+Replace each input with your own figures; the [MSP page](/msp/) shows where tier-1 time usually goes.
 
 ## Work backwards to a budget
 
-Before you ask for a quote, decide how quickly the project must pay back. Multiply the expected net monthly value by that target to get the most the project should cost. Hold some of it back for contingency. The [AI project budget planner](/tools/ai-budget-planner/) does this and splits the result across discovery, pilot and scale.
+Before you ask for a quote, decide how quickly the project must pay back. Multiply the expected net monthly value by that target to get the most the project should cost. Hold some of it back for contingency. Then split the result across discovery, pilot and scale.
 
 If a quote comes in above the ceiling, narrow the scope, raise the expected value with evidence, or accept a longer payback, and make that choice before the project starts.
 
@@ -88,7 +87,7 @@ Some effects are real but hard to price. List them next to the ROI instead of fo
 
 ## Do not forget the costs you already have
 
-Before building anything new, check what AI tools the business already pays for. Overlapping subscriptions and unused seats can fund a first pilot. The [AI subscription audit](/tools/ai-spend-audit/) is a quick way to find them, and our [AI cost optimisation](/services/ai-cost-optimization/) service goes deeper.
+Before building anything new, check what AI tools the business already pays for. Overlapping subscriptions and unused seats can fund a first pilot. Our [AI cost optimisation](/services/ai-cost-optimization/) service finds them.
 
 ## Confirm it with a pilot
 

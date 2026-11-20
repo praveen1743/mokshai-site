@@ -7,7 +7,6 @@ audience: general
 topic: security-and-governance
 summary: "Shadow AI is the use of AI tools, features or agents at work without the knowledge or approval of the business: a personal ChatGPT account, a free transcription bot in meetings, an AI browser extension, or an AI feature someone switched on inside a SaaS tool. The risk is not the tool itself but the data that goes into it and the decisions that come out of it. You bring it under control by finding what is in use, approving a short list of tools, publishing a one-page policy, and giving people an easy way to ask for new tools."
 services: [ai-consulting, ai-cost-optimization]
-tools: [ai-spend-audit, ai-readiness-scorecard]
 takeaways:
   - "Shadow AI is any AI tool, feature or agent used for work without the business knowing or approving it."
   - "IBM's 2025 breach study found breaches involving shadow AI cost more and exposed more personal data."
@@ -39,7 +38,7 @@ For a smaller business the risks are the same, with less room to absorb them:
 - **Data leaves your control.** Free and personal accounts may keep prompts, use them to improve models, or store them in another country. Your client contracts may forbid exactly that.
 - **Wrong answers get used.** A confident but wrong summary of a contract, or an invented figure in a client report, goes out under your name.
 - **Nobody knows what was shared.** If a client asks whether their data went into an AI tool, you cannot answer.
-- **Money leaks.** Individual subscriptions expensed on cards overlap with tools you already pay for. Our [AI subscription audit](/tools/ai-spend-audit/) shows how quickly that adds up.
+- **Money leaks.** Individual subscriptions expensed on cards overlap with tools you already pay for. An [AI cost optimisation](/services/ai-cost-optimization/) review shows how quickly that adds up.
 
 ## Common examples of shadow AI
 
@@ -77,6 +76,6 @@ Write the results into one list: tool, who uses it, what for, what data it sees,
 
 ## Where an MSP fits
 
-Managed service providers are well placed to run this for clients: they already see sign-in logs, devices and licences. A common package is a discovery review, a policy based on the template, app-consent controls in Microsoft 365, and a quarterly check. If you are an MSP and want the discovery step to feed into a readiness review, our [AI readiness scorecard](/tools/ai-readiness-scorecard/) covers the policy and inventory questions in two minutes.
+Managed service providers are well placed to run this for clients: they already see sign-in logs, devices and licences. A common package is a discovery review, a policy based on the template, app-consent controls in Microsoft 365, and a quarterly check. If you are an MSP and want the discovery step to feed into a readiness review, the [AI readiness assessment checklist](/ai-readiness-assessment-checklist/) covers the policy and inventory questions.
 
 If you would like an outside view of what is in use across your business and what to approve, that is the first part of our [AI strategy and consulting](/services/ai-consulting/) discovery.

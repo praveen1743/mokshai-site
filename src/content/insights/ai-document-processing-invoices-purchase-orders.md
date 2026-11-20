@@ -7,7 +7,6 @@ audience: operations
 topic: operations
 summary: "AI document processing reads invoices, purchase orders and order forms in whatever layout they arrive, extracts the fields you need, checks them against your ERP or accounting system and either posts a draft for approval or routes the exception to a person. For accounts payable that means extraction plus a three-way match of invoice, purchase order and goods receipt; for sales it means turning customer POs into draft orders. Start with one document type, keep payment release with a person, and measure accuracy field by field."
 services: [custom-ai-development, ai-consulting]
-tools: [back-office-hours, ai-budget-planner]
 takeaways:
   - "Modern AI extraction handles varied layouts without a template per supplier, but it still needs checking against your own data."
   - "The value is in the matching and exception routing, not only in reading the document."
@@ -69,7 +68,7 @@ The agent prepares; a person approves. Payment release, price changes and new su
 - Duplicate or incorrect postings caught, and any missed.
 - Time from receipt to approval.
 
-The [back-office time savings calculator](/tools/back-office-hours/) turns documents per week and minutes saved into hours and yearly value, and the [AI project budget planner](/tools/ai-budget-planner/) shows the most the project should cost to pay back on time.
+[How to calculate the ROI of an AI agent](/how-to-calculate-ai-agent-roi/) shows how to turn documents per week and minutes saved into hours and yearly value, and how to work out the most the project should cost to pay back on time.
 
 ## Buy a platform or build an agent?
 

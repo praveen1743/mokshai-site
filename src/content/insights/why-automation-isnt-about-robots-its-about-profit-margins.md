@@ -7,7 +7,6 @@ audience: operations
 topic: operations
 summary: "Most automation that pays for itself is software that cuts rework, overtime and manual handoffs. It fails when it is bolted onto a broken process, so start from the margin you want to protect."
 services: [ai-consulting, custom-ai-development]
-tools: [back-office-hours, ai-budget-planner]
 takeaways:
   - "Judge automation by the margin it protects: labour hours, rework, error rates and turnaround time."
   - "Redesign the process before automating it; automating a broken process makes the breakage faster."
@@ -137,5 +136,5 @@ Automation isn’t about filling factories with robots. It’s about protecting 
 ## Next steps
 
 - For a worked example in quoting and estimating, read [Automating quote preparation in fabrication and manufacturing shops](/automating-quote-preparation-for-fabrication-shops/).
-- To put numbers on a candidate process, follow [How to calculate the ROI of an AI agent](/how-to-calculate-ai-agent-roi/) or try the [back-office time savings calculator](/tools/back-office-hours/).
+- To put numbers on a candidate process, follow [How to calculate the ROI of an AI agent](/how-to-calculate-ai-agent-roi/).
 - To run a pilot that ends in a clear decision, see [What a 30-day AI agent pilot should measure](/ai-agent-pilot-metrics/).

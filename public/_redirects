@@ -9,3 +9,15 @@
 /sitemap_index.xml    /sitemap-index.xml  301!
 /page-sitemap.xml     /sitemap-index.xml  301!
 /post-sitemap.xml     /sitemap-index.xml  301!
+/tools/                               /services/                              301!
+/tools                                /services/                              301!
+/tools/msp-ticket-roi/                /msp/                                   301!
+/tools/msp-ticket-roi                 /msp/                                   301!
+/tools/back-office-hours/             /operations/                            301!
+/tools/back-office-hours              /operations/                            301!
+/tools/ai-spend-audit/                /services/ai-cost-optimization/         301!
+/tools/ai-spend-audit                 /services/ai-cost-optimization/         301!
+/tools/ai-budget-planner/             /pricing/                               301!
+/tools/ai-budget-planner              /pricing/                               301!
+/tools/ai-readiness-scorecard/        /ai-readiness-assessment-checklist/     301!
+/tools/ai-readiness-scorecard         /ai-readiness-assessment-checklist/     301!

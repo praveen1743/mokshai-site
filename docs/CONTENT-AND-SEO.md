@@ -13,7 +13,6 @@
 | Articles | `src/content/insights/<slug>.md` (editable in the CMS at `/keystatic`) |
 | Case studies | `src/content/case-studies/<slug>.md` (editable in the CMS) |
 | Privacy policy | `src/content/pages/privacy-policy.md` |
-| Calculator names and descriptions | `src/lib/tools.ts` |
 
 ### Article frontmatter
 
@@ -27,7 +26,6 @@ updated: 2026-11-20
 audience: msp                 # msp | operations | general
 topic: msp-automation         # msp-automation | strategy-and-roi | security-and-governance | operations
 services: [custom-ai-development]   # service slugs this article supports
-tools: [msp-ticket-roi]             # calculator slugs this article uses
 takeaways:                          # 3-4 bullets shown in a "Key takeaways" box
   - "..."
 faqs:                               # shown on the page and emitted as FAQPage schema
@@ -60,15 +58,14 @@ Links are generated from the frontmatter, so a new article is linked from the ri
 
 | Where | What links appear | Driven by |
 |---|---|---|
-| Article page | "Put this into practice" (services + calculators), "Related reading" (3 articles, same topic first), topic breadcrumb, sidebar calculator button | `services`, `tools`, `topic`, `audience` |
+| Article page | "Put this into practice" (services), "Related reading" (3 articles, same topic first), topic breadcrumb, sidebar "Book a strategy call" button | `services`, `topic`, `audience` |
 | Service pages | "Related guides" | `services` |
 | `/msp/`, `/operations/` | "Guides for MSPs" / "Guides for operations teams" | `audience` (`general` appears on both) |
-| Calculator pages | "Guides that use this calculator" | `tools` |
-| `/insights/<topic>/` | All articles in the topic, plus related services and calculators | `topic` |
+| `/insights/<topic>/` | All articles in the topic, plus related services | `topic` |
 | Footer | All topic hubs | `src/lib/topics.ts` |
 | Home, `/insights/` | Featured article + latest | `featured`, `published` |
 
-Also link by hand inside the body: each article should link to at least two other pages (a service, a calculator or another guide) where the text naturally refers to them. Use root-relative URLs such as `/tools/msp-ticket-roi/`.
+Also link by hand inside the body: each article should link to at least two other pages (a service or another guide) where the text naturally refers to them. Use root-relative URLs such as `/services/rag-knowledge-systems/`.
 
 ## Articles to review
 
@@ -143,7 +140,7 @@ Avoid publishing many near-duplicate pages aimed at query variations. Google tre
 After launch:
 
 1. Verify `mokshai.net` in Google Search Console and Bing Webmaster Tools; submit `https://mokshai.net/sitemap-index.xml`.
-2. Request indexing for `/`, `/msp/`, `/operations/` and the four calculators.
+2. Request indexing for `/`, `/msp/`, `/operations/` and the service pages.
 3. Track a fixed set of 30–50 buyer prompts monthly across ChatGPT, Perplexity, Google AI Mode and Gemini, and record whether Moksh AI is mentioned or cited.
 
 ## Article page layout and authors
@@ -195,8 +192,7 @@ Target keywords per article, from US search volume and keyword difficulty (OpenS
 | `custom-ai-agents-vs-…` | ai agent vs chatbot (320, 12) | ai agents vs automation, rpa vs ai agents |
 | `ai-agent-pilot-metrics` | ai proof of concept (170, 0) | |
 | `automating-quote-preparation-…` | quote automation (170, 0) | manufacturing quoting software |
-| `how-to-calculate-ai-agent-roi` | ai agent roi | ai roi calculator |
-| `/tools/ai-readiness-scorecard/` | ai readiness assessment tool | |
+| `how-to-calculate-ai-agent-roi` | ai agent roi | ai roi |
 
 Checked and deliberately not targeted: "ai quoting software" (the results suggest most searchers want quotation generators), "copilot vs chatgpt" (consumer traffic), "mcp server" (developers looking for the tool).
 

@@ -11,7 +11,6 @@ import { allPosts, relatedPosts, readingMinutes, audienceLabel, type Post } from
 import { topicBySlug } from '../lib/topics';
 import { services } from '../site.config';
 import { serviceDetails } from '../lib/serviceDetails';
-import { tools } from '../lib/tools';
 
 export async function getStaticPaths() {
   const posts = await allPosts();
@@ -28,8 +27,6 @@ const fmt = (x: Date) => x.toLocaleDateString('en-US', { day: 'numeric', month: 
 const toc = headings.filter((h) => h.depth === 2);
 const related = relatedPosts(post, posts, 3);
 const relServices = services.filter((s) => d.services.includes(s.slug));
-const relTools = tools.filter((t) => d.tools.includes(t.slug));
-const primaryTool = relTools[0] ?? (d.audience === 'operations' ? tools.find((t) => t.slug === 'back-office-hours')! : tools.find((t) => t.slug === 'msp-ticket-roi')!);
 const schema = [
   article({ title: d.title, description: d.description, path, published: d.published, updated: d.updated, author }),
   breadcrumbs([{ name: 'Insights', path: '/insights/' }, { name: topic.name, path: `/insights/${topic.slug}/` }, { name: d.title, path }]),
@@ -53,7 +50,7 @@ const schema = [
       <aside class="toc" aria-label="On this page">
         <p class="tag">On this page</p>
         <ol>{toc.map((h) => <li><a href={`#${h.slug}`}>{h.text}</a></li>)}{d.faqs.length > 0 && <li><a href="#questions">Questions</a></li>}</ol>
-        <a class="btn btn-primary toc-cta" href={`/tools/${primaryTool.slug}/`}>{primaryTool.name} <Arrow /></a>
+        <a class="btn btn-primary toc-cta" href="/book/">Book a strategy call <Arrow /></a>
       </aside>
       <div class="main">
         {d.takeaways.length > 0 && (
@@ -71,15 +68,12 @@ const schema = [
           </section>
         )}
 
-        {(relServices.length > 0 || relTools.length > 0) && (
+        {relServices.length > 0 && (
           <section class="practice" aria-labelledby="practice-h">
             <h2 id="practice-h">Put this into practice</h2>
             <ul class="practice-list" role="list">
               {relServices.map((s) => (
                 <li><a href={`/services/${s.slug}/`}><span class="tag">Service</span><strong>{s.name}</strong><span>{serviceDetails[s.slug].lede}</span></a></li>
-              ))}
-              {relTools.map((t) => (
-                <li><a href={`/tools/${t.slug}/`}><span class="tag">Free calculator</span><strong>{t.name}</strong><span>{t.question}</span></a></li>
               ))}
             </ul>
           </section>

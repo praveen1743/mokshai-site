@@ -7,7 +7,6 @@ audience: general
 topic: security-and-governance
 summary: "An AI acceptable use policy tells staff which AI tools they may use for work, which information must never be entered into them, that a person is responsible for checking anything AI produces, and how to ask for new tools or report a mistake. A good one fits on two pages and is written for the people who will follow it. The template below covers approved tools, prohibited data, use of AI output, AI features inside existing software, requests, incidents and acknowledgement."
 services: [ai-consulting, ai-implementation-training]
-tools: [ai-readiness-scorecard, ai-spend-audit]
 takeaways:
   - "Keep the policy short and specific: approved tools, data that never goes in, who checks output, who to ask."
   - "Name the approved tools. A policy that only lists what is banned pushes people to personal accounts."
@@ -86,7 +85,7 @@ Owner: [name, role] · Effective: [date] · Next review: [date, at most 12 month
 
 ## How to roll it out
 
-1. **Fill in the approved tools first.** If you do not know what is in use, run the discovery steps in the [shadow AI guide](/what-is-shadow-ai/) and the [AI subscription audit](/tools/ai-spend-audit/).
+1. **Fill in the approved tools first.** If you do not know what is in use, run the discovery steps in the [shadow AI guide](/what-is-shadow-ai/).
 2. **Explain it in a short team meeting.** Ten minutes covering why it exists, what is approved and how to ask for more does more than an email.
 3. **Collect acknowledgements.** A form or your HR system is enough.
 4. **Show people how to use the approved tools well.** A policy without training leaves people unsure, and unsure people go back to their personal accounts. Role-based training is part of our [implementation and training](/services/ai-implementation-training/) service.
@@ -99,4 +98,4 @@ Owner: [name, role] · Effective: [date] · Next review: [date, at most 12 month
 - **Forgetting built-in AI.** Meeting recorders and AI features in CRMs and help desks read the same data as a chat tool.
 - **No owner.** Without a named person to ask, requests go nowhere and the list goes stale.
 
-To check whether the rest of your business is ready for AI beyond the policy, take the [AI readiness scorecard](/tools/ai-readiness-scorecard/).
+To check whether the rest of your business is ready for AI beyond the policy, work through the [AI readiness assessment checklist](/ai-readiness-assessment-checklist/).

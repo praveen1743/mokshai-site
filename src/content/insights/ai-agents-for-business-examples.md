@@ -7,7 +7,6 @@ audience: general
 topic: strategy-and-roi
 summary: "An AI agent for business is software that reads a piece of work (a ticket, an email, a document), decides what kind of work it is, gathers what it needs from your systems and then either completes the routine part within limits you set or prepares it for a person to approve. The most useful business agents take on high-volume, repetitive preparation work: ticket triage, password and access requests, alert grouping, quote and order intake, invoice matching and status updates."
 services: [custom-ai-development, ai-consulting]
-tools: [msp-ticket-roi, back-office-hours, ai-readiness-scorecard]
 takeaways:
   - "An agent reads the work, decides what it is, gathers context and acts within limits, or prepares the work for a person."
   - "The best first agents handle high-volume, repetitive preparation, not the judgement calls."
@@ -39,7 +38,7 @@ Below are twelve examples, six from IT service desks and managed service provide
 | 5 | Ticket notes and documentation | Closed tickets, technician notes | Writes a clean resolution note and suggests a knowledge-base update | KB changes before they are published |
 | 6 | Client status updates | Open tickets and their history | Drafts the client update in your tone | Every outgoing message until accuracy is proven |
 
-For the step-by-step build of examples 1 and 2, see [how to automate tier-1 tickets with an AI agent](/how-to-automate-tier-1-tickets-with-an-ai-agent/). To size the hours they could return, use the [MSP ticket automation ROI calculator](/tools/msp-ticket-roi/).
+For the step-by-step build of examples 1 and 2, see [how to automate tier-1 tickets with an AI agent](/how-to-automate-tier-1-tickets-with-an-ai-agent/). To size the hours they could return, follow [how to calculate the ROI of an AI agent](/how-to-calculate-ai-agent-roi/).
 
 ## Back-office examples
 
@@ -52,7 +51,7 @@ For the step-by-step build of examples 1 and 2, see [how to automate tier-1 tick
 | 11 | Document intake and filing | Shared inbox attachments | Classifies, renames and files documents; extracts key fields | Low-confidence classifications |
 | 12 | Weekly operations report | ERP, PSA or spreadsheet exports | Drafts the summary with the figures and exceptions | The report before it is sent |
 
-Examples 7 to 9 are covered in detail in [automating quote preparation for fabrication shops](/automating-quote-preparation-for-fabrication-shops/) and [AI document processing for invoices and purchase orders](/ai-document-processing-invoices-purchase-orders/). The [back-office time savings calculator](/tools/back-office-hours/) estimates the time they return.
+Examples 7 to 9 are covered in detail in [automating quote preparation for fabrication shops](/automating-quote-preparation-for-fabrication-shops/) and [AI document processing for invoices and purchase orders](/ai-document-processing-invoices-purchase-orders/).
 
 ## What the examples have in common
 
@@ -67,6 +66,6 @@ Examples 7 to 9 are covered in detail in [automating quote preparation for fabri
 2. For each, note the systems involved and whether the input is structured (a form) or messy (an email or PDF).
 3. Remove anything where a mistake is expensive and hard to undo.
 4. Pick the one with the highest volume and clearest rules.
-5. Check your foundations with the [AI readiness scorecard](/tools/ai-readiness-scorecard/), then run a measured pilot.
+5. Check your foundations with the [AI readiness assessment checklist](/ai-readiness-assessment-checklist/), then run a measured pilot.
 
 If you would like help choosing and scoping the first agent, that is what our [AI strategy and consulting](/services/ai-consulting/) discovery is for. When you know what you need, our [custom AI agent development](/services/custom-ai-development/) team builds it.

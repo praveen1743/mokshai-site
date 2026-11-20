@@ -3,7 +3,6 @@ import { z } from 'astro/zod';
 import { glob } from 'astro/loaders';
 import { topicSlugs } from './lib/topics';
 import { serviceSlugs } from './site.config';
-import { toolSlugs } from './lib/tools';
 
 // Fields the Keystatic CMS may write as empty strings are accepted here and
 // treated as "not set" by the pages (see author, quote, cover).
@@ -23,7 +22,6 @@ const insights = defineCollection({
     topic: z.enum(topicSlugs),
     // Internal links rendered around the article
     services: z.array(z.enum(serviceSlugs)).default([]),
-    tools: z.array(z.enum(toolSlugs)).default([]),
     takeaways: z.array(z.string()).default([]),
     faqs: z.array(z.object({ q: z.string(), a: z.string() })).default([]),
     featured: z.boolean().default(false),
@@ -49,7 +47,6 @@ const caseStudies = defineCollection({
     published: z.coerce.date(),
     updated: optionalDate,
     services: z.array(z.enum(serviceSlugs)).default([]),
-    tools: z.array(z.enum(toolSlugs)).default([]),
     quote: z.object({ text: z.string().default(''), name: z.string().default(''), role: z.string().default('') }).optional(),
     cover: z.string().nullish(),
     coverAlt: z.string().nullish(),

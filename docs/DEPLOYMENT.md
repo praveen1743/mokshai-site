@@ -31,7 +31,7 @@ Preview and `*.vercel.app` URLs send `X-Robots-Tag: noindex`, so they never comp
 
 ## Choosing a form backend
 
-The booking form POSTs JSON with these fields: `name`, `email`, `company`, `phone`, `team`, `size`, `workflow`, `calculator` (optional), `page`.
+The booking form POSTs JSON with these fields: `name`, `email`, `company`, `phone`, `team`, `size`, `workflow`, `page`.
 
 | Option | Notes |
 | --- | --- |

@@ -53,6 +53,66 @@
       "source": "/(page|post)-sitemap.xml",
       "destination": "/sitemap-index.xml",
       "permanent": true
+    },
+    {
+      "source": "/tools",
+      "destination": "/services/",
+      "permanent": true
+    },
+    {
+      "source": "/tools/",
+      "destination": "/services/",
+      "permanent": true
+    },
+    {
+      "source": "/tools/msp-ticket-roi",
+      "destination": "/msp/",
+      "permanent": true
+    },
+    {
+      "source": "/tools/msp-ticket-roi/",
+      "destination": "/msp/",
+      "permanent": true
+    },
+    {
+      "source": "/tools/back-office-hours",
+      "destination": "/operations/",
+      "permanent": true
+    },
+    {
+      "source": "/tools/back-office-hours/",
+      "destination": "/operations/",
+      "permanent": true
+    },
+    {
+      "source": "/tools/ai-spend-audit",
+      "destination": "/services/ai-cost-optimization/",
+      "permanent": true
+    },
+    {
+      "source": "/tools/ai-spend-audit/",
+      "destination": "/services/ai-cost-optimization/",
+      "permanent": true
+    },
+    {
+      "source": "/tools/ai-budget-planner",
+      "destination": "/pricing/",
+      "permanent": true
+    },
+    {
+      "source": "/tools/ai-budget-planner/",
+      "destination": "/pricing/",
+      "permanent": true
+    },
+    {
+      "source": "/tools/ai-readiness-scorecard",
+      "destination": "/ai-readiness-assessment-checklist/",
+      "permanent": true
+    },
+    {
+      "source": "/tools/ai-readiness-scorecard/",
+      "destination": "/ai-readiness-assessment-checklist/",
+      "permanent": true
     }
   ],
   "headers": [

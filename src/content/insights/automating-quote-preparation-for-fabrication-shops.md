@@ -7,7 +7,6 @@ audience: operations
 topic: operations
 summary: "An AI agent can read an incoming request for quote and its attachments, match the customer and similar past jobs, extract part, quantity, material and due date, flag what is missing, and fill a draft in your quoting template. The estimator still sets the price, checks the technical judgement and sends the quote."
 services: [custom-ai-development, ai-consulting]
-tools: [back-office-hours, ai-budget-planner]
 takeaways:
   - "Automate the preparation of a quote, not the pricing decision."
   - "The agent's value comes from reading the request, pulling history and spotting missing information before an estimator opens it."
@@ -65,7 +64,7 @@ Keeping these with a person is the reason the approach works. The agent removes 
 
 **Pick a slice.** Repeat customers and repeat part types give the agent the most history to work from. Leave one-off, complex assemblies for later.
 
-**Measure the baseline.** For two normal weeks, record quotes received, time from request to quote sent, and estimator time per quote. Our [back-office time savings calculator](/tools/back-office-hours/) turns those numbers into hours per week and the extra quoting capacity the same team would have.
+**Measure the baseline.** For two normal weeks, record quotes received, time from request to quote sent, and estimator time per quote. [How to calculate the ROI of an AI agent](/how-to-calculate-ai-agent-roi/) shows how to turn those numbers into hours per week and the extra quoting capacity the same team would have.
 
 **Agree the template and the gaps.** List the fields every quote needs and the conditions that should always be flagged. This list becomes the agent's specification.
 

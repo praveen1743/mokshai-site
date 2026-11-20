@@ -7,7 +7,6 @@ audience: general
 topic: strategy-and-roi
 summary: "Measure five things against a baseline recorded before the build: how much of the workflow the agent handles, how often its work is accepted without edits, the time saved per item, the net monthly value after running cost, and whether the people working with it trust it. Agree the targets and a stop rule before day one."
 services: [ai-consulting, custom-ai-development]
-tools: [msp-ticket-roi, ai-budget-planner]
 takeaways:
   - "Record the baseline before the build, from your own systems, for the one workflow in scope."
   - "Track coverage, accuracy, time saved, net value and user trust every week."
@@ -58,7 +57,7 @@ Handling time per item now, compared with the baseline, multiplied by the items 
 
 ### 4. Net value
 
-The labour value of the time saved, minus the agent's running cost for the month (model usage, hosting, monitoring). This is the number that decides whether the agent pays for itself. Our [AI project budget planner](/tools/ai-budget-planner/) works backwards from this figure to the most you should spend on the build.
+The labour value of the time saved, minus the agent's running cost for the month (model usage, hosting, monitoring). This is the number that decides whether the agent pays for itself. [How to calculate the ROI of an AI agent](/how-to-calculate-ai-agent-roi/) shows how to work backwards from this figure to the most you should spend on the build.
 
 ### 5. Trust
 
@@ -92,4 +91,4 @@ At the end of the month there are three honest outcomes:
 
 All three are good results if the numbers are clear. The bad outcome is a pilot that ends with nobody sure whether it worked.
 
-For the tier-1 service desk version of this process, see [How to automate tier-1 tickets with an AI agent](/how-to-automate-tier-1-tickets-with-an-ai-agent/). To estimate the value before a pilot, use the [MSP ticket automation ROI calculator](/tools/msp-ticket-roi/), and check the foundations first with the [AI readiness scorecard](/tools/ai-readiness-scorecard/).
+For the tier-1 service desk version of this process, see [How to automate tier-1 tickets with an AI agent](/how-to-automate-tier-1-tickets-with-an-ai-agent/). To estimate the value before a pilot, follow [how to calculate the ROI of an AI agent](/how-to-calculate-ai-agent-roi/), and check the foundations first with the [AI readiness assessment checklist](/ai-readiness-assessment-checklist/).

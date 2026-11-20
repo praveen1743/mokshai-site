@@ -4,7 +4,7 @@ Marketing site for Moksh AI (mokshai.net). Astro 7 with the Vercel adapter: ever
 
 ## Commands
 - `npm run dev`: dev server on :4321
-- `npm run test`: Vitest, calculator formulas (`tests/calc.test.ts`)
+- `npm run test`: Vitest (`tests/`, none at present; passes with no tests). Add a test with any new pure logic in `src/lib/`
 - `npm run check`: `astro check` (TypeScript for .ts, .tsx and .astro). `npm run lint`: ESLint (`eslint.config.js`)
 - `npm run build`: build to `.vercel/output/` (then `scripts/vercel-csp-routes.mjs` fixes the CSP routes). Node 22.23.4+. Needs `PUBLIC_FORM_ENDPOINT` for a working booking form; optional `PUBLIC_BOOKING_URL`
 - `dev` and `build` first run `scripts/copy-fonts.mjs`, which copies fonts from `node_modules` into `public/fonts/` (git-ignored)
@@ -18,11 +18,9 @@ Vercel, from `main`. Settings live in `vercel.json`; keep `public/.htaccess` and
 ## Structure
 - `src/site.config.ts`: single source of truth for company facts, nav, services (ten, grouped Plan/Build/Run; copy in `src/lib/serviceDetails.ts`), Google tag IDs. Never hard-code an email, phone or address elsewhere.
 - `src/lib/schema.ts`: JSON-LD builders. `Base.astro` always emits Organization + WebSite; pages pass extra nodes via the `schema` prop.
-- `src/lib/calc.ts`: pure calculator formulas. Any change needs a test in `tests/calc.test.ts`.
-- `src/lib/handoff.ts`: sessionStorage handoff from calculators to `/book/`, plus the `track()` wrapper for gtag events.
-- `src/content/insights/*.md`: articles, served at the site root (`/[slug]/`) so old WordPress URLs keep working. Frontmatter (`topic`, `services`, `tools`, `takeaways`, `faqs`) drives internal links and schema; see `docs/CONTENT-AND-SEO.md`.
+- `src/lib/track.ts`: the `track()` wrapper for gtag events.
+- `src/content/insights/*.md`: articles, served at the site root (`/[slug]/`) so old WordPress URLs keep working. Frontmatter (`topic`, `services`, `takeaways`, `faqs`) drives internal links and schema; see `docs/CONTENT-AND-SEO.md`.
 - `src/lib/topics.ts`, `src/lib/insights.ts`: Insights topics and helpers (related posts, posts per service/tool/audience).
-- `src/layouts/ToolPage.astro`: shared calculator page shell (method + FAQ + related tools).
 - `keystatic.config.ts`: CMS fields. A new frontmatter field must be added here and in `src/content.config.ts`.
 - `src/content/case-studies/*.md`: case studies, created by the team in the CMS; `draft: true` until reviewed.
 - `src/components/scenes/`: hero illustrations, one per page topic. Pass them to `PageHero` via `slot="visual"`.
@@ -52,13 +50,13 @@ Vercel, from `main`. Settings live in `vercel.json`; keep `public/.htaccess` and
 
 ## Content rules
 - No invented numbers, clients, testimonials or certifications. Every figure on the site needs a source the company can show.
-- Calculator defaults are labelled "Example inputs" and must stay labelled.
+- The site has no calculators (removed November 2026). Old `/tools/*` URLs redirect in `vercel.json`, `public/_redirects` and `public/.htaccess`; do not reintroduce `/tools/` links.
 - Banned phrasing: "unlock the potential", "seamless", "elevate", "empower", "cutting-edge", "in today's competitive market", "game-changer".
 - No two-beat or contrast headlines ("The agent prepares. A person decides.", "X, not Y"). Write plain, specific statements.
 - Show the operating-model table (`SplitTable`) only on the homepage and audience pages, not on every page.
 - Never copy another company's copy, prices, case-study figures or screenshots, even when a person shares them as a reference. Use references for structure only.
 - Answer-first: the first paragraph of a service page or article answers its main question directly.
-- Every article links in its body to at least two other pages (a service, a calculator or another article), and declares `services` and `tools` in frontmatter.
+- Every article links in its body to at least two other pages (a service or another article), and declares `services` in frontmatter.
 
 ## Checks before shipping a change
 `npm run test && npm run check && npm run lint && npm run build`, then check the changed pages at 390 px and 1440 px for horizontal overflow, and run axe/Lighthouse on any page whose layout changed.

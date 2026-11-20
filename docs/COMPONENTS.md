@@ -16,15 +16,6 @@ Every page uses it. Renders `<head>` (title, description, canonical, Open Graph,
 | `noindex` | boolean | Adds `noindex, follow` |
 | `published`, `updated` | Date | Article timestamps |
 
-### `layouts/ToolPage.astro`
-Shell for calculator pages: page hero, the calculator (named slot `calc`), a method section (named slot `method`), FAQ, related calculators and the CTA band. Emits `WebApplication`, `BreadcrumbList` and `FAQPage` schema.
-
-| Prop | Type |
-| --- | --- |
-| `slug` | one of the slugs in `lib/tools.ts` |
-| `title`, `lede` | string |
-| `faqs` | `{ q, a }[]` |
-
 ## Site chrome
 
 | Component | Purpose | Notes |
@@ -43,8 +34,6 @@ Shell for calculator pages: page hero, the calculator (named slot `calc`), a met
 | `PostList.astro` | Editorial list of articles (topic, audience, reading time, title, summary; no date) | `posts`, `showSummary?`, `compact?` |
 | `RelatedReading.astro` | "Related reading" band before the CTA; renders nothing when empty | `posts`, `title?`, `moreHref?`, `moreLabel?`, `tone?: 'sky' \| 'mint' \| 'paper'` |
 | `Faq.astro` | Accessible accordion built on `<details>`; first item open | `items: { q, a }[]` (pair with `faq()` from `lib/schema.ts` for FAQPage schema) |
-| `MiniCalc.astro` | Compact live MSP ticket-savings estimate on the homepage (three sliders, fixed 15 min at $42/h) linking to the full calculator | none |
-| `Range.astro` | Labelled slider with live output and gradient fill | `id`, `label`, `min`, `max`, `step`, `value`, `hint?`, `display?` (server-rendered output text) |
 | `Icon.astro` | 24 px line-icon set, always `aria-hidden` | `name` (ticket, alert, doc, copilot, layers, quote, inbox, status, chart, compass, code, people, coins, shield, clock, stack, handshake, target, wallet, lock, eye, power, database, route) |
 | `Arrow.astro` | Arrow glyph used in buttons | none |
 | `HexField.astro` | Decorative cluster of outlined hexagons from the logo, slowly rotating and floating. Carries `data-loop` | `variant: 'dark' \| 'light'`, `class` |
@@ -86,11 +75,9 @@ Product-style illustrations that show each page's subject. All are HTML/SVG, lab
 
 | Module | Exports |
 | --- | --- |
-| `calc.ts` | `ticketRoi`, `backOffice`, `spendAudit`, `budgetPlan`, `usd`, `num`, `PRODUCTIVE_HOURS_PER_MONTH`. Pure, input-clamped, unit-tested |
-| `handoff.ts` | `saveHandoff`, `readHandoff`, `track` |
+| `track.ts` | `track(event, params)`: sends a gtag event when the tag is loaded |
 | `schema.ts` | `organization`, `website`, `breadcrumbs`, `faq`, `service`, `article`, `webApp`, `orgId` |
 | `serviceDetails.ts` | Copy, FAQs and outcomes for each service page |
-| `tools.ts` | Calculator names, audiences, questions and descriptions |
 | `topics.ts` | Insights topics (slug, name, description, intro) used for hubs, breadcrumbs and the footer |
 | `caseStudies.ts` | `publishedCaseStudies()` (newest first, drafts hidden in production; returns `[]` while the folder is empty), `CaseStudy` type |
 | `insights.ts` | `isPublished`, `allPosts`, `relatedPosts`, `postsForService`, `postsForTool`, `postsForAudience`, `featuredPost`, `readingMinutes`, `audienceLabel`, `fmtDate` |
@@ -101,7 +88,7 @@ Layout: `.container`, `.section`, `.section-tight`, `.grid`, `.g-2/.g-3/.g-4`, `
 Surfaces: `.dark`, `.sky`, `.mint`, `.wash`, `.surface`, `.glow`
 Type: `.eyebrow`, `.lede`, `.grad-text`, `.mono`, `.tag`, `.prose`
 Controls: `.btn`, `.btn-primary`, `.btn-secondary`, `.btn-light`, `.link-arrow`, `.input`, `.choice`, `.field`
-Blocks: `.card`, `.card.featured`, `.hexi`, `.steps/.step`, `.faq`, `.cta`, `.facts`, `.checks`, `.notes`, `.split`, `.scene*`, `.pill-*`, `.calc*`
+Blocks: `.card`, `.card.featured`, `.hexi`, `.steps/.step`, `.faq`, `.cta`, `.facts`, `.checks`, `.notes`, `.split`, `.scene*`, `.pill-*`
 Motion: `.reveal` (scroll-driven, movement only); `[data-loop]` on any element with a looping animation pauses it off screen (`.anim-paused`, toggled by `Base.astro`)
 
 ## Pages added by the CMS
@@ -109,5 +96,5 @@ Motion: `.reveal` (scroll-driven, movement only); `[data-loop]` on any element w
 | Route | File | Notes |
 | --- | --- | --- |
 | `/case-studies/` | `pages/case-studies/[...index].astro` | Built only when at least one case study is published |
-| `/case-studies/<slug>/` | `pages/case-studies/[slug].astro` | Facts row, before/after, cover, body, optional quote, related services and calculators, `BlogPosting` + breadcrumbs schema |
+| `/case-studies/<slug>/` | `pages/case-studies/[slug].astro` | Facts row, before/after, cover, body, optional quote, related services, `BlogPosting` + breadcrumbs schema |
 | `/keystatic`, `/api/keystatic` | injected by `@keystatic/astro`; the admin page is swapped for `cms/KeystaticPage.astro` → `cms/KeystaticApp.tsx` (`keystaticCms()` in `astro.config.mjs`) | On-demand (Vercel function), noindex; config in `keystatic.config.ts`. The wrapper strips the trailing slash Vercel adds, which Keystatic's router doesn't match |

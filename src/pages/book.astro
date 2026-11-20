@@ -53,10 +53,6 @@ const endpoint = site.formEndpoint;
             <textarea class="input" id="workflow" name="workflow" rows="4" required placeholder="e.g. Password resets and access requests take two technicians most of Monday."></textarea>
             <span class="hint">One or two sentences is plenty. Please do not include passwords or client personal data.</span>
           </div>
-          <div class="calc-attach" id="calc-attach" hidden>
-            <label class="check"><input type="checkbox" id="attach" checked /> <span>Attach my calculator results: <strong id="calc-name"></strong></span></label>
-            <dl id="calc-summary"></dl>
-          </div>
           <input type="text" name="company_website" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
           <p class="error" id="form-error" role="alert" hidden></p>
           <button class="btn btn-primary submit" type="submit">Request a call</button>
@@ -91,30 +87,14 @@ const endpoint = site.formEndpoint;
   .hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
   .submit { justify-content: center; width: 100%; min-height: 52px; font-size: var(--t-md); }
   .legal { font-size: var(--t-xs); color: var(--muted); }
-  .calc-attach { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; display: grid; gap: 10px; font-size: var(--t-sm); }
-  .calc-attach dl { display: grid; grid-template-columns: auto 1fr; gap: 2px 14px; margin: 0; font-size: var(--t-xs); }
-  .calc-attach dt { color: var(--muted); } .calc-attach dd { margin: 0; font-family: var(--f-mono); }
-  .check { display: flex; gap: 10px; align-items: flex-start; cursor: pointer; }
-  .check input { width: 18px; height: 18px; margin-top: 2px; accent-color: var(--blue-700); }
   .done { display: grid; gap: 14px; }
   .done h2 { font-size: var(--t-xl); }
 </style>
 
 <script>
-  import { readHandoff, track } from '../lib/handoff';
+  import { track } from '../lib/track';
   const form = document.getElementById('book-form') as HTMLFormElement;
   const err = document.getElementById('form-error') as HTMLElement;
-  const handoff = readHandoff();
-  if (handoff) {
-    (document.getElementById('calc-attach') as HTMLElement).hidden = false;
-    (document.getElementById('calc-name') as HTMLElement).textContent = handoff.tool;
-    const dl = document.getElementById('calc-summary') as HTMLElement;
-    for (const [k, v] of Object.entries(handoff.summary)) {
-      const dt = document.createElement('dt'); dt.textContent = k;
-      const dd = document.createElement('dd'); dd.textContent = v;
-      dl.append(dt, dd);
-    }
-  }
   // /book/?demo=<agent-slug> from the agents page: prefill the request with that agent.
   const demo = new URLSearchParams(location.search).get('demo');
   const names = JSON.parse(form.dataset.agents || '{}') as Record<string, string>;
@@ -145,8 +125,6 @@ const endpoint = site.formEndpoint;
 
     const data = Object.fromEntries(new FormData(form).entries()) as Record<string, string>;
     delete data.company_website;
-    const attach = document.getElementById('attach') as HTMLInputElement | null;
-    if (handoff && attach?.checked) data.calculator = `${handoff.tool}: ` + Object.entries(handoff.summary).map(([k, v]) => `${k} ${v}`).join('; ');
     data.page = location.href;
 
     const endpoint = form.dataset.endpoint;
@@ -163,7 +141,7 @@ const endpoint = site.formEndpoint;
     try {
       const res = await fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(data) });
       if (!res.ok) throw new Error(String(res.status));
-      track('generate_lead', { form: 'book', team: data.team, calculator: handoff?.tool || 'none' });
+      track('generate_lead', { form: 'book', team: data.team });
       form.hidden = true;
       const done = document.getElementById('done') as HTMLElement;
       done.hidden = false;

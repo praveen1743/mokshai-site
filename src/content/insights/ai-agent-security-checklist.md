@@ -7,7 +7,6 @@ audience: general
 topic: security-and-governance
 summary: "Treat an AI agent like a privileged user. Give it a dedicated account with the minimum permissions its task needs, require human approval for security-sensitive actions, log everything it reads and does, keep each client's data separate, know where your data is processed, and make sure your own team can pause it at any time."
 services: [custom-ai-development, ai-consulting]
-tools: [ai-readiness-scorecard]
 takeaways:
   - "An agent is software with access to your systems; secure it like a privileged account."
   - "Separate actions into three lists: allowed, needs approval, never."

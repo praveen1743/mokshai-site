@@ -263,7 +263,7 @@ export const serviceDetails = {
     ],
     fit: 'Companies where AI tools were adopted team by team and nobody has the full picture of spend.',
     faqs: [
-      { q: 'Can I check this myself first?', a: 'Yes. Our free AI subscription audit calculator gives you a first estimate from your own tool list. We go deeper: usage logs, contract terms and replacement options.' },
+      { q: 'Can I check this myself first?', a: 'Yes. List every AI tool and seat the business pays for, with its monthly cost and who uses it; overlaps and unused seats usually show up quickly. We go deeper: usage logs, contract terms and replacement options.' },
       { q: 'Will people lose tools they rely on?', a: 'Not without a replacement they accept. We look at actual usage first and agree changes with team leads.' },
     ],
   },

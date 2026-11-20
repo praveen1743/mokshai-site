@@ -7,7 +7,6 @@ audience: general
 topic: security-and-governance
 summary: "Human-in-the-loop AI means a person reviews and approves what an AI system proposes before it takes effect, at points the business chooses. For business agents there are four patterns: approve every action, approve exceptions only, review a sample, and audit after the fact. Pick the pattern per type of action, by how costly and reversible a mistake is. Make approval fast by showing the evidence with each proposal, record every decision, and widen autonomy one category at a time only when the records show the agent is accurate."
 services: [custom-ai-development, ai-consulting]
-tools: [msp-ticket-roi, ai-readiness-scorecard]
 takeaways:
   - "Human-in-the-loop means a person approves AI proposals at points the business chooses, before they take effect."
   - "Choose the approval pattern per action type, based on how costly and how reversible a mistake would be."
@@ -91,6 +90,6 @@ Every agent should keep a record of what it read, what it proposed, who approved
 
 ## Where this shows up in practice
 
-In tier-1 ticket automation, approval usually starts on every categorisation and every reset, then moves to exceptions-only for the most common, well-understood request types. The [tier-1 ticket automation guide](/how-to-automate-tier-1-tickets-with-an-ai-agent/) walks through that path, and the [MSP ticket automation ROI calculator](/tools/msp-ticket-roi/) lets you model the time saved at each stage.
+In tier-1 ticket automation, approval usually starts on every categorisation and every reset, then moves to exceptions-only for the most common, well-understood request types. The [tier-1 ticket automation guide](/how-to-automate-tier-1-tickets-with-an-ai-agent/) walks through that path, and [how to calculate the ROI of an AI agent](/how-to-calculate-ai-agent-roi/) shows how to model the time saved at each stage.
 
 Human approval is on by default in every agent we build. If you want help designing the approval points for a specific workflow, talk to our [custom AI agent development](/services/custom-ai-development/) team.

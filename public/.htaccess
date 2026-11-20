@@ -15,6 +15,13 @@ ErrorDocument 404 /404.html
   RewriteRule ^contact-us/?$ /book/ [L,R=301]
   RewriteRule ^blog/?$ /insights/ [L,R=301]
   RewriteRule ^feed/?$ /rss.xml [L,R=301]
+  # Calculators were removed: send their old URLs to the nearest page
+  RewriteRule ^tools/?$ /services/ [L,R=301]
+  RewriteRule ^tools/msp-ticket-roi/?$ /msp/ [L,R=301]
+  RewriteRule ^tools/back-office-hours/?$ /operations/ [L,R=301]
+  RewriteRule ^tools/ai-spend-audit/?$ /services/ai-cost-optimization/ [L,R=301]
+  RewriteRule ^tools/ai-budget-planner/?$ /pricing/ [L,R=301]
+  RewriteRule ^tools/ai-readiness-scorecard/?$ /ai-readiness-assessment-checklist/ [L,R=301]
   RewriteRule ^sitemap_index\.xml$ /sitemap-index.xml [L,R=301]
   RewriteRule ^(page|post)-sitemap\.xml$ /sitemap-index.xml [L,R=301]
   RewriteRule ^wp-(admin|login\.php|json|content|includes)(/.*)?$ - [G,L]

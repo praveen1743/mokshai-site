@@ -7,7 +7,6 @@ audience: msp
 topic: msp-automation
 summary: "Pick one tier-1 category with high volume and a documented fix, measure how it runs today, give the agent the minimum access it needs, keep a technician approving every action for the first weeks, and loosen approvals only where the pilot data shows the agent gets it right."
 services: [custom-ai-development, ai-implementation-training]
-tools: [msp-ticket-roi]
 featured: true
 takeaways:
   - "Start with one tier-1 category that has high volume, a documented fix and low risk, such as password resets or new-starter provisioning."
@@ -54,7 +53,7 @@ Before anything is built, write down how the chosen category runs today. Your PS
 - reopen rate, or tickets that came back within seven days
 - how often the ticket was escalated beyond tier 1
 
-These numbers become the yardstick for the pilot. Without them, the only evidence you will have later is a feeling that things are faster. Our [MSP ticket automation ROI calculator](/tools/msp-ticket-roi/) turns the volume and handling-time figures into hours and labour value, which helps decide whether the category is worth piloting at all.
+These numbers become the yardstick for the pilot. Without them, the only evidence you will have later is a feeling that things are faster. [How to calculate the ROI of an AI agent](/how-to-calculate-ai-agent-roi/) shows how to turn the volume and handling-time figures into hours and labour value, which helps decide whether the category is worth piloting at all.
 
 ## Step 3: Define what the agent may do
 

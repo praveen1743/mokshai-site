@@ -7,7 +7,6 @@ audience: general
 topic: security-and-governance
 summary: "An AI governance framework is the set of owners, rules and records that decides which AI tools and agents a business uses, what data they can see, who approves their output and how they are reviewed. A small or mid-sized business can run one on a single page: name an AI owner, keep a register of every AI tool and agent, sort each into low, medium or high risk, apply a few fixed rules to all of them, and review the register every quarter."
 services: [ai-consulting, custom-ai-development]
-tools: [ai-readiness-scorecard, ai-spend-audit]
 takeaways:
   - "Governance for a smaller business is five things: an owner, a register, risk levels, a few fixed rules and a quarterly review."
   - "The register is the core. If a tool or agent is not on it, nobody is accountable for it."
@@ -86,7 +85,7 @@ Our [AI agent security checklist](/ai-agent-security-checklist/) turns rules 2 t
 
 Once a quarter, the AI owner walks the register with each system owner:
 
-- Is the tool still used? Retire it if not, and cancel the licence. The [AI subscription audit](/tools/ai-spend-audit/) helps here.
+- Is the tool still used? Retire it if not, and cancel the licence. Our [AI cost optimisation](/services/ai-cost-optimization/) review covers this.
 - Has accuracy or quality changed? Look at the approval and correction records.
 - Were there incidents or near misses? What changed as a result?
 - Have the vendor's terms, data location or pricing changed?
@@ -115,4 +114,4 @@ If a client asks for a formal standard, [ISO/IEC 42001:2023](https://www.iso.org
 4. Publish the acceptable use policy.
 5. Book the first quarterly review.
 
-To see how ready your business is before an AI pilot, take the two-minute [AI readiness scorecard](/tools/ai-readiness-scorecard/). If you want help setting up the register and controls around a specific agent, that is part of our [AI strategy and consulting](/services/ai-consulting/) work.
+To see how ready your business is before an AI pilot, work through the [AI readiness assessment checklist](/ai-readiness-assessment-checklist/). If you want help setting up the register and controls around a specific agent, that is part of our [AI strategy and consulting](/services/ai-consulting/) work.

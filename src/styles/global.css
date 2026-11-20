@@ -38,7 +38,7 @@
      roles: --ink is text, --paper the ground, --surface a raised panel,
      --ink-deep the ground of dark sections. */
   --ink: #15191e;
-  --ink-deep: #0a1622;      /* deepest ground: .dark sections, calculator output */
+  --ink-deep: #0a1622;      /* deepest ground: .dark sections */
   --ink-2: #0e2236;
   --ink-3: #13314c;
   --paper: #f7f5f0;
@@ -83,7 +83,7 @@
   --hex: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
 }
 
-/* Dark scope: .dark sections (hero accents, calculator, closing CTA, footer)
+/* Dark scope: .dark sections (hero accents, closing CTA, footer)
    get the dark values, so tokens work the same inside them. */
 .dark {
   --blue-700: #8cc2f7;
@@ -324,40 +324,7 @@ fieldset.field { border: 0; padding: 0; margin: 0; }
 .choice input:checked + span { border-color: transparent; background: var(--grad-deep); color: #fff; }
 .choice input:focus-visible + span { outline: 3px solid var(--focus); outline-offset: 2px; }
 
-/* calculators */
-.calc { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); border-radius: 18px; background: var(--surface); overflow: hidden; box-shadow: var(--shadow-2); border: 1px solid var(--line); }
-@media (max-width: 880px) { .calc { grid-template-columns: minmax(0, 1fr); } }
-.calc-inputs { padding: clamp(22px, 3vw, 40px); display: grid; gap: 24px; align-content: start; }
-.calc-inputs > *, .calc-out > * { min-width: 0; }
-.calc-out { padding: clamp(22px, 3vw, 40px); background: var(--ink-deep); color: var(--on-dark); display: grid; gap: 20px; align-content: start; position: relative; }
-.calc-out .eyebrow { color: var(--teal-on-dark); }
-.range { display: grid; gap: 8px; }
-.range-top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
-.range-top label { font-weight: 600; font-size: var(--t-sm); }
-.range-top output { font: 500 var(--t-sm)/1 var(--f-mono); color: var(--blue-700); font-variant-numeric: tabular-nums; white-space: nowrap; padding: 6px 10px; background: var(--sky); border-radius: 999px; }
-.range .hint { font-size: var(--t-xs); color: var(--muted); }
-input[type="range"] { -webkit-appearance: none; appearance: none; width: 100%; height: 28px; background: transparent; cursor: pointer; --p: 50%; }
-input[type="range"]::-webkit-slider-runnable-track { height: 6px; border-radius: 99px; background: linear-gradient(90deg, #2583db, #1fa92f) 0 / var(--p) 100% no-repeat, var(--track); }
-input[type="range"]::-moz-range-track { height: 6px; border-radius: 99px; background: var(--track); }
-input[type="range"]::-moz-range-progress { height: 6px; border-radius: 99px; background: linear-gradient(90deg, #2583db, #1fa92f); }
-input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; margin-top: -8px; border-radius: 50%; background: #fff; border: 2px solid var(--blue-700); box-shadow: 0 2px 6px rgba(6, 24, 39, .25); }
-input[type="range"]::-moz-range-thumb { width: 20px; height: 20px; border-radius: 50%; background: #fff; border: 2px solid #155ba6; }
-input[type="range"]:focus-visible { outline: 3px solid var(--focus); outline-offset: 4px; }
-.num-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; }
-.big-out { font: 780 clamp(2.6rem, 1.9rem + 2.6vw, 3.8rem)/1 var(--f-display); font-stretch: 84%; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; color: #fff; }
-.big-out small { font-size: .38em; font-weight: 500; letter-spacing: 0; margin-left: 6px; -webkit-text-fill-color: var(--on-dark-muted); color: var(--on-dark-muted); }
-.out-list { display: grid; grid-template-columns: 1fr auto; gap: 12px 20px; margin: 0; border-top: 1px solid rgba(255, 255, 255, .12); padding-top: 18px; }
-.out-list dt { color: var(--on-dark-muted); font-size: var(--t-sm); }
-.out-list dd { margin: 0; text-align: right; font: 500 var(--t-md)/1.3 var(--f-mono); font-variant-numeric: tabular-nums; color: #fff; }
-.out-note { font-size: var(--t-sm); color: var(--amber-on-dark); min-height: 1.4em; }
-.formula { font: 400 var(--t-xs)/1.7 var(--f-mono); color: var(--on-dark-muted); border-top: 1px dashed rgba(255, 255, 255, .18); padding-top: 14px; }
-.example-pill { justify-self: start; font: 500 var(--t-xs)/1 var(--f-mono); letter-spacing: .05em; text-transform: uppercase; padding: 8px 12px; border-radius: 999px; background: var(--amber-soft); color: var(--amber); }
-.spend-table { width: 100%; border-collapse: collapse; font-size: var(--t-sm); }
-.spend-table th { font: 500 var(--t-xs)/1.2 var(--f-mono); text-transform: uppercase; letter-spacing: .05em; color: var(--muted); text-align: left; padding: 0 6px 8px 0; }
-.spend-table td { padding: 4px 6px 4px 0; }
-.spend-table .input { min-height: 42px; padding: 8px 10px; font-size: var(--t-sm); }
-.icon-btn { min-width: 42px; min-height: 42px; border: 1px solid var(--line-strong); background: var(--surface); border-radius: var(--radius-sm); cursor: pointer; font: 500 1rem var(--f-mono); color: var(--muted); }
-.icon-btn:hover { border-color: var(--ink); color: var(--ink); }
+/* wide tables in articles scroll inside their own box (wrapper added at build) */
 .table-scroll { overflow-x: auto; position: relative; }
 
 /* cross-page transitions: CSS only, no JavaScript; browsers without support simply navigate */

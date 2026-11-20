@@ -7,7 +7,6 @@ audience: general
 topic: strategy-and-roi
 summary: "An AI agent's cost has four parts: discovery to define the workflow, a one-time build covering integrations, configuration, testing and approval screens, a monthly running cost made up of model usage, hosting and monitoring, and ongoing support as your systems and the models change. The build is usually the largest single figure, but over a few years the running and support costs can match it. Set the budget backwards from the value the agent returns, and compare every quote on a twelve-month total."
 services: [ai-consulting, ai-cost-optimization, custom-ai-development]
-tools: [ai-budget-planner, msp-ticket-roi, back-office-hours]
 takeaways:
   - "Cost has four parts: discovery, build, running and support."
   - "Integration work with your own systems is the biggest driver of build cost, more than the AI itself."
@@ -31,7 +30,7 @@ An AI agent's cost has four parts:
 3. **Running**: model usage, hosting, monitoring and any platform licences, every month.
 4. **Support**: keeping it working as your systems, processes and the AI models change.
 
-The build is usually the largest single figure, but over a few years the running and support costs can match it. That is why quotes should be compared on a twelve-month total, and why the budget should be set from the value the agent returns, before you see a price. Our [AI project budget planner](/tools/ai-budget-planner/) does that calculation.
+The build is usually the largest single figure, but over a few years the running and support costs can match it. That is why quotes should be compared on a twelve-month total, and why the budget should be set from the value the agent returns, before you see a price. [How to calculate the ROI of an AI agent](/how-to-calculate-ai-agent-roi/) walks through that calculation.
 
 ## 1. Discovery
 
@@ -76,9 +75,9 @@ Systems change their APIs, your processes change, and AI providers retire models
 ## Hidden costs most quotes leave out
 
 - **Your team's time.** Workflow owners need to define rules, review results and approve changes, especially in the first months.
-- **Data clean-up.** Messy categories, duplicate records or overshared files often need fixing first. The [AI readiness scorecard](/tools/ai-readiness-scorecard/) flags where.
+- **Data clean-up.** Messy categories, duplicate records or overshared files often need fixing first. The [AI readiness assessment checklist](/ai-readiness-assessment-checklist/) shows where.
 - **Change and training.** People need to know how to work with the agent and its approval screens.
-- **Overlapping tools.** You may already pay for AI features that do part of the job. Run the [AI subscription audit](/tools/ai-spend-audit/) before you buy anything new.
+- **Overlapping tools.** You may already pay for AI features that do part of the job. Check what you already have before you buy anything new; an [AI cost optimisation](/services/ai-cost-optimization/) review does this.
 - **Lock-in.** If you stop paying, what do you keep? Configuration, prompts and integrations should be handed over.
 
 ## Common pricing models
@@ -94,10 +93,10 @@ We quote engagements as a fixed scope: discovery at a fixed fee, the pilot at a 
 
 ## How to set the budget
 
-1. Estimate the monthly value from your own data with the [MSP ticket automation ROI](/tools/msp-ticket-roi/) or [back-office time savings](/tools/back-office-hours/) calculator.
+1. Estimate the monthly value from your own data, using the method in [how to calculate the ROI of an AI agent](/how-to-calculate-ai-agent-roi/).
 2. Estimate the monthly running cost.
 3. Choose a payback target.
-4. Put all three into the [AI project budget planner](/tools/ai-budget-planner/) to get the investment ceiling.
+4. Multiply the net monthly value by your payback target to get the investment ceiling.
 5. Compare quotes against that ceiling on a twelve-month total.
 
 For the full method behind those numbers, see [how to calculate the ROI of an AI agent](/how-to-calculate-ai-agent-roi/). If you are already paying for AI and suspect waste, our [AI cost optimisation](/services/ai-cost-optimization/) review is a good place to start.
