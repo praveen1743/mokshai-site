@@ -12,6 +12,7 @@ layer at frame 0, as a fraction of the image height, for the HTML labels).
 """
 import json
 import math
+import os
 import sys
 
 import bpy  # must come first: mathutils and bpy_extras come from Blender
@@ -245,7 +246,6 @@ def pose(f):
     target.location = (0, 0, 0)
 
 
-import os
 os.makedirs(OUT, exist_ok=True)
 frames = ONLY if ONLY is not None else range(FRAMES)
 for f in frames:
@@ -258,6 +258,20 @@ for f in frames:
             labels[name] = round(1 - p.y, 4)
         with open(f"{OUT}/labels.json", "w") as fh:
             json.dump(labels, fh)
+        # Top face of each plate on screen (fractions of the frame), for the
+        # page's highlight overlay. Corners: back, right, front, left.
+        plates = {}
+        for name, z, size, t, _m in LAYERS:
+            pts = []
+            for lx, ly in ((0, 1), (1, 0), (0, -1), (-1, 0)):
+                w = groups[name].matrix_world.translation + Vector((lx * size / math.sqrt(2), ly * size / math.sqrt(2), t / 2))
+                q = world_to_camera_view(sc, cam, w)
+                pts.append([round(q.x, 4), round(1 - q.y, 4)])
+            plates[name] = pts
+        with open(f"{OUT}/plates.json", "w") as fh:
+            json.dump(plates, fh)
+        if os.environ.get("GEOM_ONLY"):
+            sys.exit(0)
     r.filepath = f"{OUT}/f_{f:03d}.png"
     bpy.ops.render.render(write_still=True)
 print("RENDERED", len(list(frames)), "frames to", OUT)

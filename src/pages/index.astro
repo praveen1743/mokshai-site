@@ -100,6 +100,7 @@ const faqs = [
       </div>
       <div class="hero-visual"><HeroRender /></div>
     </div>
+    <div class="hero-runway" data-hero-runway aria-hidden="true"></div>
   </section>
 
   <!-- 2. WORK AI CAN HANDLE: editorial list -->
@@ -323,6 +324,13 @@ const faqs = [
   .proof li { display: inline-flex; align-items: center; gap: 8px; }
   .proof li::before { content: ""; width: 10px; height: 5px; border-left: 2px solid var(--green-700); border-bottom: 2px solid var(--green-700); transform: rotate(-45deg) translateY(-2px); }
   .hero-visual { position: relative; }
+  /* Desktop: hold the hero while the visitor scrolls the runway, so the stack's
+     fold into the AI layer happens on screen (HeroRender reads the runway). */
+  .hero-runway { display: none; }
+  @media (min-width: 981px) and (min-height: 820px) and (prefers-reduced-motion: no-preference) {
+    .hero-grid { position: sticky; top: calc(76px + clamp(48px, 7vw, 104px)); }
+    .hero-runway { display: block; height: 60vh; }
+  }
 
   .note { font-size: var(--t-sm); color: var(--muted); max-width: 64ch; }
   .row-head { display: flex; justify-content: space-between; align-items: end; gap: 16px 32px; flex-wrap: wrap; margin-bottom: clamp(28px, 4vw, 44px); }
@@ -427,9 +435,6 @@ const faqs = [
 
   @supports (animation-timeline: view()) {
     @media (prefers-reduced-motion: no-preference) {
-      /* 1. hero: copy lifts away faster than the drawing (depth on exit) */
-      .hero-copy { animation: sc-hero-copy linear both; animation-timeline: view(); animation-range: exit 0% exit 100%; }
-      .hero-visual { animation: sc-hero-visual linear both; animation-timeline: view(); animation-range: exit 0% exit 100%; }
 
       /* 2. work: the two columns slide in from opposite sides */
       .work li { animation: sc-slide linear both; animation-timeline: view(); animation-range: entry 0% entry 80%; --from-x: -40px; }
@@ -475,8 +480,6 @@ const faqs = [
       /* 9. why: the heading holds (sticky) while the list scrolls past. No animation. */
     }
   }
-  @keyframes sc-hero-copy { to { transform: translateY(-90px); } }
-  @keyframes sc-hero-visual { to { transform: translateY(40px) scale(.95); } }
   @keyframes sc-slide { from { transform: translate(var(--from-x), 36px); } }
   @keyframes sc-deal { from { transform: translate(var(--dx), 90px) rotate(var(--rot)) scale(.94); } }
   @keyframes sc-grow { from { transform: scale(.9) translateY(30px); } }

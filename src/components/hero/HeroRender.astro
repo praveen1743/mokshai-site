@@ -5,22 +5,30 @@
 //
 // The first frame is a plain <img> (the exploded view), so the page never waits
 // for it. A bundled script then loads the frame sequence and draws it on a
-// canvas: the stack unfolds once on load, scrolling folds it into the AI layer,
-// and it leans slightly towards the pointer. Transforms only (CLS 0); with
-// reduced motion, a slow connection or no script, the still image stays.
-// Frames are made by scripts/hero/render_stack.py and scripts/hero/encode.mjs.
+// canvas. The stack unfolds once when it comes into view; on desktop the hero
+// holds still while the visitor scrolls and the stack folds into the AI layer
+// (the page provides the runway: [data-hero-runway]); on phones it folds as it
+// crosses the middle of the screen. Each layer is a link to the service that
+// builds it: pointing at a label lights its plate, and while idle a highlight
+// walks down the layers to show work moving through. Transforms only (CLS 0);
+// with reduced motion or Save-Data the still image stays and only the hover
+// highlight remains. Frames, labels.json, plates.json and track.json are made
+// by scripts/hero/render_stack.py and scripts/hero/encode.mjs.
 import labelsY from '../../../public/hero/labels.json';
+import plates from '../../../public/hero/plates.json';
 import track from '../../../public/hero/track.json';
 
 const FRAMES = 48;
 const layers = [
-  { n: '01', key: 'systems', title: 'Your systems', items: 'Apps, email, documents, CRM, ERP, helpdesk' },
-  { n: '02', key: 'context', title: 'Your knowledge and data', items: 'Documents, policies, records, indexed for retrieval' },
-  { n: '03', key: 'ai', title: 'The AI layer', items: 'LLM features, RAG answers, automations and agents' },
-  { n: '04', key: 'human', title: 'Human review', items: 'Approval, exceptions and escalation' },
-  { n: '05', key: 'outcomes', title: 'Business outcomes', items: 'Updated records, finished workflows, reports' },
+  { n: '01', key: 'systems', title: 'Your systems', short: 'Systems', items: 'Apps, email, documents, CRM, ERP, helpdesk', href: '/services/enterprise-ai-integration/' },
+  { n: '02', key: 'context', title: 'Your knowledge and data', short: 'Knowledge', items: 'Documents, policies, records, indexed for retrieval', href: '/services/rag-knowledge-systems/' },
+  { n: '03', key: 'ai', title: 'The AI layer', short: 'AI layer', items: 'LLM features, RAG answers, automations and agents', href: '/services/llm-ai-integration/' },
+  { n: '04', key: 'human', title: 'Human review', short: 'Human review', items: 'Approval, exceptions and escalation', href: '/services/ai-consulting/' },
+  { n: '05', key: 'outcomes', title: 'Business outcomes', short: 'Outcomes', items: 'Updated records, finished workflows, reports', href: '/services/ai-workflow-automation/' },
 ] as const;
 const ys = labelsY as Record<string, number>;
+const pl = plates as Record<string, number[][]>;
+const pts = (k: string) => pl[k].map(([x, y]) => `${x},${y}`).join(' ');
 // Contact shadow under the stack, placed from the first frame (the script moves it with the fold).
 const [sx, sy, sw] = (track as number[][])[0];
 const shadowStyle = `left:${(sx * 100).toFixed(2)}%;top:${(sy * 100).toFixed(2)}%;width:${(sw * 100).toFixed(2)}%`;
@@ -30,13 +38,18 @@ const shadowStyle = `left:${(sx * 100).toFixed(2)}%;top:${(sy * 100).toFixed(2)}
     <div class="hr-shadow" style={shadowStyle} aria-hidden="true"></div>
     <img class="hr-poster" src="/hero/d/f_000.webp" srcset="/hero/m/f_000.webp 480w, /hero/d/f_000.webp 900w" sizes="(max-width: 700px) 92vw, 560px" width="900" height="900" alt="" fetchpriority="high" decoding="async" />
     <canvas class="hr-canvas" width="900" height="900" aria-hidden="true"></canvas>
+    <svg class="hr-plates" viewBox="0 0 1 1" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+      {layers.map((l) => <polygon class={`p p-${l.key}`} data-k={l.key} points={pts(l.key)} />)}
+    </svg>
   </div>
   <ol class="hr-labels" role="list" aria-label="How Moksh AI fits into your business">
     {layers.map((l) => (
-      <li class={`hr-l hr-${l.key}`} style={`top:${(ys[l.key] * 100).toFixed(2)}%`}>
-        <span class="hr-n mono" aria-hidden="true">{l.n}</span>
-        <span class="hr-t">{l.title}</span>
-        <span class="hr-i">{l.items}</span>
+      <li class={`hr-l hr-${l.key}`} data-k={l.key} style={`top:${(ys[l.key] * 100).toFixed(2)}%`}>
+        <a href={l.href}>
+          <span class="hr-n mono" aria-hidden="true">{l.n}</span>
+          <span class="hr-t"><span class="hr-long">{l.title}</span><span class="hr-short" aria-hidden="true">{l.short}</span><span class="hr-go" aria-hidden="true">→</span></span>
+          <span class="hr-i">{l.items}</span>
+        </a>
       </li>
     ))}
   </ol>
@@ -53,34 +66,93 @@ const shadowStyle = `left:${(sx * 100).toFixed(2)}%;top:${(sy * 100).toFixed(2)}
   .hr.is-live .hr-poster { visibility: hidden; }
 
   .hr-labels { list-style: none; margin: 0; padding: 0; position: absolute; top: 0; bottom: 0; left: 62%; right: 0; will-change: transform, opacity; }
-  .hr-l { position: absolute; left: 0; right: 0; transform: translateY(-50%); display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 10px; row-gap: 2px; padding-left: 12px; border-left: 2px solid var(--line-strong); }
+  .hr-l { position: absolute; left: 0; right: 0; transform: translateY(-50%); border-left: 2px solid var(--c, var(--line-strong)); }
+  .hr-l a { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 10px; row-gap: 2px; padding: 6px 8px 6px 12px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; color: inherit; text-decoration: none; transition: background-color .3s var(--ease); }
+  .hr-t { position: relative; }
+  .hr-short { display: none; }
+  .hr-go { position: absolute; margin-left: 6px; color: var(--blue-700); opacity: 0; transform: translateX(-4px); transition: opacity .25s var(--ease), transform .25s var(--ease); }
+  .hr-l.is-on a { background: color-mix(in oklab, var(--c, var(--teal)) 10%, transparent); }
+  .hr-l.is-on .hr-t { color: var(--blue-700); }
+  .hr-l a:hover .hr-go, .hr-l a:focus-visible .hr-go { opacity: 1; transform: none; }
+  .hr-l a:focus-visible { outline: 2px solid var(--blue-700); outline-offset: 2px; }
+  .hr-plates { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; will-change: opacity; }
+  .p { fill: transparent; stroke: transparent; stroke-width: 1.5; vector-effect: non-scaling-stroke; stroke-linejoin: round; transition: fill .4s var(--ease), stroke .4s var(--ease); }
+  .p.is-on { fill: color-mix(in oklab, var(--c) 16%, transparent); stroke: var(--c); }
+  .p-systems, .hr-systems { --c: var(--blue); }
+  .p-context, .hr-context { --c: var(--teal); }
+  .p-ai, .hr-ai { --c: var(--teal); }
+  .p-human, .hr-human { --c: var(--amber); }
+  .p-outcomes, .hr-outcomes { --c: var(--green); }
   .hr-n { grid-row: span 2; font-size: var(--t-xs); color: var(--muted); padding-top: 2px; }
   .hr-t { font: 600 var(--t-sm)/1.25 var(--f-body); color: var(--ink); }
   .hr-i { font-size: var(--t-xs); line-height: 1.4; color: var(--muted); }
-  .hr-ai { border-left-color: var(--teal); }
   .hr-ai .hr-n { color: var(--teal-700); }
   .hr-ai .hr-t { font-size: var(--t-md); }
-  .hr-human { border-left-color: var(--amber); }
   .hr-human .hr-n { color: var(--amber); }
-  .hr-outcomes { border-left-color: var(--green); }
-  .hr-systems { border-left-color: var(--blue); }
 
   @media (max-width: 560px) {
     .hr-stage { left: -20%; }
     .hr-labels { left: 58%; }
     .hr-i { display: none; }
-    .hr-l { padding-left: 8px; }
+    .hr-l a { padding-left: 8px; }
+    .hr-long { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+    .hr-short { display: inline; }
   }
 </style>
 
 <script>
   const root = document.querySelector<HTMLElement>('[data-hero-render]');
-  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const conn = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
-  if (root && !reduce && !conn?.saveData) {
+  if (root) {
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const conn = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
+    const animate = !reduce && !conn?.saveData;
+    const steps = ['systems', 'context', 'ai', 'human', 'outcomes'];
+    const polys = new Map(Array.from(root.querySelectorAll<SVGElement>('.p')).map((e) => [e.dataset.k, e]));
+    const items = new Map(Array.from(root.querySelectorAll<HTMLElement>('.hr-l')).map((e) => [e.dataset.k, e]));
+    const overlay = root.querySelector('.hr-plates') as SVGElement;
+    const labels = root.querySelector('.hr-labels') as HTMLElement;
+
+    // ---- Layer highlight: hover/focus a label, or the idle walk ----------------
+    let on: string | null = null;
+    const setOn = (k: string | null) => {
+      if (on === k) return;
+      if (on) { polys.get(on)?.classList.remove('is-on'); items.get(on)?.classList.remove('is-on'); }
+      on = k;
+      if (k) { polys.get(k)?.classList.add('is-on'); items.get(k)?.classList.add('is-on'); }
+    };
+    let held = false; // pointer or keyboard focus on a label
+    items.forEach((li, k) => {
+      const enter = () => { held = true; setOn(k ?? null); };
+      const leave = () => { held = false; setOn(null); };
+      li.addEventListener('pointerenter', enter);
+      li.addEventListener('pointerleave', leave);
+      li.addEventListener('focusin', enter);
+      li.addEventListener('focusout', leave);
+    });
+
+    let visible = false;
+    let cur = 0; // fold shown, 0 = open, 1 = folded into the AI layer
+
+    // Work moving through: light each layer in turn, then rest, while the stack is open.
+    if (animate) {
+      let i = 0;
+      const walk = () => {
+        if (!held) {
+          if (visible && cur < 0.02 && document.visibilityState === 'visible') {
+            setOn(i < steps.length ? steps[i] : null);
+            i = (i + 1) % (steps.length + 2); // two beats of rest after "outcomes"
+          } else setOn(null);
+        }
+        setTimeout(walk, 1300);
+      };
+      setTimeout(walk, 2600);
+    }
+
+    new IntersectionObserver(([e]) => { visible = e.isIntersecting; if (visible) wake(); }).observe(root);
+
+    // ---- Frame sequence ---------------------------------------------------------
     const canvas = root.querySelector('canvas') as HTMLCanvasElement;
     const stage = root.querySelector('.hr-stage') as HTMLElement;
-    const labels = root.querySelector('.hr-labels') as HTMLElement;
     const ctx = canvas.getContext('2d');
     const total = Number(root.dataset.frames) || 48;
     const dir = window.matchMedia('(max-width: 700px)').matches ? 'm' : 'd'; // phones get smaller frames
@@ -97,8 +169,7 @@ const shadowStyle = `left:${(sx * 100).toFixed(2)}%;top:${(sy * 100).toFixed(2)}
     };
     const nearest = (i: number) => { let k = i; while (k > 0 && !bmp[k]) k--; return bmp[k]; };
 
-    // Draw position p (0 = exploded, total-1 = folded), blending the two
-    // neighbouring frames so the motion is continuous between renders.
+    // Draw position p (0..total-1), blending the two neighbouring frames.
     let drawn = -1;
     const draw = (p: number) => {
       if (!ctx || Math.abs(p - drawn) < 0.002) return;
@@ -117,7 +188,7 @@ const shadowStyle = `left:${(sx * 100).toFixed(2)}%;top:${(sy * 100).toFixed(2)}
       drawn = p;
     };
 
-    // The shadow follows the stack's footprint per frame (interpolated), so it moves continuously.
+    // The shadow follows the stack's footprint per frame (interpolated).
     const shadow = root.querySelector('.hr-shadow') as HTMLElement;
     const tr = JSON.parse(root.dataset.track || '[]') as number[][];
     let stageW = stage.offsetWidth;
@@ -131,70 +202,84 @@ const shadowStyle = `left:${(sx * 100).toFixed(2)}%;top:${(sy * 100).toFixed(2)}
     };
 
     let fold = 0; // target from scroll, 0..1
-    let intro = 1; // 1 = folded at the start of the intro, eased to 0
-    let cur = 1; // smoothed position actually shown, 0..1
+    let intro = 0; // 1 while folded before the unfold plays
+    let live = false;
     let last = 0;
     let running = false;
-    let visible = true;
 
     const frame = (now: number) => {
       const dt = Math.min(64, now - (last || now));
       last = now;
       const target = Math.max(fold, intro);
-      // Ease towards the target at the same speed whatever the frame rate.
-      cur += (target - cur) * (1 - Math.exp(-dt / 110));
+      cur += (target - cur) * (1 - Math.exp(-dt / 110)); // same speed at any frame rate
       if (Math.abs(target - cur) < 0.0005) cur = target;
       draw(cur * (total - 1));
       moveShadow(cur * (total - 1));
-      const hide = Math.min(1, cur * 1.6);
+      const hide = Math.min(1, cur * 1.8);
       labels.style.opacity = String(1 - hide);
       labels.style.transform = `translate3d(${(-24 * hide).toFixed(1)}px,0,0)`;
+      overlay.style.opacity = String(1 - Math.min(1, cur * 6));
+      if (cur > 0.02) setOn(held ? on : null);
       if (cur !== target && visible) requestAnimationFrame(frame);
       else { running = false; last = 0; }
     };
-    const wake = () => { if (!running && visible) { running = true; requestAnimationFrame(frame); } };
+    function wake() { if (live && !running && visible) { running = true; requestAnimationFrame(frame); } }
 
+    // Desktop: the page holds the hero while its runway scrolls past, and the
+    // fold happens in that window. Elsewhere: fold as the visual crosses the
+    // middle of the screen, so it is always seen.
+    const runway = document.querySelector<HTMLElement>('[data-hero-runway]');
     const onScroll = () => {
-      const r = root.getBoundingClientRect();
-      fold = Math.min(1, Math.max(0, (80 - r.top) / Math.max(1, r.height * 0.9))); // starts once the visual reaches the header
+      const vh = window.innerHeight;
+      if (runway && runway.offsetHeight > 0) {
+        const len = runway.offsetHeight * 0.85;
+        const start = runway.getBoundingClientRect().top + window.scrollY - vh; // scroll where the runway starts entering
+        fold = Math.min(1, Math.max(0, (window.scrollY - Math.max(0, start)) / len));
+      } else {
+        const r = root.getBoundingClientRect();
+        fold = Math.min(1, Math.max(0, (vh * 0.6 - (r.top + r.height / 2)) / (vh * 0.4)));
+      }
       wake();
     };
 
     const run = async () => {
       await load(0);
       if (!bmp[0]) return;
-      draw(total - 1);
       await Promise.all(Array.from({ length: total - 1 }, (_, k) => load(k + 1)));
+      // Unfold the first time the visual is on screen.
+      await new Promise<void>((res) => { const t = () => (visible ? res() : setTimeout(t, 120)); t(); });
+      intro = 1; cur = 1; draw(total - 1); moveShadow(total - 1);
       root.classList.add('is-live');
+      live = true;
       const t0 = performance.now();
       const D = 1700;
-      const intro_ = (t: number) => {
+      const step = (t: number) => {
         const p = Math.min(1, (t - t0) / D);
-        intro = Math.pow(1 - p, 3); // ease-out cubic, folded -> exploded
+        intro = Math.pow(1 - p, 3); // ease-out cubic, folded -> open
         wake();
-        if (p < 1) requestAnimationFrame(intro_);
+        if (p < 1) requestAnimationFrame(step);
       };
-      requestAnimationFrame(intro_);
+      requestAnimationFrame(step);
       window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', onScroll, { passive: true });
       onScroll();
     };
 
-    // Pause the loop while the hero is off screen.
-    new IntersectionObserver(([e]) => { visible = e.isIntersecting; if (visible) wake(); }).observe(root);
+    if (animate) {
+      const start = () => ('requestIdleCallback' in window ? (window as Window & { requestIdleCallback: (cb: () => void) => void }).requestIdleCallback(() => void run()) : setTimeout(() => void run(), 200));
+      if (document.readyState === 'complete') start(); else window.addEventListener('load', start, { once: true });
 
-    const start = () => ('requestIdleCallback' in window ? (window as Window & { requestIdleCallback: (cb: () => void) => void }).requestIdleCallback(() => void run()) : setTimeout(() => void run(), 200));
-    if (document.readyState === 'complete') start(); else window.addEventListener('load', start, { once: true });
-
-    // Pointer lean (fine pointers only)
-    if (window.matchMedia('(pointer: fine)').matches) {
-      root.addEventListener('pointermove', (e) => {
-        const r = root.getBoundingClientRect();
-        const x = (e.clientX - r.left) / r.width - 0.5;
-        const y = (e.clientY - r.top) / r.height - 0.5;
-        stage.style.setProperty('--ty', `${(x * 6).toFixed(2)}deg`);
-        stage.style.setProperty('--tx', `${(-y * 4).toFixed(2)}deg`);
-      });
-      root.addEventListener('pointerleave', () => { stage.style.setProperty('--ty', '0deg'); stage.style.setProperty('--tx', '0deg'); });
+      // Pointer lean (fine pointers only)
+      if (window.matchMedia('(pointer: fine)').matches) {
+        root.addEventListener('pointermove', (e) => {
+          const r = root.getBoundingClientRect();
+          const x = (e.clientX - r.left) / r.width - 0.5;
+          const y = (e.clientY - r.top) / r.height - 0.5;
+          stage.style.setProperty('--ty', `${(x * 6).toFixed(2)}deg`);
+          stage.style.setProperty('--tx', `${(-y * 4).toFixed(2)}deg`);
+        });
+        root.addEventListener('pointerleave', () => { stage.style.setProperty('--ty', '0deg'); stage.style.setProperty('--tx', '0deg'); });
+      }
     }
   }
 </script>

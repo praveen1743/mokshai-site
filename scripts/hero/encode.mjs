@@ -37,5 +37,6 @@ for (const [k, i] of pick.entries()) {
   bytes.m += (await sharp(img).resize(480, 480).webp({ quality: 66, alphaQuality: 70, effort: 6 }).toFile(join('public/hero/m', out))).size;
 }
 copyFileSync(join(src, 'labels.json'), 'public/hero/labels.json');
+copyFileSync(join(src, 'plates.json'), 'public/hero/plates.json');
 writeFileSync('public/hero/track.json', JSON.stringify(track));
 console.log(`${pick.length} frames; desktop ${(bytes.d / 1024).toFixed(0)} KB, mobile ${(bytes.m / 1024).toFixed(0)} KB`);
