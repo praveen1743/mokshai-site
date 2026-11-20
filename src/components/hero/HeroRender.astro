@@ -30,7 +30,9 @@ const ys = labelsY as Record<string, number>;
 // plates.json: per frame, each layer's top face on screen (fractions of the frame)
 const perFrame = plates as Record<string, number[][]>[];
 const pl = perFrame[0];
-const pts = (k: string) => pl[k].map(([x, y]) => `${x},${y}`).join(' ');
+// Only the front edge (right, front, left corners): it is the part of a plate
+// never hidden by the plate above, so the light reads as the rim lighting up.
+const pts = (k: string) => [1, 2, 3].map((j) => `${pl[k][j][0]},${pl[k][j][1]}`).join(' ');
 // Contact shadow under the stack, placed from the first frame (the script moves it with the fold).
 const [sx, sy, sw] = (track as number[][])[0];
 const shadowStyle = `left:${(sx * 100).toFixed(2)}%;top:${(sy * 100).toFixed(2)}%;width:${(sw * 100).toFixed(2)}%`;
@@ -41,7 +43,7 @@ const shadowStyle = `left:${(sx * 100).toFixed(2)}%;top:${(sy * 100).toFixed(2)}
     <img class="hr-poster" src="/hero/d/f_000.webp" srcset="/hero/m/f_000.webp 640w, /hero/d/f_000.webp 1200w" sizes="(max-width: 700px) 92vw, 560px" width="1200" height="1200" alt="" fetchpriority="high" decoding="async" />
     <canvas class="hr-canvas" width="1200" height="1200" aria-hidden="true"></canvas>
     <svg class="hr-plates" viewBox="0 0 1 1" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-      {layers.map((l) => <polygon class={`p p-${l.key}`} data-k={l.key} points={pts(l.key)} />)}
+      {layers.map((l) => <polyline class={`p p-${l.key}`} data-k={l.key} points={pts(l.key)} />)}
     </svg>
   </div>
   <ol class="hr-labels" role="list" aria-label="How Moksh AI fits into your business">
@@ -81,9 +83,9 @@ const shadowStyle = `left:${(sx * 100).toFixed(2)}%;top:${(sy * 100).toFixed(2)}
   .hr-l a:hover .hr-go, .hr-l a:focus-visible .hr-go { opacity: 1; transform: none; }
   .hr-l a:focus-visible { outline: 2px solid var(--blue-700); outline-offset: 2px; }
   .hr-plates { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; will-change: opacity; }
-  /* Highlight: a soft light along the plate's top edge, not a filled shape. */
-  .p { fill: color-mix(in oklab, var(--c) 7%, transparent); stroke: var(--c); stroke-width: 1.25; vector-effect: non-scaling-stroke; stroke-linejoin: round; opacity: 0; filter: drop-shadow(0 0 6px color-mix(in oklab, var(--c) 70%, transparent)); transition: opacity .45s var(--ease); }
-  .p.is-on { opacity: .9; }
+  /* Highlight: the plate's front rim glows in the layer colour. */
+  .p { fill: none; stroke: var(--c); stroke-width: 2; stroke-linecap: round; vector-effect: non-scaling-stroke; stroke-linejoin: round; opacity: 0; filter: drop-shadow(0 0 4px var(--c)) drop-shadow(0 0 12px color-mix(in oklab, var(--c) 60%, transparent)); transition: opacity .45s var(--ease); }
+  .p.is-on { opacity: 1; }
   .p-systems, .hr-systems { --c: var(--blue); }
   .p-context, .hr-context { --c: var(--teal); }
   .p-ai, .hr-ai { --c: var(--teal); }
@@ -202,7 +204,7 @@ const shadowStyle = `left:${(sx * 100).toFixed(2)}%;top:${(sy * 100).toFixed(2)}
       const i = Math.min(pf.length - 2, Math.floor(p)), t = p - i;
       polys.forEach((el, k) => {
         if (!k || !pf[i][k]) return;
-        el.setAttribute('points', pf[i][k].map((c, j) => `${(c[0] + (pf[i + 1][k][j][0] - c[0]) * t).toFixed(4)},${(c[1] + (pf[i + 1][k][j][1] - c[1]) * t).toFixed(4)}`).join(' '));
+        el.setAttribute('points', [1, 2, 3].map((j) => { const c = pf[i][k][j], d = pf[i + 1][k][j]; return `${(c[0] + (d[0] - c[0]) * t).toFixed(4)},${(c[1] + (d[1] - c[1]) * t).toFixed(4)}`; }).join(' '));
       });
     };
     const shadow = root.querySelector('.hr-shadow') as HTMLElement;
