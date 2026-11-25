@@ -415,7 +415,7 @@ const groupLabel: Record<string, string> = { Plan: 'Plan · decide what is worth
   /* once the ring is live, only the front card's caption shows, stacked in one cell */
   .captions.live { grid-template-areas: "c"; }
   .captions.live .caption { grid-area: c; opacity: 0; visibility: hidden; transform: translateY(8px); transition: opacity .35s var(--ease), transform .35s var(--ease), visibility 0s linear .35s; }
-  .captions.live .caption.on { opacity: 1; visibility: visible; transform: none; transition: opacity .35s var(--ease) .1s, transform .35s var(--ease) .1s, visibility 0s; }
+  .captions.live .caption.on { opacity: 1; visibility: visible; transform: none; transition: opacity .3s var(--ease), transform .3s var(--ease), visibility 0s; }
 
   /* silence */
   .hush { display: grid; place-items: center; min-height: 62vh; padding: 0 24px; text-align: center; }

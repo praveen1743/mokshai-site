@@ -3,7 +3,7 @@
 // HTML captions under it in index.astro, so search engines and screen readers read
 // those. On pinned desktop (html.motion) scroll through [data-act="path"] picks
 // the front card, and dragging the ring scrolls the page to match. Elsewhere it
-// turns on a slow timer. Each change is announced to the page with a
+// turns on a slow timer. The card the ring actually shows in front is announced to the page with a
 // `layer-change` event so the caption under the ring shows the same layer.
 import * as React from 'react';
 import { WarpCarousel, type WarpCard } from './ui/warp-carousel';
@@ -68,18 +68,16 @@ export default function LayersCarousel() {
       if (next !== indexRef.current) {
         indexRef.current = next;
         setIndex(next);
-        announce(next);
       }
     };
     update();
-    announce(indexRef.current);
     addEventListener('scroll', update, { passive: true });
     addEventListener('resize', update);
     return () => {
       removeEventListener('scroll', update);
       removeEventListener('resize', update);
     };
-  }, [announce]);
+  }, []);
 
   // Dragging or clicking the ring while pinned: move the page to that layer's scroll position.
   const onPinnedChange = React.useCallback((i: number) => {
@@ -103,8 +101,8 @@ export default function LayersCarousel() {
   };
 
   return motion ? (
-    <WarpCarousel {...common} index={index} autoplay={false} onIndexChange={onPinnedChange} />
+    <WarpCarousel {...common} index={index} autoplay={false} onIndexChange={onPinnedChange} onFrontChange={announce} />
   ) : (
-    <WarpCarousel {...common} autoplay step={1} interval={4} onIndexChange={announce} />
+    <WarpCarousel {...common} autoplay step={1} interval={4} onFrontChange={announce} />
   );
 }

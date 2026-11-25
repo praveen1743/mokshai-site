@@ -41,6 +41,8 @@ export interface WarpCarouselProps {
   defaultIndex?: number;
   /** Called when the front card should change: autoplay, drag, click, or arrow keys. */
   onIndexChange?: (index: number) => void;
+  /** Called with the card that is actually nearest the front, as the ring turns (Moksh AI addition). */
+  onFrontChange?: (index: number) => void;
   /** Spin to the next card on a timer. */
   autoplay?: boolean;
   /** Seconds between autoplay spins. Longer intervals only stretch the slow tail of the spin; shorter ones compress the whole curve. */
@@ -996,6 +998,7 @@ export function WarpCarousel({
   index,
   defaultIndex = 0,
   onIndexChange,
+  onFrontChange,
   autoplay = true,
   interval = 3.6667,
   step = 2,
@@ -1047,8 +1050,8 @@ export function WarpCarousel({
     visible: true,
     hiddenAt: 0,
   });
-  const props = React.useRef({ onIndexChange, controlled, autoplay, gap, stepN, seconds, reduced, realCount });
-  props.current = { onIndexChange, controlled, autoplay, gap, stepN, seconds, reduced, realCount };
+  const props = React.useRef({ onIndexChange, onFrontChange, controlled, autoplay, gap, stepN, seconds, reduced, realCount });
+  props.current = { onIndexChange, onFrontChange, controlled, autoplay, gap, stepN, seconds, reduced, realCount };
   const handles = React.useRef<{ kick: () => void; draw: () => void }>({ kick: () => {}, draw: () => {} });
 
   const lastIndex = React.useRef(current);
@@ -1193,9 +1196,16 @@ export function WarpCarousel({
       });
     };
 
+    let lastFront = -1;
     const draw = (now: number) => {
       if (disposed) return;
       const { P, Pb, mix } = progressAt(now);
+      // report the card that is visually in front (it changes as the turning ring passes halfway)
+      const frontNow = mod(Math.round(mix > 0.5 ? Pb : P), props.current.realCount);
+      if (frontNow !== lastFront) {
+        lastFront = frontNow;
+        props.current.onFrontChange?.(frontNow);
+      }
       const setA = poseSet(P);
       if (gls) {
         const { gl, prog, loc } = gls;
