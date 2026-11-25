@@ -1,18 +1,29 @@
 ---
+// Shared header for every interior page. One quiet pattern site-wide: a meta line
+// (breadcrumb, or the eyebrow label when a page has no breadcrumb), a large serif
+// title, a short summary, actions, and an optional illustration on the right.
+// It sits on the page ground with a hairline under it, so there is no band edge
+// where it meets the next section.
 interface Props { eyebrow: string; title: string; accent?: string; lede?: string; crumbs?: { name: string; href: string }[]; tone?: 'wash' | 'dark' }
 const { eyebrow, title, accent, lede, crumbs = [], tone = 'wash' } = Astro.props;
 const hasVisual = Astro.slots.has('visual');
+// Show the eyebrow as the last breadcrumb only when it adds something ("Services / Service" does not).
+const lastCrumb = crumbs.at(-1)?.name.toLowerCase() ?? '';
+const label = eyebrow.toLowerCase();
+const showHere = crumbs.length > 0 && !(lastCrumb.startsWith(label) || label.startsWith(lastCrumb));
 ---
-<section class={`page-hero ${tone === 'dark' ? 'dark' : 'wash'}${hasVisual ? ' has-visual' : ''}`}>
+<section class:list={['page-hero', { 'hero-ink': tone === 'dark', 'has-visual': hasVisual }]}>
   <div class="container">
     <div class="hero-text">
-      {crumbs.length > 0 && (
+      {crumbs.length > 0 ? (
         <nav class="crumbs" aria-label="Breadcrumb">
           <a href="/">Home</a>
           {crumbs.map((c) => (<><span aria-hidden="true">/</span><a href={c.href}>{c.name}</a></>))}
+          {showHere && <><span aria-hidden="true">/</span><span class="crumb-here">{eyebrow}</span></>}
         </nav>
+      ) : (
+        <span class="eyebrow">{eyebrow}</span>
       )}
-      <span class="eyebrow">{eyebrow}</span>
       <h1>{title}{accent && <> <span class="grad-text">{accent}</span></>}</h1>
       {lede && <p class="lede">{lede}</p>}
       <slot />
@@ -21,7 +32,6 @@ const hasVisual = Astro.slots.has('visual');
   </div>
 </section>
 <style>
-  .dark .crumbs, .dark .crumbs a { color: var(--on-dark-muted); }
-  .hero-text { display: grid; gap: 22px; }
-  .has-visual h1 { font-size: clamp(2.3rem, 1.5rem + 3.2vw, 3.9rem); }
+  .hero-text { display: grid; gap: 22px; align-content: center; }
+  .crumb-here { color: var(--ink); }
 </style>
