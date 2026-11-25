@@ -1,6 +1,10 @@
 "use client";
 
-// Warp Carousel by Louis Studios.
+// Warp Carousel by Louis Studios. MIT License, per the component's listing at
+// https://21st.dev/@louisstudios/components/warp-carousel. Copyright (c) Louis Studios.
+// Permission is granted, free of charge, to use, copy, modify and distribute this software,
+// provided this notice is kept. The software is provided "as is", without warranty of any kind.
+// Moksh AI changes: onFrontChange and position props (marked below).
 // 140+ more hand-made React components at https://studios.lou15.com/?ref=21st-code
 
 import * as React from "react";
