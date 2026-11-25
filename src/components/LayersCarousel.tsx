@@ -2,8 +2,8 @@
 // The ring is decoration: the layer names, descriptions and links live in the
 // HTML captions under it in index.astro, so search engines and screen readers read
 // those. On pinned desktop (html.motion) scroll through [data-act="path"] picks
-// the front card, and dragging the ring scrolls the page to match. Elsewhere it
-// steps through on a timer. The card the ring actually shows in front is announced to the page with a
+// the front card, and dragging the ring scrolls the page to match. Elsewhere scroll
+// steps it as the ring crosses the screen. There is no timer. The card the ring actually shows in front is announced to the page with a
 // `layer-change` event so the caption under the ring shows the same layer.
 import * as React from 'react';
 import { WarpCarousel, type WarpCard } from './ui/warp-carousel';
@@ -37,9 +37,10 @@ const cards: WarpCard[] = [
 ];
 
 const COUNT = cards.length;
-const isMotion = () => typeof document !== 'undefined' && document.documentElement.classList.contains('motion');
+// The five-layers section is pinned whenever the page sets html.path-pinned (any screen at least 620 px tall, motion allowed).
+const isMotion = () => typeof document !== 'undefined' && document.documentElement.classList.contains('path-pinned');
 
-// Two blank cards, painted in the page background with no text or glow, sit past
+// Blank cards, painted in the page background with no text or glow, sit past
 // the ends of the ring so it reads as five steps in a row, not a loop: nothing
 // shows left of 01 or right of 05.
 const blank = (bg: string): WarpCard => ({ title: '', value: '', footer: '', detail: 'none', mesh: [bg], numeral: [bg, bg], glow: bg });
@@ -50,7 +51,8 @@ export default function LayersCarousel() {
   const indexRef = React.useRef(0);
   // Paint the stage in the page's own background so the ring has no visible box.
   const [stageBg, setStageBg] = React.useState('#08121e');
-  const ring = React.useMemo(() => [...cards, blank(stageBg), blank(stageBg)], [stageBg]);
+  // Three blanks: with eight slots a jump from 01 straight to 05 never turns the long way round through them.
+  const ring = React.useMemo(() => [...cards, blank(stageBg), blank(stageBg), blank(stageBg)], [stageBg]);
 
   const go = React.useCallback((i: number) => {
     indexRef.current = i;
@@ -69,13 +71,27 @@ export default function LayersCarousel() {
       const c = getComputedStyle(el).backgroundColor;
       if (c && c !== 'transparent' && !/rgba\([^)]*,\s*0\)$/.test(c)) { setStageBg(c); break; }
     }
+    const ringEl = section?.querySelector<HTMLElement>('.ring') ?? null;
     const update = () => {
       const m = isMotion();
       setMotion(m);
-      if (!m || !section) return;
-      const r = section.getBoundingClientRect();
-      const p = Math.min(1, Math.max(0, -r.top / Math.max(1, r.height - innerHeight)));
-      // Each layer gets an equal fifth of the pinned scroll, so the last one holds as long as the rest.
+      if (!section) return;
+      let p: number;
+      if (m) {
+        // Pinned: progress through the section's scroll runway.
+        const r = section.getBoundingClientRect();
+        p = -r.top / Math.max(1, r.height - innerHeight);
+      } else {
+        // Not pinned (phones, small windows, reduced motion): progress as the ring
+        // travels from the bottom of the screen to the top, so it always starts at 01.
+        // 01 while the ring sits fully on screen at the bottom; 05 by the time it reaches the header.
+        const r = (ringEl ?? section).getBoundingClientRect();
+        const start = innerHeight - r.height;
+        const end = 96;
+        p = (start - r.top) / Math.max(1, start - end);
+      }
+      p = Math.min(1, Math.max(0, p));
+      // Each layer gets an equal fifth of the travel, so the last one holds as long as the rest.
       const next = Math.min(COUNT - 1, Math.floor(p * COUNT));
       if (next !== indexRef.current) go(next);
     };
@@ -87,13 +103,6 @@ export default function LayersCarousel() {
       removeEventListener('resize', update);
     };
   }, [go]);
-
-  // Phones and other unpinned layouts: step 01 to 05 on a timer, then start again from 01.
-  React.useEffect(() => {
-    if (motion || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const t = setInterval(() => go((indexRef.current + 1) % COUNT), 4000);
-    return () => clearInterval(t);
-  }, [motion, go]);
 
   // Dragging or clicking the ring: pinned, move the page to that layer's scroll
   // position; unpinned, just show that layer. Blank slots are ignored.
