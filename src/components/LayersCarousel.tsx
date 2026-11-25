@@ -37,7 +37,9 @@ const cards: WarpCard[] = [
 ];
 
 const COUNT = cards.length;
-// The five-layers section is pinned whenever the page sets html.path-pinned (any screen at least 620 px tall, motion allowed).
+// Share of the scroll at which the last layer arrives; it holds from here to the end.
+const LAST_AT = 0.64;
+// The five-layers section is pinned whenever the page sets html.path-pinned (any screen at least 540 px tall, motion allowed).
 const isMotion = () => typeof document !== 'undefined' && document.documentElement.classList.contains('path-pinned');
 
 // Blank cards, painted in the page background with no text or glow, sit past
@@ -46,8 +48,10 @@ const isMotion = () => typeof document !== 'undefined' && document.documentEleme
 const blank = (bg: string): WarpCard => ({ title: '', value: '', footer: '', detail: 'none', mesh: [bg], numeral: [bg, bg], glow: bg });
 
 export default function LayersCarousel() {
-  const [motion, setMotion] = React.useState(false);
   const [index, setIndex] = React.useState(0);
+  // Scrubbed ring position, driven straight from scroll (no turning animation to wait for).
+  const [position, setPosition] = React.useState(0);
+  const reduced = React.useMemo(() => typeof window !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches, []);
   const indexRef = React.useRef(0);
   // Paint the stage in the page's own background so the ring has no visible box.
   const [stageBg, setStageBg] = React.useState('#08121e');
@@ -74,7 +78,6 @@ export default function LayersCarousel() {
     const ringEl = section?.querySelector<HTMLElement>('.ring') ?? null;
     const update = () => {
       const m = isMotion();
-      setMotion(m);
       if (!section) return;
       let p: number;
       if (m) {
@@ -91,8 +94,13 @@ export default function LayersCarousel() {
         p = (start - r.top) / Math.max(1, start - end);
       }
       p = Math.min(1, Math.max(0, p));
-      // Each layer gets an equal fifth of the travel, so the last one holds as long as the rest.
-      const next = Math.min(COUNT - 1, Math.floor(p * COUNT));
+      // Layers 01 to 04 each take 16% of the travel; 05 arrives by 64% and holds for the
+      // rest. Within each step the ring holds square, then turns, then holds again.
+      const raw = Math.min(COUNT - 1, (p / LAST_AT) * (COUNT - 1));
+      const i = Math.floor(raw);
+      const f = Math.min(1, Math.max(0, (raw - i - 0.3) / 0.4));
+      setPosition(i + f * f * (3 - 2 * f));
+      const next = Math.min(COUNT - 1, Math.floor(raw));
       if (next !== indexRef.current) go(next);
     };
     update();
@@ -112,13 +120,15 @@ export default function LayersCarousel() {
     if (!isMotion() || !section) { go(i); return; }
     const top = section.getBoundingClientRect().top + scrollY;
     const span = section.offsetHeight - innerHeight;
-    scrollTo({ top: top + span * ((i + 0.5) / COUNT), behavior: 'smooth' });
+    const at = i === COUNT - 1 ? LAST_AT + 0.08 : ((i + 0.5) / (COUNT - 1)) * LAST_AT;
+    scrollTo({ top: top + span * at, behavior: 'smooth' });
   }, [go]);
 
   return (
     <WarpCarousel
       cards={ring}
       index={index}
+      position={reduced ? undefined : position}
       autoplay={false}
       onIndexChange={onRingChange}
       onFrontChange={announce}

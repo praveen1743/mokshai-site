@@ -43,6 +43,8 @@ export interface WarpCarouselProps {
   onIndexChange?: (index: number) => void;
   /** Called with the card that is actually nearest the front, as the ring turns (Moksh AI addition). */
   onFrontChange?: (index: number) => void;
+  /** Ring position set directly, for scroll scrubbing: 0 puts card 0 in front, 1.5 is halfway from card 1 to card 2. Overrides index, autoplay and drag (Moksh AI addition). */
+  position?: number;
   /** Spin to the next card on a timer. */
   autoplay?: boolean;
   /** Seconds between autoplay spins. Longer intervals only stretch the slow tail of the spin; shorter ones compress the whole curve. */
@@ -999,6 +1001,7 @@ export function WarpCarousel({
   defaultIndex = 0,
   onIndexChange,
   onFrontChange,
+  position,
   autoplay = true,
   interval = 3.6667,
   step = 2,
@@ -1050,8 +1053,8 @@ export function WarpCarousel({
     visible: true,
     hiddenAt: 0,
   });
-  const props = React.useRef({ onIndexChange, onFrontChange, controlled, autoplay, gap, stepN, seconds, reduced, realCount });
-  props.current = { onIndexChange, onFrontChange, controlled, autoplay, gap, stepN, seconds, reduced, realCount };
+  const props = React.useRef({ onIndexChange, onFrontChange, position, controlled, autoplay, gap, stepN, seconds, reduced, realCount });
+  props.current = { onIndexChange, onFrontChange, position, controlled, autoplay, gap, stepN, seconds, reduced, realCount };
   const handles = React.useRef<{ kick: () => void; draw: () => void }>({ kick: () => {}, draw: () => {} });
 
   const lastIndex = React.useRef(current);
@@ -1142,6 +1145,11 @@ export function WarpCarousel({
     const L = live.current;
     const progressAt = (now: number) => {
       const p = props.current;
+      if (p.position !== undefined) {
+        L.P = p.position;
+        L.mode = "rest";
+        return { P: p.position, Pb: 0, mix: 0 };
+      }
       if (p.seconds !== undefined) {
         if (p.reduced) {
           const k = p.seconds < LEAD ? 0 : Math.floor((p.seconds - LEAD) / p.gap) + 1;
@@ -1347,9 +1355,14 @@ export function WarpCarousel({
     else handles.current.kick();
   }, [seconds, autoplay, reduced]);
 
+  // scrubbed: redraw whenever the position changes
+  React.useEffect(() => {
+    if (position !== undefined) handles.current.draw();
+  }, [position]);
+
   /* ---------------- interaction ---------------- */
   const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (seconds !== undefined || e.button > 0) return;
+    if (seconds !== undefined || position !== undefined || e.button > 0) return;
     const L = live.current;
     e.currentTarget.setPointerCapture?.(e.pointerId);
     L.mode = "drag";
