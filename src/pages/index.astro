@@ -2,7 +2,6 @@
 import Base from '../layouts/Base.astro';
 import Arrow from '../components/Arrow.astro';
 import Icon from '../components/Icon.astro';
-import HeroRender from '../components/hero/HeroRender.astro';
 import Faq from '../components/Faq.astro';
 import CtaBand from '../components/CtaBand.astro';
 import FounderVideo from '../components/FounderVideo.astro';
@@ -19,19 +18,6 @@ const homeAgents = ['medical-report-insights', 'financial-reasoning', 'legal-doc
 // Manufacturing gets the featured panel: Moksh Group's longest experience.
 const manufacturing = industries.find((i) => i.slug === 'manufacturing')!;
 const otherIndustries = industries.filter((i) => i.slug !== 'manufacturing');
-
-const serviceIcons: Record<string, string> = {
-  'ai-consulting': 'compass',
-  'custom-ai-development': 'copilot',
-  'ai-voice-agents': 'quote',
-  'llm-ai-integration': 'layers',
-  'ai-prototype-to-production': 'power',
-  'ai-implementation-training': 'people',
-  'ai-cost-optimization': 'coins',
-  'rag-knowledge-systems': 'stack',
-  'enterprise-ai-integration': 'database',
-  'ai-workflow-automation': 'route',
-};
 
 const workflows = [
   { icon: 'doc', t: 'Reading documents', d: 'Pull the fields you need out of invoices, forms, reports and PDFs, and file them where they belong.' },
@@ -73,16 +59,36 @@ const faqs = [
   { q: 'What is the difference between RAG, automation and AI agents?', a: 'RAG (retrieval-augmented generation) lets AI answer from your own documents and data, with sources. Workflow automation runs a defined process end to end, with AI handling steps such as reading a document or classifying a request. An agent decides its own steps towards a goal and takes actions in your systems. Most projects combine them, and we recommend the simplest one that does the job.' },
   { q: 'Which industries can benefit from AI automation?', a: `Any business with repeatable, rules-based work. We already have agents, guides or demos for managed service providers and their clients, manufacturing and operations, fintech and insurance, healthcare, real estate, legal and professional services, and e-commerce. We work with teams worldwide, and support is available ${site.supportHours}.` },
 ];
+// Five layers of every build. Each one links to the page that explains it.
+const layers = [
+  { t: 'Your systems', d: 'Email, documents, CRM, ERP and helpdesk stay where they are. Nothing is ripped out.', href: '/services/enterprise-ai-integration/', icon: 'database' },
+  { t: 'Knowledge and data', d: 'Policies, manuals, price lists and past work, made searchable with the source attached.', href: '/services/rag-knowledge-systems/', icon: 'stack' },
+  { t: 'The AI layer', d: 'Agents and AI features that read, draft, check and route the work at machine pace.', href: '/services/custom-ai-development/', icon: 'copilot', ai: true },
+  { t: 'Human review', d: 'A person validates and approves anything sensitive before it leaves the building.', href: '/human-in-the-loop-ai-approval-design/', icon: 'people', person: true },
+  { t: 'Outcomes', d: 'Finished work in your systems, with every action logged.', href: '/services/ai-workflow-automation/', icon: 'route' },
+];
+const groupLabel: Record<string, string> = { Plan: 'Plan · decide what is worth doing', Build: 'Build · put AI into your business', Run: 'Run · adopt it and keep it affordable' };
 ---
 <Base
   title="AI Implementation, Integration & Automation Services | Moksh AI"
   description="Moksh AI builds AI into the systems you already run: AI features in existing apps, RAG knowledge assistants, ERP and CRM integrations, workflow and document automation and custom AI agents, with people in control."
   schema={[faq(faqs), videoObject(introVideo)]}
 >
-  <!-- 1. HERO: the only section with ambient lighting -->
-  <section class="hero wash glow" aria-labelledby="hero-h">
-    <div class="container hero-grid">
-      <div class="hero-copy">
+  <!-- 1. HERO: four depth planes, headline between them -->
+  <section class="act hero" id="top" data-act="hero" aria-labelledby="hero-h">
+    <div class="pin hero-pin">
+      <div class="plane p-glow" data-depth="3" aria-hidden="true"></div>
+      <div class="plane p-far" data-depth="9" aria-hidden="true">
+        <span class="chip c1">Email</span><span class="chip c2">ERP</span><span class="chip c3">CRM</span><span class="chip c4">Helpdesk</span><span class="chip c5">Documents</span>
+      </div>
+      <div class="plane p-mid" data-depth="17" aria-hidden="true">
+        <div class="docs">
+          <div class="doc"><b></b><b></b><b></b></div>
+          <div class="doc"><b></b><b></b><b></b><b></b></div>
+          <div class="doc"><b></b><b></b><b></b><b></b><b></b><b></b><em></em></div>
+        </div>
+      </div>
+      <div class="container hero-copy" data-copy>
         <span class="eyebrow">AI implementation, integration and automation</span>
         <h1 id="hero-h"><span class="h1-kicker">AI + Human:</span> Built into your business, <span class="grad-text">with your people in control</span></h1>
         <p class="lede">We put AI to work inside the systems you already run: AI features in your apps, assistants that answer from your own knowledge, integrations with your ERP and CRM, automated workflows and custom agents. A person approves every decision that matters.</p>
@@ -96,34 +102,106 @@ const faqs = [
           <li>Designed for real business operations</li>
         </ul>
       </div>
-      <div class="hero-visual"><HeroRender /></div>
+      <div class="plane p-fore" data-depth="32" aria-hidden="true">
+        <div class="fore-card"><small class="mono">Illustrative</small><strong>Quote ready for your approval</strong><span>Approve</span></div>
+      </div>
+      <div class="plane p-atmo" aria-hidden="true"></div>
     </div>
-    <div class="hero-runway" data-hero-runway aria-hidden="true"></div>
   </section>
 
-  <!-- 2. WORK AI CAN HANDLE: editorial list -->
-  <section class="section" aria-labelledby="work-h">
-    <div class="container">
-      <div class="head">
-        <span class="eyebrow">What we automate</span>
-        <h2 id="work-h">Where AI is paying off for businesses today</h2>
-        <p class="lede">Most of the value comes from AI connected to your own data and systems, not from another standalone tool. These are the jobs we are asked to take on first, each with a person in the loop for anything unusual or sensitive.</p>
-      </div>
-      <ol class="work" role="list">
-        {workflows.map((w, i) => (
-          <li>
-            <span class="hexi sm soft"><Icon name={w.icon} /></span>
-            <div>
-              <h3><span class="mono w-n">{String(i + 1).padStart(2, '0')}</span>{w.t}</h3>
+  <!-- 2. WORK AI CAN HANDLE: the chores strike themselves out -->
+  <section class="act work-act" data-act="work" aria-labelledby="work-h">
+    <div class="pin work-pin">
+      <div class="container work-grid">
+        <div class="work-head">
+          <span class="eyebrow">What we automate</span>
+          <h2 id="work-h">Where AI is paying off for businesses today</h2>
+          <p class="lede">Most of the value comes from AI connected to your own data and systems, not from another standalone tool. These are the jobs we are asked to take on first, each with a person in the loop for anything unusual or sensitive.</p>
+        </div>
+        <ol class="chores" role="list" data-chores>
+          {workflows.map((w) => (
+            <li>
+              <h3><span class="strike">{w.t}</span><span class="handled mono" aria-hidden="true">Agent</span></h3>
               <p>{w.d}</p>
-            </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. FIVE LAYERS: lateral travel -->
+  <section class="act path-act" data-act="path" aria-labelledby="path-h">
+    <div class="pin path-pin">
+      <div class="container path-head">
+        <h2 id="path-h">Every build follows the same five layers, from your systems to the outcome</h2>
+        <p class="lede">The AI layer sits between what you already use and the result you need. A person sits between the AI and anything that matters.</p>
+      </div>
+      <ol class="track" role="list" data-track>
+        {layers.map((l, i) => (
+          <li class:list={['node', { ai: l.ai, person: l.person }]}>
+            <a href={l.href}>
+              <span class="node-top"><span class="mono">{String(i + 1).padStart(2, '0')}</span><span class="hexi sm soft"><Icon name={l.icon} /></span></span>
+              <span class="node-body"><span class="node-t">{l.t}</span><span class="node-d">{l.d}</span></span>
+              <span class="link-arrow node-go">Read more</span>
+            </a>
           </li>
         ))}
       </ol>
+      <div class="container"><div class="rail" aria-hidden="true"><b data-rail></b></div></div>
     </div>
   </section>
 
-  <!-- 3. DEMO AGENTS -->
+  <!-- authored silence before the peak -->
+  <div class="hush" aria-hidden="true"><p data-hush>This is where a person decides.</p></div>
+
+  <!-- 4. THE GATE (peak): the run halts until the visitor approves -->
+  <section class="act gate-act" data-act="gate" aria-labelledby="human-h">
+    <div class="pin gate-pin">
+      <div class="container gate">
+        <div class="gate-head">
+          <span class="eyebrow">AI plus human</span>
+          <h2 id="human-h">AI handles the repetitive work while your people keep the decisions that matter</h2>
+          <p class="lede">AI processes, analyses and prepares the work. People supervise sensitive actions, review exceptions and make the calls that need judgement. Every step is logged.</p>
+        </div>
+        <div class="board">
+          <div class="quote" aria-hidden="true">
+            <span class="stamp mono" data-stamp>Draft</span>
+            <span class="q-title">Quote Q-2041</span>
+            <span class="row"><span>Line items</span><span>14</span></span>
+            <span class="row"><span>Supplier terms</span><span>Net 30</span></span>
+            <span class="row flag"><span>Discount above policy</span><span>Needs approval</span></span>
+            <span class="row"><span>Delivery window</span><span>Confirmed</span></span>
+          </div>
+          <div class="run" data-run>
+            <p class="run-label mono">Illustrative run with sample data</p>
+            <ol class="steps" role="list" aria-hidden="true" data-steps>
+              <li>Read</li><li>Extract</li><li>Draft</li><li class="g">Approve</li><li>Send</li>
+            </ol>
+            <p class="status" aria-live="polite" data-status>Waiting to start.<small>Scroll to run the agent.</small></p>
+            <button class="btn btn-person" type="button" disabled data-approve>Approve and send</button>
+          </div>
+          <ol class="flow" role="list" data-flow>
+            {flow.map((f, i) => (
+              <li class:list={['flow-step', { person: f.who === 'Person', branch: f.branch }]}>
+                <span class="flow-who mono">{String(i + 1).padStart(2, '0')} · {f.who}</span>
+                <h3>{f.t}</h3>
+                <p>{f.d}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+        <p class="small-link">The rule behind every agent we build: read <a href="/human-in-the-loop-ai-approval-design/">how we design approval steps</a>.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. THE CEO: a still section after the peak -->
+  <section class="section ceo-sec" aria-label="Why Moksh Group started Moksh AI">
+    <div class="container"><FounderVideo heading="Why Moksh Group started Moksh AI" /></div>
+  </section>
+
+  <!-- 6. DEMO AGENTS: cards deal in -->
   <section class="section sky" aria-labelledby="demo-h">
     <div class="container">
       <div class="row-head">
@@ -134,113 +212,77 @@ const faqs = [
         </div>
         <a class="link-arrow" href="/agents/">All {agents.length} demo agents</a>
       </div>
-      <div class="agent-grid">{homeAgents.map((a) => <AgentCard agent={a} />)}</div>
+      <div class="agent-grid deal">{homeAgents.map((a) => <AgentCard agent={a} />)}</div>
     </div>
   </section>
 
-  <!-- 4. INDUSTRIES: manufacturing featured, the rest as a list -->
-  <section class="section" aria-labelledby="ind-h">
-    <div class="container">
-      <div class="row-head">
-        <div class="stack-sm">
-          <span class="eyebrow">Industries</span>
-          <h2 id="ind-h">AI automation designed for the way your industry works</h2>
+  <!-- 7. SERVICES then INDUSTRIES: one wipes over the other -->
+  <section class="act range-act" data-act="range" aria-label="Services and industries">
+    <div class="pin range-pin">
+      <div class="container panels" data-panels>
+        <div class="panel svc" aria-labelledby="svc-h">
+          <div class="panel-head">
+            <h2 id="svc-h">Everything you need to turn AI opportunities into working business solutions</h2>
+            <a class="link-arrow" href="/services/">All services</a>
+          </div>
+          <ol class="svc-list" role="list">
+            {services.map((s, i) => (
+              <li>
+                {(i === 0 || services[i - 1].group !== s.group) && <span class="svc-group mono">{groupLabel[s.group] ?? s.group}</span>}
+                <a href={`/services/${s.slug}/`}>
+                  <span class="svc-n mono">{String(i + 1).padStart(2, '0')}</span>
+                  <span class="svc-name">{s.name}</span>
+                  <span class="svc-text">{s.short}</span>
+                </a>
+              </li>
+            ))}
+          </ol>
         </div>
-        <a class="link-arrow" href="/industries/">All industries</a>
-      </div>
-      <div class="ind">
-        <a class="ind-feature dark" href={manufacturing.href}>
-          <span class="tag">Where Moksh Group started</span>
-          <span class="if-title">{manufacturing.name}</span>
-          <span class="if-text">Moksh Group has supported manufacturing and fabrication businesses for 15 years. Agents prepare quotes from RFQs and drawings, read incoming documents, answer order-status questions and take the handoffs out of the back office.</span>
-          <span class="if-tasks mono">Quoting · Intake · Order status · Back office</span>
-          <span class="link-arrow">AI for manufacturing and operations</span>
-        </a>
-        <ul class="ind-list" role="list">
-          {otherIndustries.map((i) => (
-            <li><a href={i.href}><span class="hexi sm"><Icon name={i.icon} /></span><span class="ind-t"><strong>{i.name}</strong><small>{i.note}</small></span></a></li>
-          ))}
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <!-- 5. SERVICES: numbered editorial list -->
-  <section class="section mint" aria-labelledby="svc-h">
-    <div class="container">
-      <div class="row-head">
-        <div class="stack-sm">
-          <span class="eyebrow">Services</span>
-          <h2 id="svc-h">Everything you need to turn AI opportunities into working business solutions</h2>
-        </div>
-        <a class="link-arrow" href="/services/">All services</a>
-      </div>
-      <ol class="svc-list" role="list">
-        {services.map((s, i) => (
-          <li data-group={s.group}>
-            {(i === 0 || services[i - 1].group !== s.group) && <span class="svc-group mono">{s.group === 'Plan' ? 'Plan · decide what is worth doing' : s.group === 'Build' ? 'Build · put AI into your business' : 'Run · adopt it and keep it affordable'}</span>}
-            <a href={`/services/${s.slug}/`}>
-              <span class="svc-n mono">{String(i + 1).padStart(2, '0')}</span>
-              <span class="svc-name"><span class="svc-ic" aria-hidden="true"><Icon name={serviceIcons[s.slug] ?? 'copilot'} /></span>{s.name}</span>
-              <span class="svc-text">{s.short}</span>
-              <span class="svc-go" aria-hidden="true"><Arrow /></span>
+        <div class="panel ind" aria-labelledby="ind-h" data-wipe>
+          <div class="panel-head">
+            <h2 id="ind-h">AI automation designed for the way your industry works</h2>
+            <a class="link-arrow" href="/industries/">All industries</a>
+          </div>
+          <div class="ind-grid">
+            <a class="ind-feature" href={manufacturing.href}>
+              <span class="tag">Where Moksh Group started</span>
+              <span class="if-title">{manufacturing.name}</span>
+              <span class="if-text">Moksh Group has supported manufacturing and fabrication businesses for 15 years. Agents prepare quotes from RFQs and drawings, read incoming documents, answer order-status questions and take the handoffs out of the back office.</span>
+              <span class="if-tasks mono">Quoting · Intake · Order status · Back office</span>
             </a>
-          </li>
-        ))}
-      </ol>
+            <ul class="ind-list" role="list">
+              {otherIndustries.map((i) => (
+                <li><a href={i.href}><strong>{i.name}</strong><small>{i.note}</small></a></li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- 6. AI + HUMAN: the operating model, with the CEO -->
-  <section class="section dark" aria-labelledby="human-h">
-    <div class="container">
-      <div class="head">
-        <span class="eyebrow">AI plus human</span>
-        <h2 id="human-h">AI handles the repetitive work while your people keep the decisions that matter</h2>
-        <p class="lede">AI processes, analyses and prepares the work. People supervise sensitive actions, review exceptions and make the calls that need judgement. Every step is logged.</p>
-      </div>
-      <div class="flow-wrap">
-      <div class="flow-bar" aria-hidden="true"></div>
-      <ol class="flow" role="list">
-        {flow.map((f, i) => (
-          <li class:list={['flow-step', { person: f.who === 'Person', branch: f.branch }]}>
-            <span class="flow-who mono">{String(i + 1).padStart(2, '0')} · {f.who}</span>
-            <h3>{f.t}</h3>
-            <p>{f.d}</p>
-          </li>
-        ))}
-      </ol>
-      </div>
-      <p class="small-link">The rule behind every agent we build: read <a href="/human-in-the-loop-ai-approval-design/">how we design approval steps</a>.</p>
-      <div class="ceo"><FounderVideo heading="Why Moksh Group started Moksh AI" /></div>
-    </div>
-  </section>
-
-  <!-- 7. HOW WE WORK -->
-  <section class="section" aria-labelledby="how-h">
+  <!-- 8. HOW WE WORK: phases stack -->
+  <section class="section how" aria-labelledby="how-h">
     <div class="container">
       <div class="head">
         <span class="eyebrow">How we work</span>
         <h2 id="how-h">From the first workflow to measurable business automation</h2>
       </div>
-      <ol class="steps" role="list">
-        <li class="step">
+      <ol class="phases" role="list" data-phases>
+        <li class="phase">
           <span class="step-n">01</span>
-          <h3>Discovery</h3>
-          <p>We map one business workflow, understand the systems behind it and find where automation makes sense.</p>
-          <dl><dt>Outcome</dt><dd>A prioritised automation opportunity and an agreed measurement baseline</dd></dl>
+          <div><h3>Discovery</h3><p>We map one business workflow, understand the systems behind it and find where automation makes sense.</p></div>
+          <dl><dt class="mono">Outcome</dt><dd>A prioritised automation opportunity and an agreed measurement baseline</dd></dl>
         </li>
-        <li class="step">
+        <li class="phase">
           <span class="step-n">02</span>
-          <h3>Pilot</h3>
-          <p>We build an agent for the chosen workflow with human approval switched on, and run it against live work.</p>
-          <dl><dt>Outcome</dt><dd>Measured performance on your own workflow and data</dd></dl>
+          <div><h3>Pilot</h3><p>We build an agent for the chosen workflow with human approval switched on, and run it against live work.</p></div>
+          <dl><dt class="mono">Outcome</dt><dd>Measured performance on your own workflow and data</dd></dl>
         </li>
-        <li class="step">
+        <li class="phase">
           <span class="step-n">03</span>
-          <h3>Scale</h3>
-          <p>We extend what works into neighbouring workflows, train your team and set up the operating procedures.</p>
-          <dl><dt>Outcome</dt><dd>AI your team can operate, supervise and improve</dd></dl>
+          <div><h3>Scale</h3><p>We extend what works into neighbouring workflows, train your team and set up the operating procedures.</p></div>
+          <dl><dt class="mono">Outcome</dt><dd>AI your team can operate, supervise and improve</dd></dl>
         </li>
       </ol>
       <div class="after-steps">
@@ -250,18 +292,18 @@ const faqs = [
     </div>
   </section>
 
-  <!-- 8. WHY MOKSH AI -->
+  <!-- 9. WHY MOKSH AI: lines draw in -->
   <section class="section sky" aria-labelledby="why-h">
     <div class="container why">
       <div class="stack-sm why-head">
         <span class="eyebrow">Why Moksh AI</span>
         <h2 id="why-h">Practical AI expertise, built around your business</h2>
         <dl class="why-facts">
-          <div><dt>Contracting</dt><dd>US office, Lake Hiawatha, New Jersey</dd></div>
-          <div><dt>Delivery</dt><dd>Engineering team in Ahmedabad, India</dd></div>
-          <div><dt>Support</dt><dd>Available {site.supportHours}</dd></div>
-          <div><dt>Team</dt><dd>{site.teamSize} across Moksh</dd></div>
-          <div><dt>Group</dt><dd>Part of <a href="https://moksh-group.com/" rel="noopener">Moksh Group</a></dd></div>
+          <div><dt class="mono">Contracting</dt><dd>US office, Lake Hiawatha, New Jersey</dd></div>
+          <div><dt class="mono">Delivery</dt><dd>Engineering team in Ahmedabad, India</dd></div>
+          <div><dt class="mono">Support</dt><dd>Available {site.supportHours}</dd></div>
+          <div><dt class="mono">Team</dt><dd>{site.teamSize} across Moksh</dd></div>
+          <div><dt class="mono">Group</dt><dd>Part of <a href="https://moksh-group.com/" rel="noopener">Moksh Group</a></dd></div>
         </dl>
       </div>
       <ol class="why-list" role="list">
@@ -270,8 +312,8 @@ const faqs = [
     </div>
   </section>
 
-  <!-- 10. FAQ -->
-  <section class="section mint" aria-labelledby="faq-h">
+  <!-- 10. FAQ: still -->
+  <section class="section" aria-labelledby="faq-h">
     <div class="container faq-grid">
       <div class="stack-sm">
         <h2 id="faq-h">Questions buyers ask first</h2>
@@ -281,7 +323,7 @@ const faqs = [
     </div>
   </section>
 
-  <!-- 11. CLOSING CTA: flat ink into the footer -->
+  <!-- 11. CLOSE: flat ink into the footer -->
   <CtaBand
     title="Let’s find the right AI opportunity for your business"
     text="Tell us about a workflow that takes up your team’s time. We’ll tell you whether AI automation makes sense and what an implementation could look like."
@@ -292,173 +334,365 @@ const faqs = [
 </Base>
 
 <style>
-  /* hero */
-  .hero { padding-block: clamp(48px, 7vw, 104px) clamp(56px, 7vw, 96px); }
-  .hero.glow::before { opacity: .16; }
-  .hero.glow::after { opacity: .12; }
-  .hero-grid { display: grid; grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr); gap: clamp(32px, 4vw, 64px); align-items: center; }
-  @media (max-width: 980px) { .hero-grid { grid-template-columns: minmax(0, 1fr); } }
-  .hero-copy { display: grid; gap: 24px; position: relative; z-index: 1; }
-  .hero h1 { max-width: 16ch; font-size: clamp(2.4rem, 1.4rem + 3.4vw, 4.1rem); }
-  .h1-kicker { display: block; margin-bottom: .12em; font-size: .62em; letter-spacing: .02em; text-transform: uppercase; }
-  .hero .lede { max-width: 48ch; }
-  .proof { list-style: none; margin: 4px 0 0; padding: 18px 0 0; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 10px 22px; font-size: var(--t-sm); color: var(--muted); }
-  .proof li { display: inline-flex; align-items: center; gap: 8px; }
-  .proof li::before { content: ""; width: 10px; height: 5px; border-left: 2px solid var(--green-700); border-bottom: 2px solid var(--green-700); transform: rotate(-45deg) translateY(-2px); }
-  .hero-visual { position: relative; }
-  /* Desktop: hold the hero while the visitor scrolls the runway, so the stack's
-     fold into the AI layer happens on screen (HeroRender reads the runway). */
-  .hero-runway { display: none; }
-  @media (min-width: 981px) and (min-height: 820px) and (prefers-reduced-motion: no-preference) {
-    .hero-grid { position: sticky; top: calc(76px + clamp(48px, 7vw, 104px)); }
-    .hero-runway { display: block; height: 60vh; }
-  }
+  /* Pinned acts. Motion only runs when the script adds .motion to <html>;
+     without it (no JS, reduced motion, phones) every act is a normal section. */
+  .act { position: relative; }
+  .pin { position: relative; }
+  :global(html.motion) .act { height: var(--span); }
+  :global(html.motion) .pin { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: clip; padding-top: 76px; }
+  .hero { --span: 175vh; }
+  .work-act { --span: 300vh; }
+  .path-act { --span: 290vh; }
+  .gate-act { --span: 440vh; }
+  .range-act { --span: 260vh; }
 
-  .note { font-size: var(--t-sm); color: var(--muted); max-width: 64ch; }
-  .row-head { display: flex; justify-content: space-between; align-items: end; gap: 16px 32px; flex-wrap: wrap; margin-bottom: clamp(28px, 4vw, 44px); }
-  .row-head h2 { max-width: 24ch; }
+  /* 1 hero */
+  .hero-pin { min-height: 100svh; display: grid; align-items: center; overflow: clip; background: var(--paper); }
+  .plane { position: absolute; inset: -6% -4%; pointer-events: none; will-change: transform; }
+  .p-glow { background: radial-gradient(55% 50% at 74% 42%, rgba(37, 131, 219, .30), transparent 70%), radial-gradient(40% 40% at 88% 80%, rgba(31, 169, 47, .16), transparent 70%); }
+  .chip { position: absolute; padding: 7px 14px; border: 1px solid var(--line-strong); border-radius: 999px; font: 500 var(--t-xs)/1 var(--f-mono); color: var(--muted); background: rgba(18, 35, 57, .7); }
+  .c1 { left: 52%; top: 12%; } .c2 { left: 57%; top: 54%; } .c3 { left: 50%; top: 80%; } .c4 { left: 86%; top: 14%; } .c5 { left: 80%; top: 84%; }
+  .docs { position: absolute; right: 7%; top: 22%; width: min(26vw, 370px); aspect-ratio: 3 / 4; }
+  .doc { position: absolute; inset: 0; border-radius: 14px; background: linear-gradient(180deg, #dfe8f1, #c6d4e2); box-shadow: 0 40px 70px -24px rgba(0, 0, 0, .7); padding: 10% 11%; }
+  .doc:nth-child(1) { transform: rotate(-8deg) translate(-10%, 3%); opacity: .5; }
+  .doc:nth-child(2) { transform: rotate(-2.5deg) translate(-3%, 1%); opacity: .78; }
+  .doc:nth-child(3) { transform: rotate(3deg); }
+  .doc b { display: block; height: 9px; border-radius: 5px; background: #9fb3c8; margin-bottom: 12px; }
+  .doc b:nth-child(1) { width: 46%; height: 12px; margin-bottom: 22px; background: var(--blue); }
+  .doc b:nth-child(3) { width: 86%; } .doc b:nth-child(4) { width: 70%; } .doc b:nth-child(5) { width: 78%; } .doc b:nth-child(6) { width: 40%; }
+  .doc em { position: absolute; right: 11%; bottom: 9%; width: 34%; height: 22%; border: 2px solid var(--amber-on-dark); border-radius: 8px; }
+  .hero-copy { position: relative; z-index: 3; }
+  .hero-copy > * { max-width: min(620px, 47vw); }
+  .hero-copy h1 { margin: 18px 0 22px; font-size: clamp(2.5rem, 1.4rem + 3.6vw, 5rem); line-height: 1.02; }
+  .h1-kicker { display: block; font-size: .42em; font-style: italic; color: var(--muted); letter-spacing: 0; margin-bottom: .3em; }
+  .hero-copy .lede { margin-bottom: 30px; }
+  .proof { display: flex; flex-wrap: wrap; gap: 8px 26px; margin: 34px 0 0; padding: 0; list-style: none; color: var(--muted); font-size: var(--t-sm); }
+  .proof li::before { content: ""; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--green); margin-right: 10px; vertical-align: middle; }
+  .p-fore { z-index: 4; }
+  .fore-card { position: absolute; right: 4%; bottom: -2%; width: min(28vw, 360px); padding: 20px 22px; border-radius: 18px; background: #12233a; border: 1px solid rgba(242, 180, 92, .4); box-shadow: 0 50px 90px -30px rgba(0, 0, 0, .85); }
+  .fore-card small { display: block; color: var(--muted); font-size: var(--t-xs); margin-bottom: 6px; }
+  .fore-card strong { display: block; font: 450 1.35rem/1.2 var(--f-display); margin-bottom: 14px; }
+  .fore-card span { display: inline-block; padding: 7px 16px; border-radius: 999px; background: var(--amber-on-dark); color: #1a1204; font-size: var(--t-xs); font-weight: 600; }
+  .p-atmo { z-index: 5; inset: auto 0 0 0; height: 26%; background: linear-gradient(180deg, transparent, var(--paper)); }
 
-  /* 2. work */
-  .work { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: clamp(28px, 5vw, 72px); }
-  @media (max-width: 760px) { .work { grid-template-columns: minmax(0, 1fr); } }
-  .work li { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 18px; align-items: start; padding-block: 22px; border-top: 1px solid var(--line); }
-  .work h3 { font-size: var(--t-lg); display: flex; align-items: baseline; gap: 10px; }
-  .w-n { font-size: var(--t-xs); color: var(--muted); font-weight: 500; }
-  .work p { margin-top: 6px; color: var(--muted); }
+  /* 2 chores */
+  .work-pin { display: grid; align-items: center; padding-block: clamp(56px, 7vw, 96px); }
+  :global(html.motion) .work-pin { padding-block: 76px 0; }
+  .work-grid { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(28px, 6vw, 88px); align-items: center; }
+  .work-head { display: grid; gap: 16px; align-content: start; }
+  .chores { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+  .chores li { padding: clamp(8px, 1.3vh, 14px) 0; border-bottom: 1px solid var(--line); }
+  .chores h3 { display: flex; justify-content: space-between; gap: 16px; align-items: baseline; font-size: clamp(1.1rem, .9rem + .7vw, 1.45rem); }
+  .chores p { color: var(--muted); font-size: var(--t-sm); line-height: 1.5; margin-top: 3px; max-width: 60ch; }
+  .strike { position: relative; transition: color .5s var(--ease); }
+  .strike::after { content: ""; position: absolute; left: -2px; right: -2px; top: 55%; height: 2px; background: var(--green); transform: scaleX(0); transform-origin: left; transition: transform .6s var(--ease); }
+  .handled { font-size: var(--t-xs); color: var(--green-on-dark); white-space: nowrap; transform: translateX(-8px); opacity: 0; transition: transform .5s var(--ease), opacity .5s; }
+  .chores li.done .strike { color: var(--muted); }
+  .chores li.done .strike::after { transform: scaleX(1); }
+  .chores li.done .handled { opacity: 1; transform: none; }
 
-  /* 3. agents */
-  .agent-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 330px), 1fr)); gap: 24px; }
+  /* 3 path */
+  .path-pin { display: flex; flex-direction: column; justify-content: center; gap: clamp(26px, 4vh, 48px); padding-block: clamp(56px, 7vw, 96px); }
+  :global(html.motion) .path-pin { padding-block: 76px 0; }
+  .path-head { display: grid; gap: 14px; }
+  .path-head h2 { max-width: 22ch; }
+  .track { display: flex; gap: clamp(14px, 2vw, 26px); margin: 0; padding: 0 var(--gutter); list-style: none; width: max-content; will-change: transform; }
+  .node a { display: flex; flex-direction: column; justify-content: space-between; gap: 28px; width: clamp(260px, 25vw, 360px); min-height: clamp(270px, 40vh, 360px); padding: 26px; border-radius: 20px; background: var(--surface); border: 1px solid var(--line); text-decoration: none; color: var(--ink); transition: border-color .3s var(--ease), transform .3s var(--ease); }
+  .node a:hover { border-color: var(--blue-on-dark); transform: translateY(-3px); color: var(--ink); }
+  .node-top { display: flex; justify-content: space-between; align-items: center; color: var(--muted); }
+  .node-body { display: grid; gap: 10px; }
+  .node-t { font: 450 clamp(1.6rem, 1.2rem + 1vw, 2.2rem)/1.08 var(--f-display); }
+  .node-d { color: var(--muted); font-size: var(--t-sm); line-height: 1.55; }
+  .node-go { font-size: var(--t-sm); }
+  .node.ai a { background: linear-gradient(160deg, #16365a, #122339); border-color: rgba(140, 194, 247, .45); }
+  .node.person a { border-color: rgba(242, 180, 92, .55); }
+  .node.person .hexi { background: var(--amber-soft); color: var(--amber-on-dark); }
+  .rail { height: 2px; background: var(--line); position: relative; }
+  .rail b { position: absolute; inset: 0 auto 0 0; width: 0; background: var(--grad); }
+  :global(html:not(.motion)) .track { width: auto; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 8px; }
+  :global(html:not(.motion)) .node { scroll-snap-align: start; }
+  :global(html:not(.motion)) .rail { display: none; }
 
-  /* 4. industries */
-  .ind { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(24px, 4vw, 56px); align-items: stretch; }
-  @media (max-width: 900px) { .ind { grid-template-columns: minmax(0, 1fr); } }
-  .ind-feature { display: grid; gap: 16px; align-content: start; padding: clamp(26px, 3.4vw, 44px); border-radius: 18px; text-decoration: none; color: var(--ink); position: relative; overflow: hidden; isolation: isolate; transition: transform .25s var(--ease); }
-  .ind-feature::after { content: ""; position: absolute; z-index: -1; right: -80px; bottom: -80px; width: 260px; height: 260px; border-radius: 50%; background: radial-gradient(circle, rgba(31, 169, 47, .28), transparent 70%); pointer-events: none; }
-  .ind-feature:hover { transform: translateY(-3px); color: var(--ink); }
-  .if-title { font: 750 var(--t-2xl)/1.05 var(--f-display); font-stretch: 86%; letter-spacing: -0.02em; }
-  .if-text { color: var(--muted); max-width: 52ch; }
-  .if-tasks { font-size: var(--t-xs); letter-spacing: .06em; text-transform: uppercase; color: var(--teal-700); }
-  .ind-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 28px; align-content: start; }
-  @media (max-width: 560px) { .ind-list { grid-template-columns: minmax(0, 1fr); } }
-  .ind-list a { display: flex; align-items: center; gap: 14px; min-height: 76px; padding-block: 14px; border-bottom: 1px solid var(--line); color: inherit; text-decoration: none; }
-  .ind-t { display: grid; gap: 2px; }
-  .ind-t strong { font-weight: 600; transition: color .2s var(--ease); }
-  .ind-t small { font-size: var(--t-xs); color: var(--muted); }
-  .ind-list a:hover strong { color: var(--blue-700); }
+  /* silence */
+  .hush { display: grid; place-items: center; min-height: 62vh; padding: 0 24px; text-align: center; }
+  .hush p { font: italic 400 clamp(2rem, 1rem + 4vw, 4.6rem)/1.1 var(--f-display); color: var(--ink); opacity: var(--o, 1); }
 
-  /* 5. services */
-  .svc-list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line-strong); }
-  .svc-list a { display: grid; grid-template-columns: 56px minmax(0, .95fr) minmax(0, 1.25fr) 40px; gap: 24px; align-items: center; padding-block: 24px; border-bottom: 1px solid var(--line-strong); color: inherit; text-decoration: none; transition: background-color .25s var(--ease), padding .25s var(--ease); }
-  .svc-list a:hover { background: var(--surface); padding-inline: 16px; }
-  .svc-n { font-size: var(--t-sm); color: var(--muted); }
-  .svc-group { display: block; padding: 28px 0 10px; font-size: var(--t-xs); letter-spacing: .1em; text-transform: uppercase; color: var(--teal-700); }
-  .svc-name { display: flex; align-items: center; gap: 14px; font: 700 var(--t-lg)/1.2 var(--f-display); font-stretch: 90%; letter-spacing: -0.01em; }
-  .svc-ic { display: grid; place-items: center; width: 36px; height: 36px; flex: none; border-radius: 10px; background: var(--surface); border: 1px solid var(--line); color: var(--teal-700); }
-  .svc-ic :global(svg) { width: 18px; height: 18px; }
-  .svc-text { color: var(--muted); }
-  .svc-go { justify-self: end; color: var(--blue-700); }
-  .svc-go :global(svg) { width: 20px; height: 20px; transition: transform .25s var(--ease); }
-  .svc-list a:hover .svc-go :global(svg) { transform: translateX(4px); }
-  @media (max-width: 860px) { .svc-list a { grid-template-columns: 36px minmax(0, 1fr); gap: 8px 14px; } .svc-text { grid-column: 2; } .svc-go { display: none; } }
+  /* 4 gate */
+  .gate-pin { display: grid; align-items: center; padding-block: clamp(56px, 7vw, 96px); }
+  :global(html.motion) .gate-pin { padding-block: 92px 16px; }
+  .gate { display: grid; gap: clamp(16px, 2.6vh, 30px); }
+  .gate-head { display: grid; gap: 12px; max-width: 900px; }
+  .gate-head h2 { font-size: clamp(1.8rem, 1.2rem + 2vw, 2.9rem); }
+  :global(html.motion) .gate-head .lede { font-size: var(--t-md); }
+  .board { display: grid; grid-template-columns: minmax(0, .75fr) minmax(0, 1.15fr) minmax(0, 1.25fr); gap: clamp(12px, 1.6vw, 22px); align-items: stretch; }
+  .quote { position: relative; display: flex; flex-direction: column; gap: 2px; background: linear-gradient(180deg, #dfe8f1, #c6d4e2); color: #0e2036; border-radius: 16px; padding: 22px; font-size: var(--t-xs); }
+  .q-title { font: 500 1.4rem/1.2 var(--f-display); color: #0b1b2e; margin-bottom: 10px; }
+  .quote .row { display: flex; justify-content: space-between; gap: 8px; padding: 7px 0; border-bottom: 1px solid rgba(14, 32, 54, .15); }
+  .quote .flag { background: rgba(242, 180, 92, .45); margin: 0 -10px; padding: 7px 10px; border-radius: 6px; border: 0; }
+  .stamp { position: absolute; right: 14px; top: 16px; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; padding: 4px 10px; border-radius: 99px; background: #0e2036; color: #dfe8f1; }
+  .run { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: clamp(18px, 2vw, 26px); display: flex; flex-direction: column; justify-content: center; gap: 18px; }
+  .run-label { font-size: var(--t-xs); color: var(--muted); }
+  .steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; position: relative; --ap: 0; }
+  .steps::before, .steps::after { content: ""; position: absolute; left: 10%; top: 15px; height: 2px; }
+  .steps::before { right: 10%; background: var(--line-strong); }
+  .steps::after { width: calc(80% * var(--ap)); background: var(--blue); }
+  .steps li { position: relative; z-index: 1; text-align: center; font: 500 11px/1.2 var(--f-mono); color: var(--muted); transition: color .4s; }
+  .steps li::before { content: ""; display: block; width: 32px; height: 32px; margin: 0 auto 8px; border-radius: 50%; background: var(--paper); border: 2px solid var(--line-strong); transition: background-color .4s var(--ease), border-color .4s var(--ease); }
+  .steps li.g::before { border-radius: 9px; }
+  .steps li.on { color: var(--ink); }
+  .steps li.on::before { background: var(--blue); border-color: var(--blue); }
+  .steps li.hold::before { background: var(--paper); border-color: var(--amber-on-dark); animation: ring 1.6s infinite; }
+  .steps li.done::before { background: var(--green); border-color: var(--green); }
+  @keyframes ring { from { box-shadow: 0 0 0 0 rgba(242, 180, 92, .55); } to { box-shadow: 0 0 0 16px rgba(242, 180, 92, 0); } }
+  .status { min-height: 3.2em; font: 450 clamp(1.25rem, 1rem + .8vw, 1.8rem)/1.2 var(--f-display); }
+  .status :global(small) { display: block; font: 400 var(--t-sm)/1.45 var(--f-body); color: var(--muted); margin-top: 6px; }
+  .btn-person { align-self: flex-start; background: var(--amber-on-dark); color: #1a1204; }
+  .btn-person:hover:not([disabled]) { transform: translateY(-1px); color: #1a1204; }
+  .flow { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 14px 18px; }
+  .flow-step { padding: 7px 0 7px 14px; border-left: 2px solid var(--line-strong); transition: border-color .4s var(--ease); }
+  .flow-step h3 { font-size: 1.05rem; }
+  .flow-step p { color: var(--muted); font-size: 13px; line-height: 1.45; }
+  .flow-who { font-size: 11px; color: var(--muted); letter-spacing: .05em; }
+  .flow-step.person .flow-who { color: var(--amber-on-dark); }
+  .flow-step.branch { opacity: .82; }
+  .flow-step.lit { border-color: var(--blue); }
+  .flow-step.person.lit { border-color: var(--amber-on-dark); }
+  .small-link { color: var(--muted); font-size: var(--t-sm); }
 
-  /* 6. AI + human */
-  .flow { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; position: relative; }
-  @media (max-width: 1000px) { .flow { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-  @media (max-width: 560px) { .flow { grid-template-columns: minmax(0, 1fr); } }
-  .flow-step { display: grid; gap: 8px; align-content: start; padding: 20px; border-radius: var(--radius); border: 1px solid var(--line); background: var(--surface); position: relative; }
-  .flow-step h3 { font-size: var(--t-lg); }
-  .flow-step p { font-size: var(--t-sm); color: var(--muted); }
-  .flow-who { font-size: var(--t-xs); letter-spacing: .06em; text-transform: uppercase; color: var(--teal-700); }
-  .flow-step.person { border-color: rgba(242, 180, 92, .45); }
-  .flow-step.person .flow-who { color: var(--amber); }
-  .flow-step.branch { border-style: dashed; }
-  .small-link { margin-top: 22px; font-size: var(--t-sm); color: var(--muted); }
-  .ceo { margin-top: clamp(44px, 6vw, 72px); padding-top: clamp(36px, 5vw, 56px); border-top: 1px solid var(--line); }
+  /* 5 ceo */
+  .ceo-sec { background: var(--paper); }
 
-  .after-steps { margin-top: 32px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 12px 32px; }
-  .after-steps p { color: var(--muted); max-width: 64ch; }
+  /* 6 agents */
+  .row-head { display: flex; justify-content: space-between; align-items: end; gap: 20px; flex-wrap: wrap; margin-bottom: clamp(28px, 4vw, 48px); }
+  .row-head h2 { max-width: 20ch; }
+  .note { color: var(--muted); font-size: var(--t-sm); max-width: 60ch; }
+  .agent-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
 
-  /* 8. value */
+  /* 7 range */
+  .range-pin { padding-block: clamp(56px, 7vw, 96px); }
+  :global(html.motion) .range-pin { padding-block: 92px 20px; }
+  .panels { display: grid; gap: 22px; }
+  :global(html.motion) .panels { position: relative; height: 100%; display: block; }
+  .panel { border-radius: 22px; padding: clamp(20px, 2.6vw, 36px); background: var(--surface); border: 1px solid var(--line); }
+  :global(html.motion) .panel { position: absolute; inset: 0 var(--gutter); overflow: auto; }
+  .panel-head { display: flex; justify-content: space-between; align-items: end; gap: 18px; flex-wrap: wrap; margin-bottom: 18px; }
+  .panel-head h2 { font-size: clamp(1.6rem, 1.1rem + 1.6vw, 2.5rem); max-width: 24ch; }
+  .svc-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 36px; }
+  .svc-group { grid-column: 1 / -1; display: block; font-size: var(--t-xs); color: var(--teal-on-dark); letter-spacing: .06em; padding: 14px 0 4px; }
+  .svc-list a { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 2px 14px; padding: 10px 0; border-bottom: 1px solid var(--line); text-decoration: none; color: var(--ink); }
+  .svc-list a:hover .svc-name { color: var(--blue-on-dark); }
+  .svc-n { grid-row: span 2; font-size: var(--t-xs); color: var(--muted); padding-top: 4px; }
+  .svc-name { font: 500 1.08rem/1.3 var(--f-body); transition: color .2s; }
+  .svc-text { color: var(--muted); font-size: 13px; line-height: 1.45; }
+  .svc-list li { display: contents; }
+  .ind { background: linear-gradient(150deg, #123a5e, #0d2d3a 60%, #0f3b25); border-color: rgba(127, 220, 140, .3); }
+  :global(html.motion) .ind { clip-path: inset(0 0 0 calc(100% - var(--w, 0%)) round 22px); }
+  .ind-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: clamp(16px, 2.4vw, 32px); }
+  .ind-feature { display: grid; gap: 12px; align-content: start; padding: 24px; border-radius: 16px; background: rgba(8, 18, 30, .55); color: var(--ink); text-decoration: none; border: 1px solid rgba(255, 255, 255, .1); }
+  .ind-feature:hover { color: var(--ink); border-color: var(--green-on-dark); }
+  .tag { font: 500 var(--t-xs)/1 var(--f-mono); color: var(--green-on-dark); letter-spacing: .06em; text-transform: uppercase; }
+  .if-title { font: 450 clamp(1.6rem, 1.2rem + 1.2vw, 2.3rem)/1.06 var(--f-display); }
+  .if-text { color: var(--on-dark-muted); font-size: var(--t-sm); }
+  .if-tasks { font-size: var(--t-xs); color: var(--muted); }
+  .ind-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 24px; align-content: start; }
+  .ind-list a { display: grid; gap: 2px; padding: 12px 0; border-bottom: 1px solid rgba(255, 255, 255, .12); text-decoration: none; color: var(--ink); }
+  .ind-list a:hover strong { color: var(--green-on-dark); }
+  .ind-list strong { font-weight: 500; }
+  .ind-list small { color: var(--on-dark-muted); font-size: 13px; }
 
-  /* 9. why */
-  .why { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: clamp(32px, 5vw, 80px); align-items: start; }
-  @media (max-width: 900px) { .why { grid-template-columns: minmax(0, 1fr); } }
-  .why-facts { margin: 12px 0 0; display: grid; gap: 0; border-top: 1px solid var(--line); }
-  .why-facts div { display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 12px; padding-block: 12px; border-bottom: 1px solid var(--line); font-size: var(--t-sm); }
-  .why-facts dt { font: 500 var(--t-xs)/1.6 var(--f-mono); letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
+  /* 8 how */
+  .how { background: var(--paper); }
+  .head { display: grid; gap: 14px; max-width: 780px; margin-bottom: clamp(32px, 5vw, 56px); }
+  .phases { list-style: none; margin: 0; padding: 0; display: grid; gap: clamp(18px, 3vh, 28px); }
+  .phase { display: grid; grid-template-columns: auto minmax(0, 1.2fr) minmax(0, 1fr); gap: clamp(16px, 3vw, 48px); align-items: start; padding: clamp(22px, 3vw, 40px); border-radius: 22px; border: 1px solid var(--line); background: var(--surface); transform-origin: 50% 0; }
+  .phase:nth-child(2) { background: #15304f; } .phase:nth-child(3) { background: #183a5f; }
+  :global(html.motion) .phase { position: sticky; top: calc(96px + var(--i, 0) * 24px); min-height: 220px; }
+  .phase:nth-child(1) { --i: 0; } .phase:nth-child(2) { --i: 1; } .phase:nth-child(3) { --i: 2; }
+  .phase h3 { font-size: clamp(1.8rem, 1.2rem + 2vw, 3rem); font-weight: 420; margin-bottom: 10px; }
+  .phase p { color: var(--muted); }
+  .phase dl { margin: 0; border-left: 2px solid var(--green); padding-left: 16px; }
+  .phase dt { font-size: var(--t-xs); color: var(--muted); letter-spacing: .06em; text-transform: uppercase; }
+  .phase dd { margin: 6px 0 0; font: 450 1.3rem/1.3 var(--f-display); }
+  .after-steps { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; align-items: center; margin-top: clamp(24px, 4vw, 40px); color: var(--muted); }
+
+  /* 9 why */
+  .why { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(28px, 6vw, 80px); }
+  .why-head h2 { margin: 10px 0 24px; }
+  .why-facts { margin: 0; display: grid; gap: 12px; }
+  .why-facts div { display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+  .why-facts dt { font-size: var(--t-xs); color: var(--muted); text-transform: uppercase; letter-spacing: .06em; padding-top: 3px; }
   .why-facts dd { margin: 0; }
-  .why-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 32px; }
-  @media (max-width: 600px) { .why-list { grid-template-columns: minmax(0, 1fr); } }
-  .why-list li { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 10px; padding-block: 20px; border-top: 1px solid var(--line); }
-  .why-list .mono { font-size: var(--t-xs); color: var(--teal-700); padding-top: 4px; }
-  .why-list h3 { font-size: var(--t-lg); }
-  .why-list p { margin-top: 6px; color: var(--muted); font-size: var(--t-sm); }
+  .why-list { list-style: none; margin: 0; padding: 0; }
+  .why-list li { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 12px; padding: 18px 0; border-top: 1px solid var(--line); }
+  .why-list li > .mono { color: var(--green-on-dark); font-size: var(--t-xs); padding-top: 6px; }
+  .why-list p { color: var(--muted); font-size: var(--t-sm); margin-top: 4px; }
 
-  .faq-grid { display: grid; grid-template-columns: minmax(0, .75fr) minmax(0, 1.25fr); gap: clamp(32px, 5vw, 72px); align-items: start; }
-  @media (max-width: 900px) { .faq-grid { grid-template-columns: minmax(0, 1fr); } }
+  /* 10 faq */
+  .faq-grid { display: grid; grid-template-columns: minmax(0, .7fr) minmax(0, 1.3fr); gap: clamp(28px, 6vw, 80px); align-items: start; }
 
-  /* ---------------------------------------------------------------------------
-     Scroll motion. Each section moves differently; content is readable at rest
-     (transforms only, never opacity), nothing moves layout, browsers without
-     scroll timelines and reduced-motion visitors get the static page.
-     The FAQ and the closing CTA are deliberately still.
-     ------------------------------------------------------------------------- */
-  section { overflow-x: clip; }
-  .flow-wrap { position: relative; }
-  .flow-bar { position: absolute; left: 0; right: 0; top: -18px; height: 2px; border-radius: 2px; background: var(--grad); transform-origin: left; }
-  @media (min-width: 901px) { .why-head { position: sticky; top: 112px; } }
-
+  /* scroll-linked motion for the still sections: transforms only, never opacity */
   @supports (animation-timeline: view()) {
     @media (prefers-reduced-motion: no-preference) {
-
-      /* 2. work: the two columns slide in from opposite sides */
-      .work li { animation: sc-slide linear both; animation-timeline: view(); animation-range: entry 0% entry 80%; --from-x: -40px; }
-      .work li:nth-child(even) { --from-x: 40px; }
-      @media (max-width: 760px) { .work li, .work li:nth-child(even) { --from-x: 0px; } }
-
-      /* 3. demo agents: dealt like a hand of cards, then settle flat */
-      .agent-grid > :global(*) { animation: sc-deal linear both; animation-timeline: view(); animation-range: entry 0% cover 38%; transform-origin: 50% 100%; }
-      .agent-grid > :global(*:nth-child(1)) { --rot: -6deg; --dx: 60px; }
-      .agent-grid > :global(*:nth-child(2)) { --rot: 0deg; --dx: 0px; }
-      .agent-grid > :global(*:nth-child(3)) { --rot: 6deg; --dx: -60px; }
-      @media (max-width: 760px) { .agent-grid > :global(*) { --rot: 0deg !important; --dx: 0px !important; } }
-
-      /* 4. industries: the manufacturing panel grows in, its light drifts across */
-      .ind-feature { animation: sc-grow linear both; animation-timeline: view(); animation-range: entry 0% entry 90%; }
-      .ind-feature::after { animation: sc-drift linear both; animation-timeline: view(); animation-range: cover 0% cover 100%; }
-      .ind-list li { animation: sc-rise linear both; animation-timeline: view(); animation-range: entry 0% entry 100%; }
-
-      /* 5. services: each rule draws across, numbers and arrows slide home */
-      .svc-list li { position: relative; }
-      .svc-list li::before { content: ""; position: absolute; left: 0; right: 0; top: -1px; height: 2px; background: var(--teal); transform-origin: left; animation: sc-draw linear both; animation-timeline: view(); animation-range: entry 20% cover 45%; }
-      .svc-n, .svc-go { animation: sc-nudge linear both; animation-timeline: view(); animation-range: entry 10% cover 40%; }
-
-      /* 6. AI + human (the peak): the bar runs along the flow and each step
-         rises as it arrives */
-      .flow-wrap { view-timeline: --flow block; }
-      .flow-bar { animation: sc-draw linear both; animation-timeline: --flow; animation-range: entry 60% cover 62%; }
-      .flow-step { animation: sc-step linear both; animation-timeline: --flow; }
-      .flow-step:nth-child(1) { animation-range: entry 50% cover 30%; }
-      .flow-step:nth-child(2) { animation-range: entry 70% cover 38%; }
-      .flow-step:nth-child(3) { animation-range: entry 90% cover 46%; }
-      .flow-step:nth-child(4) { animation-range: cover 22% cover 54%; }
-      .flow-step:nth-child(5) { animation-range: cover 30% cover 62%; }
-
-      /* 7. how we work: the connector draws, the hexagon numbers turn into place */
-      .steps { view-timeline: --steps block; }
-      .steps::before { transform-origin: left; animation: sc-draw linear both; animation-timeline: --steps; animation-range: entry 40% cover 50%; }
-      .step-n { animation: sc-turn linear both; animation-timeline: view(); animation-range: entry 20% cover 35%; }
-
-      /* 9. why: the heading holds (sticky) while the list scrolls past. No animation. */
+      .deal :global(> *) { animation: deal linear both; animation-timeline: view(); animation-range: entry 0% cover 35%; }
+      .deal :global(> *:nth-child(2)) { animation-range: entry 8% cover 40%; }
+      .deal :global(> *:nth-child(3)) { animation-range: entry 16% cover 45%; }
+      .why-list li { animation: draw linear both; animation-timeline: view(); animation-range: entry 0% cover 30%; }
     }
   }
-  @keyframes sc-slide { from { transform: translate(var(--from-x), 36px); } }
-  @keyframes sc-deal { from { transform: translate(var(--dx), 90px) rotate(var(--rot)) scale(.94); } }
-  @keyframes sc-grow { from { transform: scale(.9) translateY(30px); } }
-  @keyframes sc-drift { from { transform: translate(-260px, -200px); } to { transform: translate(40px, 30px); } }
-  @keyframes sc-rise { from { transform: translateY(32px); } }
-  @keyframes sc-draw { from { transform: scaleX(0); } }
-  @keyframes sc-nudge { from { transform: translateX(-28px); } }
-  @keyframes sc-step { from { transform: translateY(56px) scale(.94); } }
-  @keyframes sc-turn { from { transform: rotate(-120deg) scale(.5); } }
+  @keyframes deal { from { transform: translateY(60px) rotate(2deg); } to { transform: none; } }
+  @keyframes draw { from { transform: translateX(-28px); } to { transform: none; } }
+
+  @media (max-width: 980px) {
+    .hero-copy > * { max-width: 100%; }
+    .docs { right: -14%; top: 4%; width: 60vw; opacity: .3; }
+    .p-far, .p-fore { display: none; }
+    .work-grid, .why, .faq-grid, .ind-grid { grid-template-columns: minmax(0, 1fr); }
+    .board { grid-template-columns: minmax(0, 1fr); }
+    .quote { display: none; }
+    .agent-grid { grid-template-columns: minmax(0, 1fr); }
+    .svc-list, .ind-list { grid-template-columns: minmax(0, 1fr); }
+    .phase { grid-template-columns: minmax(0, 1fr); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .steps li.hold::before { animation: none; }
+  }
 </style>
+
+<script>
+  // Scroll choreography for the homepage. Runs only on wide, tall screens with
+  // motion allowed; everywhere else the page is a normal document and the
+  // approval demo advances as it crosses the middle of the screen.
+  const root = document.documentElement;
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const wide = matchMedia('(min-width: 981px) and (min-height: 700px)');
+  const clamp = (v: number, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+  const $ = <T extends Element = HTMLElement>(s: string) => document.querySelector<T & HTMLElement>(s)!;
+  const $$ = (s: string, r: ParentNode = document) => Array.from(r.querySelectorAll<HTMLElement>(s));
+
+  const setMotion = () => root.classList.toggle('motion', !reduce && wide.matches);
+  setMotion();
+  wide.addEventListener('change', () => { setMotion(); tick(); });
+
+  const progress = (el: HTMLElement) => { const r = el.getBoundingClientRect(); return clamp(-r.top / Math.max(1, r.height - innerHeight)); };
+  // Fallback progress when not pinned: how far the element has crossed the screen.
+  const crossing = (el: HTMLElement) => { const r = el.getBoundingClientRect(); return clamp((innerHeight * 0.85 - r.top) / (innerHeight * 0.6)); };
+
+  /* approval demo */
+  const steps = $$('[data-steps] li');
+  const stepsEl = $('[data-steps]');
+  const flowSteps = $$('[data-flow] li');
+  const status = $('[data-status]');
+  const btn = $<HTMLButtonElement>('[data-approve]');
+  const stamp = $('[data-stamp]');
+  const STATUS: [string, string][] = [
+    ['Waiting to start.', 'Scroll to run the agent.'],
+    ['Reading the request.', 'Pulling the email and its attachments.'],
+    ['Extracting line items.', '14 found on the purchase request.'],
+    ['Drafting the quote.', 'Matching the price list and supplier terms.'],
+    ['Held for your approval.', 'One discount is above policy. Nothing has been sent.'],
+  ];
+  let approved = false;
+  const say = (s: [string, string]) => { status.innerHTML = `${s[0]}<small>${s[1]}</small>`; };
+  const renderGate = (p: number) => {
+    if (approved) return;
+    const a = clamp(p / 0.5);
+    const stage = a <= 0.02 ? 0 : a < 0.25 ? 1 : a < 0.5 ? 2 : a < 0.75 ? 3 : 4;
+    stepsEl.style.setProperty('--ap', String(Math.min(a, 0.75)));
+    steps.forEach((li, i) => { li.classList.toggle('on', i < Math.min(stage, 3)); li.classList.toggle('hold', i === 3 && stage === 4); });
+    flowSteps.forEach((li, i) => li.classList.toggle('lit', (i === 0 && stage >= 1) || (i === 1 && stage === 4)));
+    say(STATUS[stage]);
+    btn.disabled = stage < 4;
+    stamp.textContent = stage === 4 ? 'On hold' : 'Draft';
+  };
+  btn.addEventListener('click', () => {
+    if (btn.disabled || approved) return;
+    approved = true;
+    stepsEl.style.setProperty('--ap', '1');
+    steps.forEach((li) => { li.classList.remove('hold'); li.classList.add('on', 'done'); });
+    flowSteps.forEach((li) => li.classList.toggle('lit', !li.classList.contains('branch')));
+    say(['Approved and sent.', 'A person signed off, and every step is in the log.']);
+    stamp.textContent = 'Sent';
+    btn.textContent = 'Approved';
+    btn.disabled = true;
+  });
+
+  if (reduce) {
+    $$('[data-chores] li').forEach((li) => li.classList.add('done'));
+    renderGate(1);
+  }
+
+  /* hero planes follow scroll and, on desktop, the pointer */
+  const hero = $('[data-act="hero"]');
+  const planes = $$('[data-depth]', hero);
+  const copy = $('[data-copy]');
+  let tx = 0, ty = 0, px = 0, py = 0;
+  const fine = matchMedia('(pointer: fine)').matches;
+  if (fine) addEventListener('pointermove', (e) => { tx = e.clientX / innerWidth - 0.5; ty = e.clientY / innerHeight - 0.5; request(); }, { passive: true });
+
+  const chores = $('[data-act="work"]');
+  const choreItems = $$('[data-chores] li');
+  const path = $('[data-act="path"]');
+  const track = $('[data-track]');
+  const rail = $('[data-rail]');
+  const hush = $('[data-hush]');
+  const gate = $('[data-act="gate"]');
+  const run = $('[data-run]');
+  const range = $('[data-act="range"]');
+  const wipe = $('[data-wipe]');
+  const phases = $$('[data-phases] .phase');
+
+  let queued = false;
+  function request() { if (!queued) { queued = true; requestAnimationFrame(tick); } }
+  function tick() {
+    queued = false;
+    const motion = root.classList.contains('motion');
+    px += (tx - px) * 0.08; py += (ty - py) * 0.08;
+
+    if (motion) {
+      const hp = progress(hero);
+      planes.forEach((pl) => {
+        const d = Number(pl.dataset.depth);
+        pl.style.transform = `translate3d(${px * d * 1.2}px, ${-hp * d * 5 + py * d * 0.6}px, 0)`;
+      });
+      copy.style.transform = `translate3d(0, ${-hp * 60}px, 0)`;
+
+      const cp = progress(chores);
+      choreItems.forEach((li, i) => li.classList.toggle('done', cp > (i + 0.6) / (choreItems.length + 1.2)));
+
+      const pp = progress(path);
+      const max = Math.max(0, track.scrollWidth - innerWidth);
+      track.style.transform = `translate3d(${-pp * max}px, 0, 0)`;
+      rail.style.width = `${pp * 100}%`;
+
+      if (!reduce) renderGate(progress(gate));
+
+      const rp = progress(range);
+      wipe.style.setProperty('--w', `${clamp((rp - 0.3) / 0.4) * 100}%`);
+
+      phases.forEach((ph, i) => {
+        const next = phases[i + 1];
+        if (!next) return;
+        const t = clamp(1 - (next.getBoundingClientRect().top - 140) / (innerHeight * 0.6));
+        ph.style.transform = `scale(${1 - t * 0.05})`;
+      });
+    } else {
+      planes.forEach((pl) => (pl.style.transform = ''));
+      copy.style.transform = '';
+      track.style.transform = '';
+      phases.forEach((ph) => (ph.style.transform = ''));
+      if (!reduce) {
+        choreItems.forEach((li) => li.classList.toggle('done', li.getBoundingClientRect().top < innerHeight * 0.6));
+        renderGate(crossing(run));
+      }
+    }
+
+    const r = hush.getBoundingClientRect();
+    const mid = 1 - Math.abs(r.top + r.height / 2 - innerHeight / 2) / (innerHeight * 0.55);
+    hush.style.setProperty('--o', String(reduce ? 1 : clamp(mid, 0.18, 1)));
+
+    if (Math.abs(tx - px) > 0.001 || Math.abs(ty - py) > 0.001) request();
+  }
+  addEventListener('scroll', request, { passive: true });
+  addEventListener('resize', request);
+  tick();
+</script>
