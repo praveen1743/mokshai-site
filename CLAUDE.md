@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-Marketing site for Moksh AI (mokshai.net). Astro 7 with the Vercel adapter: every public page is prerendered static HTML; only the Keystatic CMS (`/keystatic`, `/api/keystatic`, React) runs on demand. No UI framework on public pages, with one exception: the homepage five-layers ring (`components/LayersCarousel.tsx`, wrapping `components/ui/warp-carousel.tsx`) is a React island loaded `client:visible`. Its card text is painted on a canvas, so the layer names, descriptions and links must stay in the HTML list beside it. Vanilla TypeScript in `<script>` tags for interactivity.
+Marketing site for Moksh AI (mokshai.net). Astro 7 with the Vercel adapter: every public page is prerendered static HTML; only the Keystatic CMS (`/keystatic`, `/api/keystatic`, React) runs on demand. No UI framework on public pages, with one exception: the homepage five-layers ring (`components/LayersCarousel.tsx`, wrapping `components/ui/warp-carousel.tsx`) is a React island loaded `client:visible`. Its card text is painted on a canvas, so the layer names, descriptions and links must stay in the HTML captions under it (all five in the DOM; script shows the front one). Vanilla TypeScript in `<script>` tags for interactivity.
 
 ## Commands
 - `npm run dev`: dev server on :4321

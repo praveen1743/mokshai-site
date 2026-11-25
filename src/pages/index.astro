@@ -134,23 +134,22 @@ const groupLabel: Record<string, string> = { Plan: 'Plan · decide what is worth
   <!-- 3. FIVE LAYERS: scroll turns the Warp Carousel ring; the HTML list carries the words and links -->
   <section class="act path-act" data-act="path" aria-labelledby="path-h">
     <div class="pin path-pin">
-      <div class="container path-grid">
-        <div class="path-copy">
+      <div class="container path-stage">
+        <div class="path-head">
           <h2 id="path-h">Every build follows the same five layers, from your systems to the outcome</h2>
           <p class="lede">The AI layer sits between what you already use and the result you need. A person sits between the AI and anything that matters.</p>
-          <ol class="layers" role="list" data-layers>
-            {layers.map((l, i) => (
-              <li class:list={['layer', { ai: l.ai, person: l.person, on: i === 0 }]}>
-                <a href={l.href}>
-                  <span class="layer-n mono">{String(i + 1).padStart(2, '0')}</span>
-                  <span class="layer-body"><span class="layer-t">{l.t}</span><span class="layer-d"><span>{l.d}</span></span></span>
-                  <span class="layer-go" aria-hidden="true">→</span>
-                </a>
-              </li>
-            ))}
-          </ol>
         </div>
         <div class="ring"><LayersCarousel client:visible /></div>
+        <ol class="captions" role="list" data-layers>
+          {layers.map((l, i) => (
+            <li class:list={['caption', { person: l.person, on: i === 0 }]}>
+              <span class="cap-n mono">{String(i + 1).padStart(2, '0')}</span>
+              <h3 class="cap-t">{l.t}</h3>
+              <p class="cap-d">{l.d}</p>
+              <a class="link-arrow cap-go" href={l.href}>Read more<span class="sr"> about {l.t.toLowerCase()}</span></a>
+            </li>
+          ))}
+        </ol>
       </div>
     </div>
   </section>
@@ -394,29 +393,26 @@ const groupLabel: Record<string, string> = { Plan: 'Plan · decide what is worth
   .chores li.done .strike::after { transform: scaleX(1); }
   .chores li.done .handled { opacity: 1; transform: none; }
 
-  /* 3 path */
+  /* 3 path: the ring is the only visual; one caption under it follows the front card */
   .path-pin { display: grid; align-items: center; padding-block: clamp(56px, 7vw, 96px); }
   :global(html.motion) .path-pin { padding-block: 84px 12px; }
-  .path-grid { display: grid; grid-template-columns: minmax(0, .78fr) minmax(0, 1.22fr); gap: clamp(24px, 4vw, 64px); align-items: center; }
-  .path-copy { display: grid; gap: 14px; }
-  .path-copy h2 { font-size: clamp(1.8rem, 1.2rem + 1.8vw, 2.8rem); max-width: 20ch; }
-  :global(html.motion) .path-copy .lede { font-size: var(--t-md); }
-  .layers { list-style: none; margin: 8px 0 0; padding: 0; border-top: 1px solid var(--line); }
-  .layer a { display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 12px; align-items: start; padding: 11px 0 11px 12px; border-bottom: 1px solid var(--line); border-left: 2px solid transparent; text-decoration: none; color: var(--muted); transition: color .3s var(--ease), border-color .3s var(--ease), background-color .3s var(--ease); }
-  .layer a:hover { color: var(--ink); }
-  .layer-n { font-size: var(--t-xs); padding-top: 5px; }
-  .layer-body { display: grid; }
-  .layer-t { font: 450 clamp(1.15rem, 1rem + .5vw, 1.45rem)/1.2 var(--f-display); }
-  .layer-d { display: grid; grid-template-rows: 1fr; font-size: var(--t-sm); line-height: 1.5; color: var(--muted); transition: grid-template-rows .45s var(--ease); }
-  .layer-d > span { overflow: hidden; padding-top: 4px; }
-  .layer-go { padding-top: 4px; transition: transform .2s var(--ease); }
-  .layer a:hover .layer-go { transform: translateX(3px); }
-  :global(html.motion) .layer:not(.on) .layer-d { grid-template-rows: 0fr; }
-  .layer.on a { color: var(--ink); border-left-color: var(--blue); background: linear-gradient(90deg, rgba(37, 131, 219, .10), transparent 70%); }
-  .layer.on.person a { border-left-color: var(--amber-on-dark); background: linear-gradient(90deg, rgba(242, 180, 92, .10), transparent 70%); }
-  .layer.on.ai a { border-left-color: var(--teal); }
-  .layer.person .layer-n { color: var(--amber-on-dark); }
-  .ring { height: min(70vh, 600px); min-height: 360px; border-radius: 20px; overflow: hidden; }
+  .path-stage { display: grid; grid-template-columns: minmax(0, 1fr); gap: clamp(14px, 2.4vh, 26px); justify-items: center; text-align: center; }
+  .path-head { display: grid; gap: 10px; justify-items: center; max-width: 820px; }
+  .path-head h2 { font-size: clamp(1.7rem, 1.1rem + 1.7vw, 2.6rem); }
+  :global(html.motion) .path-head .lede { font-size: var(--t-md); }
+  .ring { width: 100%; max-width: 980px; height: min(52vh, 500px); min-height: 340px; }
+  .captions { list-style: none; margin: 0; padding: 0; display: grid; gap: 22px; width: 100%; max-width: 640px; }
+  .caption { display: grid; gap: 6px; justify-items: center; }
+  .cap-n { font-size: var(--t-xs); color: var(--blue-on-dark); letter-spacing: .08em; }
+  .caption.person .cap-n { color: var(--amber-on-dark); }
+  .cap-t { font-size: clamp(1.3rem, 1.05rem + .7vw, 1.7rem); font-weight: 450; }
+  .cap-d { color: var(--muted); font-size: var(--t-sm); max-width: 54ch; }
+  .cap-go { font-size: var(--t-sm); }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  /* once the ring is live, only the front card's caption shows, stacked in one cell */
+  .captions.live { grid-template-areas: "c"; }
+  .captions.live .caption { grid-area: c; opacity: 0; visibility: hidden; transform: translateY(8px); transition: opacity .35s var(--ease), transform .35s var(--ease), visibility 0s linear .35s; }
+  .captions.live .caption.on { opacity: 1; visibility: visible; transform: none; transition: opacity .35s var(--ease) .1s, transform .35s var(--ease) .1s, visibility 0s; }
 
   /* silence */
   .hush { display: grid; place-items: center; min-height: 62vh; padding: 0 24px; text-align: center; }
@@ -551,12 +547,13 @@ const groupLabel: Record<string, string> = { Plan: 'Plan · decide what is worth
     .hero-copy > * { max-width: 100%; }
     .docs { right: -14%; top: 4%; width: 60vw; opacity: .3; }
     .p-far, .p-fore { display: none; }
-    .work-grid, .why, .faq-grid, .ind-grid, .path-grid { grid-template-columns: minmax(0, 1fr); }
+    .work-grid, .why, .faq-grid, .ind-grid { grid-template-columns: minmax(0, 1fr); }
     .board { grid-template-columns: minmax(0, 1fr); }
     .quote { display: none; }
     .agent-grid { grid-template-columns: minmax(0, 1fr); }
     .svc-list, .ind-list { grid-template-columns: minmax(0, 1fr); }
     .phase { grid-template-columns: minmax(0, 1fr); }
+    .ring { height: 290px; min-height: 260px; }
   }
   @media (prefers-reduced-motion: reduce) {
     .steps li.hold::before { animation: none; }
@@ -636,9 +633,11 @@ const groupLabel: Record<string, string> = { Plan: 'Plan · decide what is worth
 
   const chores = $('[data-act="work"]');
   const choreItems = $$('[data-chores] li');
+  const captionList = $('[data-layers]');
   const layerItems = $$('[data-layers] li');
   document.addEventListener('layer-change', (e) => {
     const i = (e as CustomEvent<number>).detail;
+    captionList.classList.add('live');
     layerItems.forEach((li, k) => li.classList.toggle('on', k === i));
   });
   const hush = $('[data-hush]');
