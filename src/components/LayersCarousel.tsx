@@ -44,6 +44,8 @@ export default function LayersCarousel() {
   const [motion, setMotion] = React.useState(false);
   const [index, setIndex] = React.useState(0);
   const indexRef = React.useRef(0);
+  // Paint the stage in the page's own background so the ring has no visible box.
+  const [stageBg, setStageBg] = React.useState('#08121e');
 
   const announce = React.useCallback((i: number) => {
     document.dispatchEvent(new CustomEvent('layer-change', { detail: mod(i, COUNT) }));
@@ -51,13 +53,18 @@ export default function LayersCarousel() {
 
   React.useEffect(() => {
     const section = document.querySelector<HTMLElement>('[data-act="path"]');
+    for (let el: HTMLElement | null = section; el; el = el.parentElement) {
+      const c = getComputedStyle(el).backgroundColor;
+      if (c && c !== 'transparent' && !/rgba\([^)]*,\s*0\)$/.test(c)) { setStageBg(c); break; }
+    }
     const update = () => {
       const m = isMotion();
       setMotion(m);
       if (!m || !section) return;
       const r = section.getBoundingClientRect();
       const p = Math.min(1, Math.max(0, -r.top / Math.max(1, r.height - innerHeight)));
-      const next = Math.round(p * (COUNT - 1));
+      // Each layer gets an equal fifth of the pinned scroll, so the last one holds as long as the rest.
+      const next = Math.min(COUNT - 1, Math.floor(p * COUNT));
       if (next !== indexRef.current) {
         indexRef.current = next;
         setIndex(next);
@@ -83,13 +90,13 @@ export default function LayersCarousel() {
     const top = section.getBoundingClientRect().top + scrollY;
     const span = section.offsetHeight - innerHeight;
     const target = Math.min(COUNT - 1, Math.max(0, i));
-    scrollTo({ top: top + span * (target / (COUNT - 1)), behavior: 'smooth' });
+    scrollTo({ top: top + span * ((target + 0.5) / COUNT), behavior: 'smooth' });
   }, []);
 
   const common = {
     cards,
-    background: '#0c1826',
-    warp: 0.55,
+    background: stageBg,
+    warp: 0.4,
     font: '"Newsreader", "Iowan Old Style", Georgia, serif',
     ariaLabel: 'The five layers of a Moksh AI build',
     style: { width: '100%', height: '100%', minHeight: 260, cursor: 'grab' } as React.CSSProperties,
