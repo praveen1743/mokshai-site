@@ -3,7 +3,7 @@
 // HTML captions under it in index.astro, so search engines and screen readers read
 // those. On pinned desktop (html.motion) scroll through [data-act="path"] picks
 // the front card, and dragging the ring scrolls the page to match. Elsewhere it
-// turns on a slow timer. The card the ring actually shows in front is announced to the page with a
+// steps through on a timer. The card the ring actually shows in front is announced to the page with a
 // `layer-change` event so the caption under the ring shows the same layer.
 import * as React from 'react';
 import { WarpCarousel, type WarpCard } from './ui/warp-carousel';
@@ -37,8 +37,12 @@ const cards: WarpCard[] = [
 ];
 
 const COUNT = cards.length;
-const mod = (a: number, n: number) => ((a % n) + n) % n;
 const isMotion = () => typeof document !== 'undefined' && document.documentElement.classList.contains('motion');
+
+// Two blank cards, painted in the page background with no text or glow, sit past
+// the ends of the ring so it reads as five steps in a row, not a loop: nothing
+// shows left of 01 or right of 05.
+const blank = (bg: string): WarpCard => ({ title: '', value: '', footer: '', detail: 'none', mesh: [bg], numeral: [bg, bg], glow: bg });
 
 export default function LayersCarousel() {
   const [motion, setMotion] = React.useState(false);
@@ -46,9 +50,17 @@ export default function LayersCarousel() {
   const indexRef = React.useRef(0);
   // Paint the stage in the page's own background so the ring has no visible box.
   const [stageBg, setStageBg] = React.useState('#08121e');
+  const ring = React.useMemo(() => [...cards, blank(stageBg), blank(stageBg)], [stageBg]);
 
+  const go = React.useCallback((i: number) => {
+    indexRef.current = i;
+    setIndex(i);
+  }, []);
+
+  // The ring reports the card in front; only the five real layers reach the caption.
   const announce = React.useCallback((i: number) => {
-    document.dispatchEvent(new CustomEvent('layer-change', { detail: mod(i, COUNT) }));
+    if (i >= COUNT) return;
+    document.dispatchEvent(new CustomEvent('layer-change', { detail: i }));
   }, []);
 
   React.useEffect(() => {
@@ -65,10 +77,7 @@ export default function LayersCarousel() {
       const p = Math.min(1, Math.max(0, -r.top / Math.max(1, r.height - innerHeight)));
       // Each layer gets an equal fifth of the pinned scroll, so the last one holds as long as the rest.
       const next = Math.min(COUNT - 1, Math.floor(p * COUNT));
-      if (next !== indexRef.current) {
-        indexRef.current = next;
-        setIndex(next);
-      }
+      if (next !== indexRef.current) go(next);
     };
     update();
     addEventListener('scroll', update, { passive: true });
@@ -77,32 +86,38 @@ export default function LayersCarousel() {
       removeEventListener('scroll', update);
       removeEventListener('resize', update);
     };
-  }, []);
+  }, [go]);
 
-  // Dragging or clicking the ring while pinned: move the page to that layer's scroll position.
-  const onPinnedChange = React.useCallback((i: number) => {
+  // Phones and other unpinned layouts: step 01 to 05 on a timer, then start again from 01.
+  React.useEffect(() => {
+    if (motion || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const t = setInterval(() => go((indexRef.current + 1) % COUNT), 4000);
+    return () => clearInterval(t);
+  }, [motion, go]);
+
+  // Dragging or clicking the ring: pinned, move the page to that layer's scroll
+  // position; unpinned, just show that layer. Blank slots are ignored.
+  const onRingChange = React.useCallback((i: number) => {
+    if (i >= COUNT) return;
     const section = document.querySelector<HTMLElement>('[data-act="path"]');
-    if (!section) return;
-    // The ring reports indexes modulo five; ignore a wrap from the last layer to the first.
-    if (Math.abs(i - indexRef.current) > COUNT / 2) return;
+    if (!isMotion() || !section) { go(i); return; }
     const top = section.getBoundingClientRect().top + scrollY;
     const span = section.offsetHeight - innerHeight;
-    const target = Math.min(COUNT - 1, Math.max(0, i));
-    scrollTo({ top: top + span * ((target + 0.5) / COUNT), behavior: 'smooth' });
-  }, []);
+    scrollTo({ top: top + span * ((i + 0.5) / COUNT), behavior: 'smooth' });
+  }, [go]);
 
-  const common = {
-    cards,
-    background: stageBg,
-    warp: 0.4,
-    font: '"Newsreader", "Iowan Old Style", Georgia, serif',
-    ariaLabel: 'The five layers of a Moksh AI build',
-    style: { width: '100%', height: '100%', minHeight: 260, cursor: 'grab' } as React.CSSProperties,
-  };
-
-  return motion ? (
-    <WarpCarousel {...common} index={index} autoplay={false} onIndexChange={onPinnedChange} onFrontChange={announce} />
-  ) : (
-    <WarpCarousel {...common} autoplay step={1} interval={4} onFrontChange={announce} />
+  return (
+    <WarpCarousel
+      cards={ring}
+      index={index}
+      autoplay={false}
+      onIndexChange={onRingChange}
+      onFrontChange={announce}
+      background={stageBg}
+      warp={0.4}
+      font={'"Newsreader", "Iowan Old Style", Georgia, serif'}
+      ariaLabel="The five layers of a Moksh AI build"
+      style={{ width: '100%', height: '100%', minHeight: 260, cursor: 'grab' }}
+    />
   );
 }
