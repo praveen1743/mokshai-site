@@ -351,8 +351,8 @@ const groupLabel: Record<string, string> = { Plan: 'Plan · decide what is worth
   .plane { position: absolute; inset: -6% -4%; pointer-events: none; will-change: transform; }
   .p-glow { background: radial-gradient(55% 50% at 74% 42%, rgba(37, 131, 219, .30), transparent 70%), radial-gradient(40% 40% at 88% 80%, rgba(31, 169, 47, .16), transparent 70%); }
   .chip { position: absolute; padding: 7px 14px; border: 1px solid var(--line-strong); border-radius: 999px; font: 500 var(--t-xs)/1 var(--f-mono); color: var(--muted); background: rgba(18, 35, 57, .7); }
-  .c1 { left: 52%; top: 12%; } .c2 { left: 57%; top: 54%; } .c3 { left: 50%; top: 80%; } .c4 { left: 86%; top: 14%; } .c5 { left: 80%; top: 84%; }
-  .docs { position: absolute; right: 7%; top: 22%; width: min(26vw, 370px); aspect-ratio: 3 / 4; }
+  .c1 { left: 58%; top: 14%; } .c2 { left: 60%; top: 58%; } .c3 { left: 62%; top: 86%; } .c4 { left: 86%; top: 14%; } .c5 { left: 80%; top: 84%; }
+  .docs { position: absolute; right: max(6%, calc((100vw - 1200px) / 2)); top: 24%; width: min(24vw, 340px); aspect-ratio: 3 / 4; }
   .doc { position: absolute; inset: 0; border-radius: 14px; background: linear-gradient(180deg, #dfe8f1, #c6d4e2); box-shadow: 0 40px 70px -24px rgba(0, 0, 0, .7); padding: 10% 11%; }
   .doc:nth-child(1) { transform: rotate(-8deg) translate(-10%, 3%); opacity: .5; }
   .doc:nth-child(2) { transform: rotate(-2.5deg) translate(-3%, 1%); opacity: .78; }
@@ -362,7 +362,7 @@ const groupLabel: Record<string, string> = { Plan: 'Plan · decide what is worth
   .doc b:nth-child(3) { width: 86%; } .doc b:nth-child(4) { width: 70%; } .doc b:nth-child(5) { width: 78%; } .doc b:nth-child(6) { width: 40%; }
   .doc em { position: absolute; right: 11%; bottom: 9%; width: 34%; height: 22%; border: 2px solid var(--amber-on-dark); border-radius: 8px; }
   .hero-copy { position: relative; z-index: 3; }
-  .hero-copy > * { max-width: min(620px, 47vw); }
+  .hero-copy > * { max-width: min(560px, 44vw); }
   .hero-copy h1 { margin: 18px 0 22px; font-size: clamp(2.5rem, 1.4rem + 3.6vw, 5rem); line-height: 1.02; }
   .h1-kicker { display: block; font-size: .42em; font-style: italic; color: var(--muted); letter-spacing: 0; margin-bottom: .3em; }
   .hero-copy .lede { margin-bottom: 30px; }
