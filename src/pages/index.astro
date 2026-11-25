@@ -3,6 +3,7 @@ import Base from '../layouts/Base.astro';
 import Arrow from '../components/Arrow.astro';
 import Icon from '../components/Icon.astro';
 import Faq from '../components/Faq.astro';
+import LayersCarousel from '../components/LayersCarousel';
 import CtaBand from '../components/CtaBand.astro';
 import FounderVideo from '../components/FounderVideo.astro';
 import AgentCard from '../components/agents/AgentCard.astro';
@@ -130,25 +131,27 @@ const groupLabel: Record<string, string> = { Plan: 'Plan · decide what is worth
     </div>
   </section>
 
-  <!-- 3. FIVE LAYERS: lateral travel -->
+  <!-- 3. FIVE LAYERS: scroll turns the Warp Carousel ring; the HTML list carries the words and links -->
   <section class="act path-act" data-act="path" aria-labelledby="path-h">
     <div class="pin path-pin">
-      <div class="container path-head">
-        <h2 id="path-h">Every build follows the same five layers, from your systems to the outcome</h2>
-        <p class="lede">The AI layer sits between what you already use and the result you need. A person sits between the AI and anything that matters.</p>
+      <div class="container path-grid">
+        <div class="path-copy">
+          <h2 id="path-h">Every build follows the same five layers, from your systems to the outcome</h2>
+          <p class="lede">The AI layer sits between what you already use and the result you need. A person sits between the AI and anything that matters.</p>
+          <ol class="layers" role="list" data-layers>
+            {layers.map((l, i) => (
+              <li class:list={['layer', { ai: l.ai, person: l.person, on: i === 0 }]}>
+                <a href={l.href}>
+                  <span class="layer-n mono">{String(i + 1).padStart(2, '0')}</span>
+                  <span class="layer-body"><span class="layer-t">{l.t}</span><span class="layer-d"><span>{l.d}</span></span></span>
+                  <span class="layer-go" aria-hidden="true">→</span>
+                </a>
+              </li>
+            ))}
+          </ol>
+        </div>
+        <div class="ring"><LayersCarousel client:visible /></div>
       </div>
-      <ol class="track" role="list" data-track>
-        {layers.map((l, i) => (
-          <li class:list={['node', { ai: l.ai, person: l.person }]}>
-            <a href={l.href}>
-              <span class="node-top"><span class="mono">{String(i + 1).padStart(2, '0')}</span><span class="hexi sm soft"><Icon name={l.icon} /></span></span>
-              <span class="node-body"><span class="node-t">{l.t}</span><span class="node-d">{l.d}</span></span>
-              <span class="link-arrow node-go">Read more</span>
-            </a>
-          </li>
-        ))}
-      </ol>
-      <div class="container"><div class="rail" aria-hidden="true"><b data-rail></b></div></div>
     </div>
   </section>
 
@@ -392,26 +395,28 @@ const groupLabel: Record<string, string> = { Plan: 'Plan · decide what is worth
   .chores li.done .handled { opacity: 1; transform: none; }
 
   /* 3 path */
-  .path-pin { display: flex; flex-direction: column; justify-content: center; gap: clamp(26px, 4vh, 48px); padding-block: clamp(56px, 7vw, 96px); }
-  :global(html.motion) .path-pin { padding-block: 76px 0; }
-  .path-head { display: grid; gap: 14px; }
-  .path-head h2 { max-width: 22ch; }
-  .track { display: flex; gap: clamp(14px, 2vw, 26px); margin: 0; padding: 0 var(--gutter); list-style: none; width: max-content; will-change: transform; }
-  .node a { display: flex; flex-direction: column; justify-content: space-between; gap: 28px; width: clamp(260px, 25vw, 360px); min-height: clamp(270px, 40vh, 360px); padding: 26px; border-radius: 20px; background: var(--surface); border: 1px solid var(--line); text-decoration: none; color: var(--ink); transition: border-color .3s var(--ease), transform .3s var(--ease); }
-  .node a:hover { border-color: var(--blue-on-dark); transform: translateY(-3px); color: var(--ink); }
-  .node-top { display: flex; justify-content: space-between; align-items: center; color: var(--muted); }
-  .node-body { display: grid; gap: 10px; }
-  .node-t { font: 450 clamp(1.6rem, 1.2rem + 1vw, 2.2rem)/1.08 var(--f-display); }
-  .node-d { color: var(--muted); font-size: var(--t-sm); line-height: 1.55; }
-  .node-go { font-size: var(--t-sm); }
-  .node.ai a { background: linear-gradient(160deg, #16365a, #122339); border-color: rgba(140, 194, 247, .45); }
-  .node.person a { border-color: rgba(242, 180, 92, .55); }
-  .node.person .hexi { background: var(--amber-soft); color: var(--amber-on-dark); }
-  .rail { height: 2px; background: var(--line); position: relative; }
-  .rail b { position: absolute; inset: 0 auto 0 0; width: 0; background: var(--grad); }
-  :global(html:not(.motion)) .track { width: auto; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 8px; }
-  :global(html:not(.motion)) .node { scroll-snap-align: start; }
-  :global(html:not(.motion)) .rail { display: none; }
+  .path-pin { display: grid; align-items: center; padding-block: clamp(56px, 7vw, 96px); }
+  :global(html.motion) .path-pin { padding-block: 84px 12px; }
+  .path-grid { display: grid; grid-template-columns: minmax(0, .78fr) minmax(0, 1.22fr); gap: clamp(24px, 4vw, 64px); align-items: center; }
+  .path-copy { display: grid; gap: 14px; }
+  .path-copy h2 { font-size: clamp(1.8rem, 1.2rem + 1.8vw, 2.8rem); max-width: 20ch; }
+  :global(html.motion) .path-copy .lede { font-size: var(--t-md); }
+  .layers { list-style: none; margin: 8px 0 0; padding: 0; border-top: 1px solid var(--line); }
+  .layer a { display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 12px; align-items: start; padding: 11px 0 11px 12px; border-bottom: 1px solid var(--line); border-left: 2px solid transparent; text-decoration: none; color: var(--muted); transition: color .3s var(--ease), border-color .3s var(--ease), background-color .3s var(--ease); }
+  .layer a:hover { color: var(--ink); }
+  .layer-n { font-size: var(--t-xs); padding-top: 5px; }
+  .layer-body { display: grid; }
+  .layer-t { font: 450 clamp(1.15rem, 1rem + .5vw, 1.45rem)/1.2 var(--f-display); }
+  .layer-d { display: grid; grid-template-rows: 1fr; font-size: var(--t-sm); line-height: 1.5; color: var(--muted); transition: grid-template-rows .45s var(--ease); }
+  .layer-d > span { overflow: hidden; padding-top: 4px; }
+  .layer-go { padding-top: 4px; transition: transform .2s var(--ease); }
+  .layer a:hover .layer-go { transform: translateX(3px); }
+  :global(html.motion) .layer:not(.on) .layer-d { grid-template-rows: 0fr; }
+  .layer.on a { color: var(--ink); border-left-color: var(--blue); background: linear-gradient(90deg, rgba(37, 131, 219, .10), transparent 70%); }
+  .layer.on.person a { border-left-color: var(--amber-on-dark); background: linear-gradient(90deg, rgba(242, 180, 92, .10), transparent 70%); }
+  .layer.on.ai a { border-left-color: var(--teal); }
+  .layer.person .layer-n { color: var(--amber-on-dark); }
+  .ring { height: min(70vh, 600px); min-height: 360px; border-radius: 20px; overflow: hidden; }
 
   /* silence */
   .hush { display: grid; place-items: center; min-height: 62vh; padding: 0 24px; text-align: center; }
@@ -546,7 +551,7 @@ const groupLabel: Record<string, string> = { Plan: 'Plan · decide what is worth
     .hero-copy > * { max-width: 100%; }
     .docs { right: -14%; top: 4%; width: 60vw; opacity: .3; }
     .p-far, .p-fore { display: none; }
-    .work-grid, .why, .faq-grid, .ind-grid { grid-template-columns: minmax(0, 1fr); }
+    .work-grid, .why, .faq-grid, .ind-grid, .path-grid { grid-template-columns: minmax(0, 1fr); }
     .board { grid-template-columns: minmax(0, 1fr); }
     .quote { display: none; }
     .agent-grid { grid-template-columns: minmax(0, 1fr); }
@@ -631,9 +636,11 @@ const groupLabel: Record<string, string> = { Plan: 'Plan · decide what is worth
 
   const chores = $('[data-act="work"]');
   const choreItems = $$('[data-chores] li');
-  const path = $('[data-act="path"]');
-  const track = $('[data-track]');
-  const rail = $('[data-rail]');
+  const layerItems = $$('[data-layers] li');
+  document.addEventListener('layer-change', (e) => {
+    const i = (e as CustomEvent<number>).detail;
+    layerItems.forEach((li, k) => li.classList.toggle('on', k === i));
+  });
   const hush = $('[data-hush]');
   const gate = $('[data-act="gate"]');
   const run = $('[data-run]');
@@ -659,11 +666,6 @@ const groupLabel: Record<string, string> = { Plan: 'Plan · decide what is worth
       const cp = progress(chores);
       choreItems.forEach((li, i) => li.classList.toggle('done', cp > (i + 0.6) / (choreItems.length + 1.2)));
 
-      const pp = progress(path);
-      const max = Math.max(0, track.scrollWidth - innerWidth);
-      track.style.transform = `translate3d(${-pp * max}px, 0, 0)`;
-      rail.style.width = `${pp * 100}%`;
-
       if (!reduce) renderGate(progress(gate));
 
       const rp = progress(range);
@@ -678,7 +680,6 @@ const groupLabel: Record<string, string> = { Plan: 'Plan · decide what is worth
     } else {
       planes.forEach((pl) => (pl.style.transform = ''));
       copy.style.transform = '';
-      track.style.transform = '';
       phases.forEach((ph) => (ph.style.transform = ''));
       if (!reduce) {
         choreItems.forEach((li) => li.classList.toggle('done', li.getBoundingClientRect().top < innerHeight * 0.6));
