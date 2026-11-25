@@ -68,7 +68,7 @@ export default defineConfig({
   // Public pages are unaffected: they are built as /page/index.html, canonicals
   // end in '/', and vercel.json (trailingSlash: true) redirects to the slashed URL.
   trailingSlash: 'ignore',
-  build: { format: 'directory', inlineStylesheets: 'auto' },
+  build: { format: 'directory', inlineStylesheets: 'always' },
   // Static fallbacks for old WordPress URLs. Real 301s are also shipped in
   // public/.htaccess, public/_redirects and vercel.json for each host type.
   redirects: {
