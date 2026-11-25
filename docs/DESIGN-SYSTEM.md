@@ -13,7 +13,7 @@ Tokens live at the top of `src/styles/global.css`. Components use tokens only, w
 
 ## Theme
 
-The site is **warm light by default**: `:root` holds an off-white ground (`--paper` #F7F5F0), white panels (`--surface`) and charcoal text (`--ink` #15191E). The logo blue and green carry links, accents and primary buttons. Amber is the only warm accent and is reserved for "a person does this step" (human review, approval).
+The site is **navy by default**: `Base.astro` puts `.dark` on `<body>`, so pages use the dark token values (`--paper` #0C1826, `--surface` #122339, `--ink` #E9F1F7). The light `:root` values are only the base that scope overrides. The logo blue and green carry links, accents and primary buttons. Amber is the only warm accent and is reserved for "a person does this step" (human review, approval).
 
 `.dark` sections re-scope the same tokens to dark values (`--ink` light text, `--paper`/`--surface` deep navy, on-dark tints for `-700` accents), so any component placed inside a dark section keeps working. Dark is used for: the AI + human section on the homepage, the closing CTA and footer, and featured panels. `.light` remains as an explicit name for article and legal pages.
 
@@ -46,7 +46,7 @@ Gradients:
 
 | Role | Family | Notes |
 | --- | --- | --- |
-| Display | Archivo (variable, `font-stretch` ~86%) | Headings; condensed, tight tracking |
+| Display | Newsreader (variable serif, optical sizing) | Headings at weight 420–500, tight tracking |
 | Body | IBM Plex Sans 400/500/600 | 17 px base, 1.65 line height, 62–70ch measure |
 | Data | IBM Plex Mono 400/500 | Eyebrows, labels, numbers (tabular figures) |
 

@@ -2,6 +2,8 @@
 // into public/fonts before each build, so the binaries don't live in git.
 import { mkdirSync, copyFileSync } from 'node:fs';
 const map = {
+  'newsreader-var.woff2': '@fontsource-variable/newsreader/files/newsreader-latin-opsz-normal.woff2',
+  'newsreader-var-italic.woff2': '@fontsource-variable/newsreader/files/newsreader-latin-opsz-italic.woff2',
   'archivo-var.woff2': '@fontsource-variable/archivo/files/archivo-latin-wdth-normal.woff2',
   'ibm-plex-sans-latin-400-normal.woff2': '@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-400-normal.woff2',
   'ibm-plex-sans-latin-400-italic.woff2': '@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-400-italic.woff2',
