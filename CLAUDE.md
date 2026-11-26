@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-Marketing site for Moksh AI (mokshai.net). Astro 7 with the Vercel adapter: every public page is prerendered static HTML; only the Keystatic CMS (`/keystatic`, `/api/keystatic`, React) runs on demand. No UI framework on public pages. Vanilla TypeScript in `<script>` tags for interactivity.
+Marketing site for Moksh AI (mokshai.net). Astro 7 with the Vercel adapter: every public page is prerendered static HTML; only the Keystatic CMS (`/keystatic`, `/api/keystatic`, React) runs on demand. No UI framework on public pages. TypeScript in bundled `<script>` tags for interactivity; motion uses GSAP (ScrollTrigger, SplitText) on the homepage and Lenis smooth scroll site-wide (`src/lib/smooth-scroll.ts`, started in `Base.astro`, off under reduced motion).
 
 ## Commands
 - `npm run dev`: dev server on :4321
@@ -39,7 +39,7 @@ Vercel, from `main`. Settings live in `vercel.json`; keep `public/.htaccess` and
 - Sections alternate surfaces: paper, `.sky`, `.mint`, `.wash`, `.dark`. Avoid two of the same tint in a row.
 - Vary section layouts. No more than two card grids per page; prefer editorial lists, statements and live components. Not every section needs an eyebrow label.
 - Fonts: Newsreader (display serif, weights 420–500), IBM Plex Sans (body), IBM Plex Mono (labels, numbers). Self-hosted in `public/fonts/` by `scripts/copy-fonts.mjs`. Do not set `font-stretch` on display text. Do not set Newsreader in italic: its italic file is 147 KB and is deliberately never loaded. Stylesheets are inlined into each page (`inlineStylesheets: 'always'`) so first paint does not wait on CSS requests.
-- Pinned homepage acts are driven by the bundled script in `index.astro`; the still sections use CSS scroll timelines (`animation-timeline: view()`) inside `@supports` and `prefers-reduced-motion: no-preference`. Each section moves differently (slide, deal, grow, draw, rise, tilt); never give two adjacent sections the same motion. The AI + human flow is the peak. The FAQ and closing CTA stay still. Transforms only.
+- Homepage motion is GSAP in the bundled script in `index.astro`: pinned acts scrub with ScrollTrigger, still sections reveal with ScrollTrigger, headings split into masked lines with SplitText. Lenis drives ScrollTrigger updates. Reduced motion jumps every animation to its final state. Each section moves differently (slide, deal, grow, draw, rise, tilt); never give two adjacent sections the same motion. The AI + human flow is the peak. The FAQ and closing CTA stay still. Transforms only.
 - Content is fully readable at rest: `.reveal` animates movement only, never opacity. Never put `.reveal` on the last block before the footer: the page can end before its scroll animation completes, leaving it offset under the footer. No animation may move layout (CLS must stay 0).
 - Never give a decorative element a class named `dark`: `.dark` paints the ink background.
 - Grid columns that collapse on mobile use `minmax(0, 1fr)`, never bare `1fr`.
