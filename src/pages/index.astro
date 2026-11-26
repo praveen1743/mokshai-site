@@ -348,7 +348,7 @@ const groupLabel: Record<string, string> = { Plan: 'Plan · decide what is worth
   :global(html.path-pinned) .path-act .pin { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: clip; padding-top: 76px; }
   .hero { --span: 175vh; }
   .path-act { --span: 360vh; }
-  .gate-act { --span: 440vh; }
+  .gate-act { --span: 320vh; }
 
   /* 1 hero */
   .hero-pin { min-height: 100svh; display: grid; align-items: center; overflow: clip; background: var(--paper); }
@@ -550,18 +550,8 @@ const groupLabel: Record<string, string> = { Plan: 'Plan · decide what is worth
   .faq-grid { display: grid; grid-template-columns: minmax(0, .7fr) minmax(0, 1.3fr); gap: clamp(28px, 6vw, 80px); align-items: start; }
 
   /* scroll-linked motion for the still sections: transforms only, never opacity */
-  @supports (animation-timeline: view()) {
-    @media (prefers-reduced-motion: no-preference) {
-      .deal :global(> *) { animation: deal linear both; animation-timeline: view(); animation-range: entry 0% cover 35%; }
-      .deal :global(> *:nth-child(2)) { animation-range: entry 8% cover 40%; }
-      .deal :global(> *:nth-child(3)) { animation-range: entry 16% cover 45%; }
-      .panels > .panel { animation: rise linear both; animation-timeline: view(); animation-range: entry 0% cover 30%; }
-      .why-list li { animation: draw linear both; animation-timeline: view(); animation-range: entry 0% cover 30%; }
-    }
-  }
-  @keyframes deal { from { transform: translateY(60px) rotate(2deg); } to { transform: none; } }
-  @keyframes rise { from { transform: translateY(56px); } to { transform: none; } }
-  @keyframes draw { from { transform: translateX(-28px); } to { transform: none; } }
+  /* SplitText line masks: a gradient phrase keeps its gradient on every split line */
+  .grad-text :global(.ln), .grad-text :global(div) { background: inherit; -webkit-background-clip: text; background-clip: text; color: transparent; }
 
   @media (max-width: 980px) {
     .hero-copy > * { max-width: 100%; }
@@ -580,30 +570,42 @@ const groupLabel: Record<string, string> = { Plan: 'Plan · decide what is worth
 </style>
 
 <script>
-  // Scroll choreography for the homepage. Runs only on wide, tall screens with
-  // motion allowed; everywhere else the page is a normal document and the
-  // approval demo advances as it crosses the middle of the screen.
+  // Homepage choreography with GSAP + ScrollTrigger, kept in step with the
+  // site-wide Lenis smooth scroll (src/lib/smooth-scroll.ts).
+  // - Pinned acts use CSS sticky (.act/.pin) so the page works without JS;
+  //   GSAP only scrubs what happens inside them.
+  // - html.motion (wide, tall screens) pins the hero and the approval demo;
+  //   html.path-pinned (any screen 540 px+) pins the five-layers deck.
+  // - Reduced motion: no smooth scroll, no reveals, everything in its final state.
+  // - Reveals move and unmask content (transform / clip-path); they never fade it.
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  import { SplitText } from 'gsap/SplitText';
+  import { startSmoothScroll } from '../lib/smooth-scroll';
+
+  gsap.registerPlugin(ScrollTrigger, SplitText);
+
   const root = document.documentElement;
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const wide = matchMedia('(min-width: 981px) and (min-height: 700px)');
   const clamp = (v: number, a = 0, b = 1) => Math.min(b, Math.max(a, v));
-  const $ = <T extends Element = HTMLElement>(s: string) => document.querySelector<T & HTMLElement>(s)!;
+  const $ = <T extends Element = HTMLElement>(s: string, r: ParentNode = document) => r.querySelector<T & HTMLElement>(s)!;
   const $$ = (s: string, r: ParentNode = document) => Array.from(r.querySelectorAll<HTMLElement>(s));
 
-  const tall = matchMedia('(min-height: 540px)');
+  const lenis = startSmoothScroll();
+  if (lenis) {
+    lenis.on('scroll', ScrollTrigger.update);
+  }
+  const scrollToY = (y: number) => (lenis ? lenis.scrollTo(y, { duration: 1.1 }) : scrollTo({ top: y, behavior: reduce ? 'auto' : 'smooth' }));
+
+  const wideQ = '(min-width: 981px) and (min-height: 700px) and (prefers-reduced-motion: no-preference)';
+  const tallQ = '(min-height: 540px) and (prefers-reduced-motion: no-preference)';
   const setMotion = () => {
-    root.classList.toggle('motion', !reduce && wide.matches);
-    root.classList.toggle('path-pinned', !reduce && tall.matches);
+    root.classList.toggle('motion', matchMedia(wideQ).matches);
+    root.classList.toggle('path-pinned', matchMedia(tallQ).matches);
   };
   setMotion();
-  wide.addEventListener('change', () => { setMotion(); tick(); });
-  tall.addEventListener('change', () => { setMotion(); tick(); });
 
-  const progress = (el: HTMLElement) => { const r = el.getBoundingClientRect(); return clamp(-r.top / Math.max(1, r.height - innerHeight)); };
-  // Fallback progress when not pinned: how far the element has crossed the screen.
-  const crossing = (el: HTMLElement) => { const r = el.getBoundingClientRect(); return clamp((innerHeight * 0.85 - r.top) / (innerHeight * 0.6)); };
-
-  /* approval demo */
+  /* ---------------- approval demo (shared by every layout) ---------------- */
   const steps = $$('[data-steps] li');
   const stepsEl = $('[data-steps]');
   const flowSteps = $$('[data-flow] li');
@@ -618,17 +620,24 @@ const groupLabel: Record<string, string> = { Plan: 'Plan · decide what is worth
     ['Held for your approval.', 'One discount is above policy. Nothing has been sent.'],
   ];
   let approved = false;
-  const say = (s: [string, string]) => { status.innerHTML = `${s[0]}<small>${s[1]}</small>`; };
+  let lastStage = -1;
+  const say = (s: [string, string]) => {
+    status.innerHTML = `${s[0]}<small>${s[1]}</small>`;
+    if (!reduce) gsap.fromTo(status, { y: 10, clipPath: 'inset(0 0 100% 0)' }, { y: 0, clipPath: 'inset(0 0 0% 0)', duration: 0.45, ease: 'power3.out' });
+  };
   const renderGate = (p: number) => {
     if (approved) return;
-    const a = clamp(p / 0.5);
+    const a = clamp(p / 0.62);
     const stage = a <= 0.02 ? 0 : a < 0.25 ? 1 : a < 0.5 ? 2 : a < 0.75 ? 3 : 4;
     stepsEl.style.setProperty('--ap', String(Math.min(a, 0.75)));
+    if (stage === lastStage) return;
+    lastStage = stage;
     steps.forEach((li, i) => { li.classList.toggle('on', i < Math.min(stage, 3)); li.classList.toggle('hold', i === 3 && stage === 4); });
     flowSteps.forEach((li, i) => li.classList.toggle('lit', (i === 0 && stage >= 1) || (i === 1 && stage === 4)));
     say(STATUS[stage]);
     btn.disabled = stage < 4;
     stamp.textContent = stage === 4 ? 'On hold' : 'Draft';
+    if (stage === 4 && !reduce) gsap.fromTo(btn, { scale: 0.92 }, { scale: 1, duration: 0.6, ease: 'elastic.out(1, 0.45)' });
   };
   btn.addEventListener('click', () => {
     if (btn.disabled || approved) return;
@@ -640,114 +649,144 @@ const groupLabel: Record<string, string> = { Plan: 'Plan · decide what is worth
     stamp.textContent = 'Sent';
     btn.textContent = 'Approved';
     btn.disabled = true;
+    if (!reduce) {
+      gsap.fromTo(stamp, { scale: 1.8, rotation: -14 }, { scale: 1, rotation: -4, duration: 0.55, ease: 'back.out(2.2)' });
+      gsap.fromTo(flowSteps.filter((li) => !li.classList.contains('branch')), { x: -14 }, { x: 0, duration: 0.5, stagger: 0.07, ease: 'power3.out' });
+    }
   });
 
-  if (reduce) {
-    $$('[data-chores] li').forEach((li) => li.classList.add('done'));
-    renderGate(1);
-  }
-
-  /* hero planes follow scroll and, on desktop, the pointer */
-  const hero = $('[data-act="hero"]');
-  const planes = $$('[data-depth]', hero);
-  const copy = $('[data-copy]');
-  let tx = 0, ty = 0, px = 0, py = 0;
-  const fine = matchMedia('(pointer: fine)').matches;
-  if (fine) addEventListener('pointermove', (e) => { tx = e.clientX / innerWidth - 0.5; ty = e.clientY / innerHeight - 0.5; request(); }, { passive: true });
-
-  const choreItems = $$('[data-chores] li');
-
-  /* five-layers deck: scroll position picks the ring position P (0 = first card in front) */
+  /* ---------------- five-layers deck ---------------- */
   const path = $('[data-act="path"]');
   const cards = $$('[data-deck] .lcard');
   const COUNT = cards.length;
   const LAST_AT = 0.64; // share of the runway by which the last card is in front; it holds to the end
-  let deckP = -1;
+  const STEP = LAST_AT / (COUNT - 1);
+  let deckP = 0;
   const pathPinned = () => root.classList.contains('path-pinned');
   const scrollToCard = (i: number) => {
     const top = path.getBoundingClientRect().top + scrollY;
     const span = path.offsetHeight - innerHeight;
-    const at = i === COUNT - 1 ? LAST_AT + 0.08 : ((i + 0.5) / (COUNT - 1)) * LAST_AT;
-    scrollTo({ top: top + span * at, behavior: reduce ? 'auto' : 'smooth' });
+    scrollToY(top + span * (i === COUNT - 1 ? LAST_AT + 0.06 : i * STEP));
   };
   cards.forEach((card, i) => {
     const link = card.querySelector('a')!;
-    // a side card is brought to the front first; the front card's link works as normal
-    link.addEventListener('click', (e) => {
-      if (pathPinned() && Math.round(deckP) !== i) { e.preventDefault(); scrollToCard(i); }
-    });
+    // a side card comes to the front first; the front card's link works as normal
+    link.addEventListener('click', (e) => { if (pathPinned() && Math.round(deckP) !== i) { e.preventDefault(); scrollToCard(i); } });
     link.addEventListener('focus', () => { if (pathPinned() && Math.round(deckP) !== i) scrollToCard(i); });
   });
-  const renderDeck = () => {
-    if (!pathPinned()) {
-      if (deckP !== -1) { cards.forEach((c) => { c.style.transform = ''; c.style.filter = ''; c.style.zIndex = ''; c.style.visibility = ''; c.classList.remove('front'); }); deckP = -1; }
-      return;
-    }
-    const r = path.getBoundingClientRect();
-    const p = clamp(-r.top / Math.max(1, r.height - innerHeight));
-    const raw = Math.min(COUNT - 1, (p / LAST_AT) * (COUNT - 1));
-    const i = Math.floor(raw);
-    const f = clamp((raw - i - 0.3) / 0.4);
-    const P = i + f * f * (3 - 2 * f); // hold, turn, hold
-    if (P === deckP) return;
+  const placeDeck = (P: number) => {
     deckP = P;
     const cw = cards[0].offsetWidth;
     cards.forEach((c, k) => {
       const d = k - P, a = Math.abs(d);
-      const x = Math.sign(d) * Math.min(a, 2.4) * cw * 0.72;
-      c.style.transform = `translate3d(${x}px, 0, ${-a * 200}px) rotateY(${clamp(-d * 34, -62, 62)}deg) scale(${1 - Math.min(a, 2) * 0.05})`;
-      c.style.filter = `brightness(${1 - Math.min(a, 2) * 0.3})`;
-      c.style.zIndex = String(100 - Math.round(a * 10));
-      c.style.visibility = a > 2.2 ? 'hidden' : '';
+      gsap.set(c, {
+        x: Math.sign(d) * Math.min(a, 2.4) * cw * 0.72,
+        z: -a * 220,
+        rotationY: clamp(-d * 36, -64, 64),
+        scale: 1 - Math.min(a, 2) * 0.05,
+        filter: `brightness(${1 - Math.min(a, 2) * 0.32})`,
+        zIndex: 100 - Math.round(a * 10),
+        visibility: a > 2.2 ? 'hidden' : 'inherit',
+      });
       c.classList.toggle('front', a < 0.5);
     });
   };
-  const hush = $('[data-hush]');
-  const gate = $('[data-act="gate"]');
-  const run = $('[data-run]');
-  const phases = $$('[data-phases] .phase');
 
-  let queued = false;
-  function request() { if (!queued) { queued = true; requestAnimationFrame(tick); } }
-  function tick() {
-    queued = false;
-    const motion = root.classList.contains('motion');
-    px += (tx - px) * 0.08; py += (ty - py) * 0.08;
+  /* ---------------- reduced motion: final states, nothing moves ---------------- */
+  if (reduce) {
+    $$('[data-chores] li').forEach((li) => li.classList.add('done'));
+    renderGate(1);
+  } else {
+    const mm = gsap.matchMedia();
 
-    if (motion) {
-      const hp = progress(hero);
-      planes.forEach((pl) => {
-        const d = Number(pl.dataset.depth);
-        pl.style.transform = `translate3d(${px * d * 1.2}px, ${-hp * d * 5 + py * d * 0.6}px, 0)`;
+    /* headings rise out of a mask, line by line (every section heading except the hero's) */
+    const splitHeadings = $$('main h2').filter((h) => !h.closest('.hero'));
+    splitHeadings.forEach((h) => {
+      SplitText.create(h, {
+        type: 'lines', mask: 'lines', linesClass: 'ln', autoSplit: true,
+        onSplit: (self) => gsap.from(self.lines, {
+          yPercent: 105, duration: 1, stagger: 0.09, ease: 'expo.out',
+          scrollTrigger: { trigger: h, start: 'top 88%', once: true },
+        }),
       });
-      copy.style.transform = `translate3d(0, ${-hp * 60}px, 0)`;
+    });
 
-      if (!reduce) renderGate(progress(gate));
+    /* hero: the headline assembles on load, then the planes part as you scroll */
+    const hero = $('[data-act="hero"]');
+    const h1 = $('#hero-h');
+    const copy = $('[data-copy]');
+    const docs = $$('.docs .doc', hero);
+    const chips = $$('.chip', hero);
+    const fore = $('.fore-card', hero);
+    SplitText.create(h1, {
+      type: 'lines', mask: 'lines', linesClass: 'ln', autoSplit: true,
+      onSplit: (self) => gsap.from(self.lines, { yPercent: 110, duration: 1.25, stagger: 0.1, ease: 'expo.out', delay: 0.15 }),
+    });
+    const intro = gsap.timeline({ defaults: { ease: 'expo.out' } });
+    intro
+      .from($('.eyebrow', copy), { y: 18, clipPath: 'inset(0 0 100% 0)', duration: 0.9 }, 0)
+      .from([$('.lede', copy), $('.btn-row', copy), $('.proof', copy)], { y: 34, clipPath: 'inset(0 0 100% 0)', duration: 1.1, stagger: 0.1 }, 0.45)
+      .from(docs, { y: 140, rotation: 0, transformOrigin: '50% 100%', duration: 1.5, stagger: 0.12 }, 0.2)
+      .from(chips, { scale: 0.4, y: 20, duration: 1, stagger: 0.07, ease: 'back.out(2)' }, 0.6)
+      .from(fore, { y: 160, rotation: 4, duration: 1.4 }, 0.55);
 
-      phases.forEach((ph, i) => {
-        const next = phases[i + 1];
-        if (!next) return;
-        const t = clamp(1 - (next.getBoundingClientRect().top - 140) / (innerHeight * 0.6));
-        ph.style.transform = `scale(${1 - t * 0.05})`;
+    mm.add(wideQ, () => {
+      // scroll: depth planes drift apart, the stack fans out, the copy lifts away
+      const tl = gsap.timeline({ scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom bottom', scrub: 0.8 } });
+      $$('[data-depth]', hero).forEach((pl) => tl.to(pl, { y: -Number(pl.dataset.depth) * 9, ease: 'none' }, 0));
+      tl.to(docs[0], { rotation: -16, x: -60, ease: 'none' }, 0)
+        .to(docs[1], { rotation: -7, x: -20, ease: 'none' }, 0)
+        .to(docs[2], { rotation: 8, x: 30, ease: 'none' }, 0)
+        .to(copy, { y: -110, scale: 0.97, transformOrigin: '0% 0%', ease: 'none' }, 0)
+        .to(fore, { y: -120, rotation: -3, ease: 'none' }, 0)
+        // hand-off: the page's own navy rises over the planes as the hero leaves
+        .fromTo($('.p-atmo', hero), { height: '26%' }, { height: '85%', ease: 'power1.in' }, 0.35);
+      // pointer: the planes lean toward the cursor
+      const leans = $$('[data-depth]', hero).map((pl) => ({ d: Number(pl.dataset.depth), x: gsap.quickTo(pl, 'x', { duration: 0.9, ease: 'power3.out' }) }));
+      const onMove = (e: PointerEvent) => { const nx = e.clientX / innerWidth - 0.5; leans.forEach((l) => l.x(nx * l.d * 1.6)); };
+      if (matchMedia('(pointer: fine)').matches) addEventListener('pointermove', onMove, { passive: true });
+
+      // approval demo runs on scroll through its pinned stage
+      ScrollTrigger.create({ trigger: $('[data-act="gate"]'), start: 'top top', end: 'bottom bottom', onUpdate: (st) => renderGate(st.progress) });
+
+      return () => removeEventListener('pointermove', onMove);
+    });
+    mm.add('(max-width: 980px), (max-height: 699px)', () => {
+      // unpinned: the demo advances as it crosses the screen
+      ScrollTrigger.create({ trigger: $('[data-run]'), start: 'top 85%', end: 'top 25%', onUpdate: (st) => renderGate(st.progress) });
+    });
+
+    mm.add(tallQ, () => {
+      // deck: scroll turns the cards, then settles on the nearest one
+      placeDeck(0);
+      ScrollTrigger.create({
+        trigger: path, start: 'top top', end: 'bottom bottom', scrub: 0.6,
+        snap: { snapTo: (v) => (v >= LAST_AT ? v : Math.round(v / STEP) * STEP), duration: { min: 0.25, max: 0.7 }, delay: 0.08, ease: 'power3.inOut' },
+        onUpdate: (st) => placeDeck(clamp(st.progress / LAST_AT) * (COUNT - 1)),
       });
-    } else {
-      planes.forEach((pl) => (pl.style.transform = ''));
-      copy.style.transform = '';
-      phases.forEach((ph) => (ph.style.transform = ''));
-      if (!reduce) renderGate(crossing(run));
-    }
+      gsap.from(cards, { y: 120, rotationX: -20, duration: 1.3, stagger: 0.08, ease: 'expo.out', scrollTrigger: { trigger: path, start: 'top 70%', once: true } });
+      return () => cards.forEach((c) => { gsap.set(c, { clearProps: 'all' }); c.classList.remove('front'); });
+    });
 
-    // the workflows strike through as each crosses the upper part of the screen (never pinned)
-    if (!reduce) choreItems.forEach((li) => li.classList.toggle('done', li.getBoundingClientRect().top < innerHeight * 0.6));
-    renderDeck();
+    /* workflows strike through, one after another, as they cross the screen */
+    ScrollTrigger.batch($$('[data-chores] li'), {
+      start: 'top 70%', once: true,
+      onEnter: (els) => els.forEach((li, i) => gsap.delayedCall(i * 0.12, () => li.classList.add('done'))),
+    });
 
-    const r = hush.getBoundingClientRect();
-    const mid = 1 - Math.abs(r.top + r.height / 2 - innerHeight / 2) / (innerHeight * 0.55);
-    hush.style.setProperty('--o', String(reduce ? 1 : clamp(mid, 0.6, 1)));
+    /* still sections: each moves differently */
+    gsap.from('.agent-grid > *', { y: 90, rotation: 2.5, duration: 1.2, stagger: 0.12, ease: 'expo.out', scrollTrigger: { trigger: '.agent-grid', start: 'top 82%', once: true } });   // deal
+    $$('.panels > .panel').forEach((pnl) => gsap.from(pnl, { y: 80, duration: 1.2, ease: 'expo.out', scrollTrigger: { trigger: pnl, start: 'top 85%', once: true } }));     // rise
+    gsap.from('.why-list li', { x: -40, duration: 1, stagger: 0.08, ease: 'expo.out', scrollTrigger: { trigger: '.why-list', start: 'top 80%', once: true } });          // draw
+    const phases = $$('[data-phases] .phase');
+    phases.slice(0, -1).forEach((ph, i) => gsap.to(ph, {                                                                                                           // stack
+      scale: 0.94, filter: 'brightness(0.72)', ease: 'none',
+      scrollTrigger: { trigger: phases[i + 1], start: 'top 85%', end: 'top 140px', scrub: true },
+    }));
+    const hush = $('[data-hush]');
+    gsap.fromTo(hush, { scale: 0.86, letterSpacing: '-0.04em' }, { scale: 1.06, letterSpacing: '0em', ease: 'none', scrollTrigger: { trigger: hush, start: 'top bottom', end: 'bottom top', scrub: 0.6 } }); // grow
+    hush.style.setProperty('--o', '1');
 
-    if (Math.abs(tx - px) > 0.001 || Math.abs(ty - py) > 0.001) request();
+    addEventListener('load', () => ScrollTrigger.refresh());
   }
-  addEventListener('scroll', request, { passive: true });
-  addEventListener('resize', request);
-  tick();
 </script>

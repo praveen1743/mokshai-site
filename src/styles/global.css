@@ -144,6 +144,12 @@ p + p { margin-top: 1em; }
 .mono { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
 
 /* gradient words */
+/* Lenis smooth scrolling (src/lib/smooth-scroll.ts) */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: clip; }
+
 .grad-text { background: var(--grad-text-light); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .dark .grad-text, .grad-text.on-dark { background-image: var(--grad-text-dark); }
 

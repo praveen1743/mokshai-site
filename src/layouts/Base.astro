@@ -97,6 +97,10 @@ const primaryTag = site.googleTagIds[0];
   </main>
   <Footer />
   <script>
+    import { startSmoothScroll } from '../lib/smooth-scroll';
+    startSmoothScroll();
+  </script>
+  <script>
     // Pause looping CSS animations (hub pulses, hexagon field) while they are
     // off screen or the tab is hidden, so low-end phones are not painting
     // motion nobody can see. Elements opt in with [data-loop].
